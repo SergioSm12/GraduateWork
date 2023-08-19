@@ -43,16 +43,25 @@ public class SpringSecurityConfig {
         return http.authorizeHttpRequests(authRules -> authRules
                         .requestMatchers(HttpMethod.GET, "/faculty").permitAll()
                         .requestMatchers(HttpMethod.GET, "/faculty/{facultyId}").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/faculty").permitAll()
+                        .requestMatchers(HttpMethod.PUT, "/faculty/{facultyId}").permitAll()
+                        .requestMatchers(HttpMethod.DELETE, "/faculty/{facultyId}").permitAll()
                         .requestMatchers(HttpMethod.GET, "/users").permitAll()
-                        .requestMatchers(HttpMethod.POST,"/vehicle/{userId}/create").permitAll()
-                        .requestMatchers(HttpMethod.GET,"/vehicle/{userId}/list").permitAll()
-                        .requestMatchers(HttpMethod.PUT,"/vehicle/{userId}/update/{vehicleId}").permitAll()
-                        .requestMatchers(HttpMethod.DELETE,"/vehicle/{userId}/delete/{vehicleId}").permitAll()
                         .requestMatchers(HttpMethod.GET, "/users/page/{page}").permitAll()
                         .requestMatchers(HttpMethod.GET, "/users/{id}").hasAnyRole("ADMIN", "GUARD")
                         .requestMatchers(HttpMethod.POST, "/users").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.PUT, "/users/{id}").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.DELETE, "/users/{id}").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.POST, "/vehicle/{userId}/create").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/vehicle/{userId}/list").permitAll()
+                        .requestMatchers(HttpMethod.PUT, "/vehicle/{userId}/update/{vehicleId}").permitAll()
+                        .requestMatchers(HttpMethod.DELETE, "/vehicle/{userId}/delete/{vehicleId}").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/rate").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/rate/{rateId}").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/rate").permitAll()
+                        .requestMatchers(HttpMethod.PUT, "/rate/{rateId}").permitAll()
+                        .requestMatchers(HttpMethod.DELETE, "/rate/{rateId}").permitAll()
+
 
                         .anyRequest().authenticated())
                 .addFilter(new JwtAuthenticationFilter(authenticationConfiguration.getAuthenticationManager()))
@@ -82,6 +91,6 @@ public class SpringSecurityConfig {
     FilterRegistrationBean<CorsFilter> corsFilter() {
         FilterRegistrationBean<CorsFilter> bean = new FilterRegistrationBean<>(new CorsFilter(corsConfigurationSource()));
         bean.setOrder(Ordered.HIGHEST_PRECEDENCE);
-        return  bean;
+        return bean;
     }
 }

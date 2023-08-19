@@ -24,9 +24,34 @@ public class FacultyService implements IFacultyService {
 
     @Override
     @Transactional(readOnly = true)
-    public Optional<Faculty> findById(Long id){
+    public Optional<Faculty> findById(Long id) {
         return facultyRepository.findById(id);
     }
+
+    @Override
+    @Transactional
+    public Faculty saveFaculty(Faculty faculty) {
+        return facultyRepository.save(faculty);
+    }
+
+    @Override
+    @Transactional
+    public Optional<Faculty> update(Faculty faculty, Long id) {
+        Optional<Faculty> fo = facultyRepository.findById(id);
+        Faculty facultyOptional = null;
+        if (fo.isPresent()) {
+            Faculty facultyDB = fo.orElseThrow();
+            facultyDB.setNameFaculty(faculty.getNameFaculty());
+            facultyOptional = facultyRepository.save(facultyDB);
+        }
+        return Optional.ofNullable(facultyOptional);
+    }
+    @Override
+    @Transactional
+    public void remove(Long id){
+        facultyRepository.deleteById(id);
+    }
+
 
 
 }

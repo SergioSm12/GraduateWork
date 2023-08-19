@@ -8,4 +8,7 @@ import java.util.Optional;
 public interface IFacultyService {
     List<Faculty> findAllFaculties();
     Optional<Faculty> findById(Long id);
+    Faculty saveFaculty(Faculty faculty);
+    Optional<Faculty> update(Faculty faculty, Long id);
+    void remove(Long id);
 }

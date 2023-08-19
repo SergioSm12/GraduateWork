@@ -13,10 +13,9 @@ public class Rate {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "vehcile_type_id")
     private VehicleType vehicleType;
-
     @NotBlank
     private String time;
-    @NotBlank
+    @NotNull
     private double amount;
 
     public Long getId() {

@@ -1,7 +1,6 @@
 package com.sergio.spring.rest.usuariosvehiculos.app.controllers;
 
 import com.sergio.spring.rest.usuariosvehiculos.app.models.dto.entity.users.UserDto;
-import com.sergio.spring.rest.usuariosvehiculos.app.models.entities.Faculty;
 import com.sergio.spring.rest.usuariosvehiculos.app.models.entities.User;
 import com.sergio.spring.rest.usuariosvehiculos.app.models.request.UserRequest;
 import com.sergio.spring.rest.usuariosvehiculos.app.service.IUserService;
@@ -36,8 +35,6 @@ public class UserController {
         Pageable pageable = PageRequest.of(page, 10);
         return userService.findAll(pageable);
     }
-
-
 
     @GetMapping("/users/{id}")
     public ResponseEntity<?> show(@PathVariable Long id) {
