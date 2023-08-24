@@ -22,7 +22,7 @@ public class DtoMapperUser {
         return new DtoMapperUser();
     }
 
-    //Pasamos el user al get instance de esta manera traemos los datos del entoty a esta clase
+    //Pasamos el user al get instance de esta manera traemos los datos del entity a esta clase
     public DtoMapperUser setUser(User user) {
         this.user = user;
         return this;

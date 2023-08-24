@@ -1,7 +1,6 @@
 package com.sergio.spring.rest.usuariosvehiculos.app.models.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.sergio.spring.rest.usuariosvehiculos.app.models.interfaces.IUser;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;

@@ -61,7 +61,15 @@ public class SpringSecurityConfig {
                         .requestMatchers(HttpMethod.POST, "/rate").permitAll()
                         .requestMatchers(HttpMethod.PUT, "/rate/{rateId}").permitAll()
                         .requestMatchers(HttpMethod.DELETE, "/rate/{rateId}").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/receipt").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/receipt/unpaid").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/receipt/paid").permitAll()
+                        .requestMatchers(HttpMethod.PUT, "/receipt/{receiptId}/update").permitAll()
+                        .requestMatchers(HttpMethod.DELETE, "/receipt/{receiptId}").permitAll()
 
+                        .requestMatchers(HttpMethod.GET, "/receipt/user/{userId}").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/receipt/user/{userId}/unpaid").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/receipt/{userId}/create").permitAll()
 
                         .anyRequest().authenticated())
                 .addFilter(new JwtAuthenticationFilter(authenticationConfiguration.getAuthenticationManager()))

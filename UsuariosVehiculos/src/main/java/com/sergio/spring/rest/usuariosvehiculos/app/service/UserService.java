@@ -7,9 +7,7 @@ import com.sergio.spring.rest.usuariosvehiculos.app.models.dto.mapper.DtoMapperV
 import com.sergio.spring.rest.usuariosvehiculos.app.models.entities.*;
 import com.sergio.spring.rest.usuariosvehiculos.app.models.interfaces.IUser;
 import com.sergio.spring.rest.usuariosvehiculos.app.models.request.UserRequest;
-import com.sergio.spring.rest.usuariosvehiculos.app.repositorys.IRoleRepository;
-import com.sergio.spring.rest.usuariosvehiculos.app.repositorys.IUserRepository;
-import com.sergio.spring.rest.usuariosvehiculos.app.repositorys.IVehicleRepository;
+import com.sergio.spring.rest.usuariosvehiculos.app.repositorys.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -26,13 +24,17 @@ import java.util.stream.Collectors;
 public class UserService implements IUserService {
     @Autowired
     private IUserRepository userRepository;
-
+    @Autowired
+    private IReceiptRepository receiptRepository;
     @Autowired
     private IRoleRepository roleRepository;
 
     //vehicle
     @Autowired
     private IVehicleRepository vehicleRepository;
+
+    //Rate
+    private IRateRepository rateRepository;
 
     //Encriptar
     @Autowired
@@ -107,7 +109,6 @@ public class UserService implements IUserService {
     }
 
     //Vehicle
-
     //Listar vehiculos por usuario
     @Override
     @Transactional(readOnly = true)
@@ -131,7 +132,7 @@ public class UserService implements IUserService {
         String plateUpper = vehicle.getPlate().toUpperCase();
         vehicle.setPlate(plateUpper);
 
-        //optener user y aociarlo
+        //optener user y asociarlo
         UserDto userDto = DtoMapperUser.builder().setUser(vehicle.getUser()).build();
         Optional<User> userOptional = userRepository.findById(userDto.getId());
 
@@ -178,6 +179,8 @@ public class UserService implements IUserService {
     public void removeVehicleByUser(Long vehicleId) {
         vehicleRepository.deleteByVehicleId(vehicleId);
     }
+
+    //Create
 
     //Metodo para validar placa
     @Override

@@ -2,8 +2,7 @@ package com.sergio.spring.rest.usuariosvehiculos.app.models.dto.entity.users;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.sergio.spring.rest.usuariosvehiculos.app.models.entities.Faculty;
-import com.sergio.spring.rest.usuariosvehiculos.app.models.entities.Role;
-import com.sergio.spring.rest.usuariosvehiculos.app.models.entities.Vehicle;
+
 
 import java.util.List;
 
