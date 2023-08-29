@@ -6,6 +6,7 @@ import com.sergio.spring.rest.usuariosvehiculos.app.models.request.UserRequest;
 import com.sergio.spring.rest.usuariosvehiculos.app.service.IUserService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -49,15 +50,20 @@ public class UserController {
     @PostMapping("/users")
     public ResponseEntity<?> create(@Valid @RequestBody User user, BindingResult result) {
         if (result.hasErrors()) {
-            return validation(result);
+            return validation(result, null);
         }
-        return ResponseEntity.status(HttpStatus.CREATED).body(userService.save(user));
+        try {
+            return ResponseEntity.status(HttpStatus.CREATED).body(userService.save(user));
+        } catch (DataIntegrityViolationException ex) {
+            return validation(result, ex);
+        }
+
     }
 
     @PutMapping("/users/{id}")
     public ResponseEntity<?> update(@Valid @RequestBody UserRequest user, BindingResult result, @PathVariable Long id) {
         if (result.hasErrors()) {
-            return validation(result);
+            return validation(result, null);
         }
         Optional<UserDto> o = userService.update(user, id);
         if (o.isPresent()) {
@@ -78,11 +84,19 @@ public class UserController {
     }
 
     //Metodo para validar errores
-    private ResponseEntity<?> validation(BindingResult result) {
+    private ResponseEntity<?> validation(BindingResult result, Exception ex) {
         Map<String, String> errors = new HashMap<>();
         result.getFieldErrors().forEach(err -> {
-            errors.put(err.getField(), "El campo : " + err.getField() + " " + err.getDefaultMessage());
+            errors.put(err.getField(), err.getDefaultMessage());
         });
+
+        if (ex instanceof DataIntegrityViolationException) {
+            String constraintMessage = ex.getMessage();
+            if (constraintMessage.contains("Duplicate entry")) {
+                errors.put("email", "Ya hay una cuenta asociada con este correo");
+            }
+        }
+
         return ResponseEntity.badRequest().body(errors);
     }
 

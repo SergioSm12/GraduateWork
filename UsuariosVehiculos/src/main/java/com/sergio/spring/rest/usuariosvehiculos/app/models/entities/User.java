@@ -17,17 +17,17 @@ public class User implements IUser {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotBlank
+    @NotBlank(message = "EL campo nombre no puede estar vacío.")
     private String name;
 
-    @NotBlank
+    @NotBlank(message = "EL campo apellido no puede estar vacío.")
     private String lastName;
     @Column(unique = true)
-    @NotBlank
+    @NotBlank(message = "EL campo correo no puede estar vacío.")
     @Email
     private String email;
 
-    @NotBlank
+    @NotBlank(message = "EL campo contraseña no puede estar vacío.")
     private String password;
 
     @ManyToMany
@@ -36,7 +36,7 @@ public class User implements IUser {
             inverseJoinColumns = @JoinColumn(name = "role_id"),
             uniqueConstraints = {@UniqueConstraint(columnNames = {"user_id", "role_id"})})
     private List<Role> roles;
-    @NotNull
+    @NotNull(message = "EL campo facultad no puede estar vacío.")
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "faculty_id")
     @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
