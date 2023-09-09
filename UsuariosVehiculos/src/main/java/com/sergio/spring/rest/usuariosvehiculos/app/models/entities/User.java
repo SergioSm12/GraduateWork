@@ -36,11 +36,9 @@ public class User implements IUser {
             inverseJoinColumns = @JoinColumn(name = "role_id"),
             uniqueConstraints = {@UniqueConstraint(columnNames = {"user_id", "role_id"})})
     private List<Role> roles;
-    @NotNull(message = "EL campo facultad no puede estar vacío.")
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "faculty_id")
-    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
-    private Faculty faculty;
+    @NotBlank(message = "EL campo numero de celular no puede estar vacío.")
+    private String phoneNumber;
+
 
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Vehicle> vehicles = new ArrayList<>();
@@ -102,12 +100,12 @@ public class User implements IUser {
         this.roles = roles;
     }
 
-    public Faculty getFaculty() {
-        return faculty;
+    public String getPhoneNumber() {
+        return phoneNumber;
     }
 
-    public void setFaculty(Faculty faculty) {
-        this.faculty = faculty;
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
     }
 
     public List<Vehicle> getVehicles() {

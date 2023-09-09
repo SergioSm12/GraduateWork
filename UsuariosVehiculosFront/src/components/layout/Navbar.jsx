@@ -12,7 +12,7 @@ export const Navbar = () => {
   const {login, handlerLogout} = useAuth();
   return (
     <>
-      <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
+      <nav className= "navbar navbar-expand-lg navbar-dark bg-dark">
         <div className="container-fluid">
           <a className="navbar-brand" href="#">
             <img src={logoUsta} style={imageStyle} alt="Usta" /> Parking

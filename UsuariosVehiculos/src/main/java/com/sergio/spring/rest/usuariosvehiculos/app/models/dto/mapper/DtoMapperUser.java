@@ -36,17 +36,17 @@ public class DtoMapperUser {
 
         List<VehicleDto> vehicleDtos = this.user.getVehicles().stream()
                 .map(vehicle -> {
-                    VehicleTypeDto vehicleTypeDto = new VehicleTypeDto(
-                      vehicle.getVehicleType().getId(),
-                      vehicle.getVehicleType().getName()
-                    );
+                            VehicleTypeDto vehicleTypeDto = new VehicleTypeDto(
+                                    vehicle.getVehicleType().getId(),
+                                    vehicle.getVehicleType().getName()
+                            );
 
-                    return  new VehicleDto(vehicle.getId(), vehicle.getPlate(), vehicleTypeDto);
-                }
-        ).collect(Collectors.toList());
+                            return new VehicleDto(vehicle.getId(), vehicle.getPlate(), vehicleTypeDto);
+                        }
+                ).collect(Collectors.toList());
 
         boolean isAdmin = user.getRoles().stream().anyMatch(r -> "ROLE_ADMIN".equals(r.getName()));
         boolean isGuard = user.getRoles().stream().anyMatch(r -> "ROLE_GUARD".equals(r.getName()));
-        return new UserDto(this.user.getId(), this.user.getName(), this.user.getLastName(), this.user.getEmail(), this.user.getFaculty(),vehicleDtos, isAdmin,isGuard);
+        return new UserDto(this.user.getId(), this.user.getName(), this.user.getLastName(), this.user.getEmail(), this.user.getPhoneNumber(), vehicleDtos, isAdmin, isGuard);
     }
 }

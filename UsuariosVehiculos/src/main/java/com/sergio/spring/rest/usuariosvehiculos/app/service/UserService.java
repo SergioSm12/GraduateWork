@@ -80,6 +80,8 @@ public class UserService implements IUserService {
         String passwordBCrypt = passwordEncoder.encode(user.getPassword());
         user.setPassword(passwordBCrypt);
         user.setRoles(getRoles(user));
+        String emailLower = user.getEmail().toLowerCase();
+        user.setEmail(emailLower);
         //DESCRIPCION return: trae la instancia asigna el user y construye
         return DtoMapperUser.builder().setUser(userRepository.save(user)).build();
     }
@@ -96,7 +98,7 @@ public class UserService implements IUserService {
             userDb.setName(user.getName());
             userDb.setLastName(user.getLastName());
             userDb.setEmail(user.getEmail());
-            userDb.setFaculty(user.getFaculty());
+            userDb.setPhoneNumber(user.getPhoneNumber());
             userOptional = userRepository.save(userDb);
         }
         return Optional.ofNullable(DtoMapperUser.builder().setUser(userOptional).build());

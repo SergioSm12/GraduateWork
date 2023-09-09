@@ -1,7 +1,6 @@
 package com.sergio.spring.rest.usuariosvehiculos.app.models.dto.entity.users;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.sergio.spring.rest.usuariosvehiculos.app.models.entities.Faculty;
 
 
 import java.util.List;
@@ -12,19 +11,18 @@ public class UserDto {
     private String name;
     private String lastName;
     private String email;
-    @JsonProperty("faculty")
-    private FacultyDto faculty;
+    private String phoneNumber;
     private List<VehicleDto> vehicles;
     private boolean admin;
     private boolean guard;
 
 
-    public UserDto(Long id, String name, String lastName, String email, Faculty faculty,List<VehicleDto> vehicles, boolean isAdmin, boolean isGuard) {
+    public UserDto(Long id, String name, String lastName, String email, String phoneNumber,List<VehicleDto> vehicles, boolean isAdmin, boolean isGuard) {
         this.id = id;
         this.name = name;
         this.lastName = lastName;
         this.email = email;
-        this.faculty = new FacultyDto(faculty.getId(), faculty.getNameFaculty());
+        this.phoneNumber = phoneNumber;
         this.admin = isAdmin;
         this.guard = isGuard;
         this.vehicles=vehicles;
@@ -65,12 +63,12 @@ public class UserDto {
         this.email = email;
     }
 
-    public FacultyDto getFaculty() {
-        return faculty;
+    public String getPhoneNumber() {
+        return phoneNumber;
     }
 
-    public void setFaculty(FacultyDto faculty) {
-        this.faculty = faculty;
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
     }
 
     public List<VehicleDto> getVehicles() {

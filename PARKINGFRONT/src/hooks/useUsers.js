@@ -1,17 +1,16 @@
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { findAllFaculties, save } from "../services/userService";
+import {  save } from "../services/userService";
 import {
   addUser,
   loadingError,
-  loadingFaculties,
   initialUserForm,
 } from "../store/slices/user/usersSlice";
 import Swal from "sweetalert2";
 import { useAuth } from "../auth/hooks/useAuth";
 
 export const useUsers = () => {
-  const { users, faculties, userSelected, errors } = useSelector(
+  const { users, userSelected, errors } = useSelector(
     (state) => state.users
   );
 
@@ -19,16 +18,6 @@ export const useUsers = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const getFaculties = async () => {
-    try {
-      const result = await findAllFaculties();
-      dispatch(loadingFaculties(result.data));
-    } catch (error) {
-      if (error.response?.status == 401) {
-        //handlerLogout();
-      }
-    }
-  };
 
   const handlerAddUser = async (user) => {
     let response;
@@ -63,8 +52,6 @@ export const useUsers = () => {
 
   return {
     users,
-    faculties,
-    getFaculties,
     userSelected,
     initialUserForm,
     errors,

@@ -41,32 +41,33 @@ public class SpringSecurityConfig {
     @Bean
     SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         return http.authorizeHttpRequests(authRules -> authRules
-                        .requestMatchers(HttpMethod.GET, "/faculty").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/faculty/{facultyId}").permitAll()
-                        .requestMatchers(HttpMethod.POST, "/faculty").permitAll()
-                        .requestMatchers(HttpMethod.PUT, "/faculty/{facultyId}").permitAll()
-                        .requestMatchers(HttpMethod.DELETE, "/faculty/{facultyId}").permitAll()
+                        //usuario
                         .requestMatchers(HttpMethod.GET, "/users").permitAll()
                         .requestMatchers(HttpMethod.GET, "/users/page/{page}").permitAll()
                         .requestMatchers(HttpMethod.GET, "/users/{id}").permitAll()
                         .requestMatchers(HttpMethod.POST, "/users").permitAll()
                         .requestMatchers(HttpMethod.PUT, "/users/{id}").permitAll()
                         .requestMatchers(HttpMethod.DELETE, "/users/{id}").permitAll()
+
+                        //usuario
                         .requestMatchers(HttpMethod.POST, "/vehicle/{userId}/create").permitAll()
                         .requestMatchers(HttpMethod.GET, "/vehicle/{userId}/list").permitAll()
                         .requestMatchers(HttpMethod.PUT, "/vehicle/{userId}/update/{vehicleId}").permitAll()
                         .requestMatchers(HttpMethod.DELETE, "/vehicle/{userId}/delete/{vehicleId}").permitAll()
+
                         .requestMatchers(HttpMethod.GET, "/rate").permitAll()
                         .requestMatchers(HttpMethod.GET, "/rate/{rateId}").permitAll()
                         .requestMatchers(HttpMethod.POST, "/rate").permitAll()
                         .requestMatchers(HttpMethod.PUT, "/rate/{rateId}").permitAll()
                         .requestMatchers(HttpMethod.DELETE, "/rate/{rateId}").permitAll()
+
                         .requestMatchers(HttpMethod.GET, "/receipt").permitAll()
                         .requestMatchers(HttpMethod.GET, "/receipt/unpaid").permitAll()
                         .requestMatchers(HttpMethod.GET, "/receipt/paid").permitAll()
                         .requestMatchers(HttpMethod.PUT, "/receipt/{receiptId}/update").permitAll()
                         .requestMatchers(HttpMethod.DELETE, "/receipt/{receiptId}").permitAll()
 
+                        //usuario
                         .requestMatchers(HttpMethod.GET, "/receipt/user/{userId}").permitAll()
                         .requestMatchers(HttpMethod.GET, "/receipt/user/{userId}/unpaid").permitAll()
                         .requestMatchers(HttpMethod.POST, "/receipt/{userId}/create").permitAll()

@@ -5,6 +5,7 @@ const initialLogin = JSON.parse(sessionStorage.getItem("login")) || {
   isAdmin: false,
   isGuard: false,
   user: undefined,
+  isLoginLoading: false,
 };
 
 export const authSlice = createSlice({
@@ -16,14 +17,20 @@ export const authSlice = createSlice({
       state.isAdmin = action.payload.isAdmin;
       state.isGuard = action.payload.isGuard;
       state.user = action.payload.user;
+      state.isLoginLoading = false;
     },
     onLogout: (state) => {
       state.isAuth = false;
       state.isAdmin = false;
       state.isGuard = false;
       state.user = undefined;
+      state.isLoginLoading = false;
+    },
+
+    onInitLogin: (state) => {
+      state.isLoginLoading = true;
     },
   },
 });
 
-export const { onLogin, onLogout } = authSlice.actions;
+export const { onLogin, onLogout, onInitLogin } = authSlice.actions;

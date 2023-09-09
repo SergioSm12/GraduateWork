@@ -1,6 +1,5 @@
 package com.sergio.spring.rest.usuariosvehiculos.app.models.request;
 
-import com.sergio.spring.rest.usuariosvehiculos.app.models.entities.Faculty;
 import com.sergio.spring.rest.usuariosvehiculos.app.models.interfaces.IUser;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
@@ -15,8 +14,8 @@ public class UserRequest implements IUser {
     @NotBlank
     @Email
     private String email;
-    @NotNull
-    private Faculty faculty;
+    @NotBlank
+    private String phoneNumber;
     private boolean admin;
     private boolean guard;
 
@@ -44,12 +43,12 @@ public class UserRequest implements IUser {
         this.email = email;
     }
 
-    public Faculty getFaculty() {
-        return faculty;
+    public String getPhoneNumber() {
+        return phoneNumber;
     }
 
-    public void setFaculty(Faculty faculty) {
-        this.faculty = faculty;
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
     }
 
     @Override

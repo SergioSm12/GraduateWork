@@ -6,7 +6,7 @@ import com.sergio.spring.rest.usuariosvehiculos.app.models.dto.entity.users.User
 import com.sergio.spring.rest.usuariosvehiculos.app.models.dto.mapper.DtoMapperUser;
 import com.sergio.spring.rest.usuariosvehiculos.app.models.entities.Receipt;
 import com.sergio.spring.rest.usuariosvehiculos.app.models.entities.User;
-import com.sergio.spring.rest.usuariosvehiculos.app.models.interfaces.IUser;
+
 import com.sergio.spring.rest.usuariosvehiculos.app.models.request.ReceiptRequest;
 import com.sergio.spring.rest.usuariosvehiculos.app.service.IReceiptService;
 import com.sergio.spring.rest.usuariosvehiculos.app.service.IUserService;

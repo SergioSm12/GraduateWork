@@ -7,14 +7,25 @@ import { Error404 } from "./pages/Error404";
 import { LayoutAdmin } from "./layout/LayoutAdmin";
 import { ForgetPassword } from "./pages/auth/ForgetPassword";
 import { useAuth } from "./auth/hooks/useAuth";
+import { Home } from "./pages/admin/Home";
 
 export const AppRoutes = () => {
   const { login } = useAuth();
 
+  if (login.isLoginLoading) {
+    return (
+      <div className="container my-4 flex justify-center items-center h-screen">
+        <div className="animate-spin rounded-full border-t-4 border-secondary border-opacity-50 h-12 w-12"></div>
+      </div>
+    );
+  }
+
   return (
     <Routes>
       {login.isAuth ? (
-        <Route path="/*" element={<LayoutAdmin />}></Route>
+        <Route path="/" element={<LayoutAdmin />}>
+          <Route index  element={<Home/>}/>
+        </Route>
       ) : (
         <>
           <Route path="/auth" element={<LayoutAuth />}>

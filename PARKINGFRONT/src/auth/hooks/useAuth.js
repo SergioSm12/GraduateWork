@@ -1,18 +1,19 @@
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { loginUser } from "../services/authService";
-import { onLogin, onLogout } from "../../store/slices/auth/authSlice";
+import { onLogin, onLogout, onInitLogin } from "../../store/slices/auth/authSlice";
 import Swal from "sweetalert2";
 
 export const useAuth = () => {
   const dispatch = useDispatch();
 
-  const { user, isAdmin, isGuard, isAuth } = useSelector((state) => state.auth);
+  const { user, isAdmin, isGuard, isAuth, isLoginLoading } = useSelector((state) => state.auth);
 
   const navigate = useNavigate();
 
   const handlerLogin = async ({ email, password }) => {
     try {
+      dispatch(onInitLogin());
       const response = await loginUser({ email, password });
       const token = response.data.token;
       const claims = JSON.parse(window.atob(token.split(".")[1]));
@@ -50,6 +51,7 @@ export const useAuth = () => {
           title: "Error de validacion",
           showConfirmButton: false,
           timer: 1500,
+          theme: "dark",
         });
       } else {
         throw error;
@@ -65,7 +67,7 @@ export const useAuth = () => {
   };
 
   return {
-    login: { user, isAdmin, isGuard, isAuth },
+    login: { user, isAdmin, isGuard, isAuth, isLoginLoading },
     handlerLogin,
     handlerLogout,
   };

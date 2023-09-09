@@ -45,9 +45,7 @@ public class DtoMapperReceipt {
                         }
                 ).toList();
 
-        FacultyDto facultyDto = new FacultyDto();
-        facultyDto.setId(receipt.getUser().getFaculty().getId());
-        facultyDto.setNameFaculty(receipt.getUser().getFaculty().getNameFaculty());
+
 
         UserDto userDto = new UserDto();
         userDto.setId(user.getId());
@@ -55,7 +53,7 @@ public class DtoMapperReceipt {
         userDto.setLastName(user.getLastName());
         userDto.setEmail(user.getEmail());
         userDto.setVehicles(vehicleDtos);
-        userDto.setFaculty(facultyDto);
+        userDto.setPhoneNumber(user.getPhoneNumber());
 
 
        //Conversion de vehicle

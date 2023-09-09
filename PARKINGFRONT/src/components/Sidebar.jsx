@@ -11,8 +11,10 @@ import {
   RiMenu3Line,
   RiCloseLine
 } from "react-icons/ri";
+import { useAuth } from "../auth/hooks/useAuth";
 
 export const Sidebar = () => {
+  const { handlerLogout } = useAuth();
   const [showSubmenu, setShowSubmenu] = useState(false);
   const [showMenu, setShowMenu]= useState(false);
   return (
@@ -102,13 +104,13 @@ export const Sidebar = () => {
         </ul>
       </div>
       <nav>
-        <Link
-          to="/"
+        <button
           className="flex items-center gap-4 py-2 px-4 rounded-lg hover:bg-secondary-900 transition-colors"
+          onClick={handlerLogout}
         >
           <RiLogoutCircleLine className="text-primary" />
           Cerrar sesión
-        </Link>
+        </button>
       </nav>
     </div>
     <button onClick={()=> setShowMenu(!showMenu)} className="xl:hidden fixed bottom-4 right-4 bg-primary text-black p-3 rounded-full z-50">

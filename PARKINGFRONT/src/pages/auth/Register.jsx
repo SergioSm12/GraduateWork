@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 
-import { Link, json } from "react-router-dom";
+import { Link } from "react-router-dom";
 import logoUsta from "../../assets/pngwing.com.png";
 //Icons
 import {
@@ -14,36 +14,16 @@ import {
 } from "react-icons/ri";
 import { useUsers } from "../../hooks/useUsers";
 
-
 export const Register = () => {
-  const {
-    faculties,
-    initialUserForm,
-    handlerAddUser,
-    errors,
-    getFaculties,
-    handlerInitialErrors,
-  } = useUsers();
+  const { initialUserForm, handlerAddUser, errors, handlerInitialErrors } =
+    useUsers();
 
   //estado para el formulario
   const [userForm, setUserForm] = useState(initialUserForm);
-  const [selectedFaculty, setSelectedFaculty] = useState(null);
 
   const [showPassword, setShowPassword] = useState(false);
   const [passwordMatch, setPasswordMatch] = useState(true);
   const [confirmPassword, setConfirmPassword] = useState("");
-  //Traemos facultades
-  useEffect(() => {
-    getFaculties();
-  }, []);
-
-  //Monitorea y guarda el cambio del select
-  useEffect(() => {
-    setUserForm({
-      ...userForm,
-      faculty: selectedFaculty,
-    });
-  }, [selectedFaculty]);
 
   const onConfirmPasswordChange = (event) => {
     setConfirmPassword(event.target.value);
@@ -51,15 +31,6 @@ export const Register = () => {
   };
   const onInputChange = ({ target }) => {
     const { name, value } = target;
-
-    //validar facultad y traer
-    if (name == "faculty") {
-      const selectedFacultyId = target.value;
-      const faculty = faculties.find(
-        (f) => f.id === parseInt(selectedFacultyId)
-      );
-      setSelectedFaculty(faculty);
-    }
 
     setUserForm({
       ...userForm,
@@ -186,26 +157,17 @@ export const Register = () => {
         </div>
         <div className="relative ">
           <RiCommunityLine className="absolute top-1/2 -translate-y-1/2 left-2 text-primary" />
-          <select
-            className="py-3 pl-8 pr-4 bg-secondary-900 w-full outline-none rounded-lg focus:border focus:border-primary appearance-none"
-            id="faculty"
-            name="faculty"
+          <input
+            type="text"
+            className="py-3 pl-8 pr-4 bg-secondary-900 w-full outline-none rounded-lg focus:border focus:border-primary"
+            placeholder="Numero de celular"
+            name="phoneNumber"
+            value={userForm.phoneNumber}
             onChange={onInputChange}
-          >
-            <option value="">Facultad o Dependencia</option>
-            {faculties.map((faculty) => (
-              <option key={faculty.id} value={faculty.id}>
-                {faculty.nameFaculty}
-              </option>
-            ))}
-          </select>
+          />
         </div>
-        <div className="relative mb-8">
-          <p className="text-red-500">
-            {errors?.faculty == "EL campo facultad no puede estar vacío."
-              ? JSON.stringify(errors?.faculty)
-              : ""}
-          </p>
+        <div className="relative mb-4">
+          <p className="text-red-500">{errors?.phoneNumber}</p>
         </div>
 
         <div>
@@ -226,7 +188,6 @@ export const Register = () => {
           Ingresa
         </Link>
       </span>
-
     </div>
   );
 };
