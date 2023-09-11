@@ -3,7 +3,6 @@ package com.sergio.spring.rest.usuariosvehiculos.app.models.request;
 import com.sergio.spring.rest.usuariosvehiculos.app.models.interfaces.IUser;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
 
 //Clase generada para el update solo pasar campos necesarios
 public class UserRequest implements IUser {

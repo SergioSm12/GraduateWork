@@ -25,3 +25,13 @@ export const save = async ({
     throw error;
   }
 };
+
+export const findAllUsers = async () => {
+  try {
+    const response = await parkingApi.get(BASE_URL_USERS);
+    return response;
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+};

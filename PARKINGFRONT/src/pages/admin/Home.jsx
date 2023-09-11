@@ -1,6 +1,6 @@
 import React from "react";
 import { CardTicket } from "../../components/Home/CardTicket";
-import { RiArrowLeftSLine, RiArrowRightSLine, RiPoliceCarLine } from "react-icons/ri";
+import { RiPoliceCarLine } from "react-icons/ri";
 import { useAuth } from "../../auth/hooks/useAuth";
 
 export const Home = () => {
@@ -24,7 +24,7 @@ export const Home = () => {
         <CardTicket ticket="payments" totalTickets="100" text="Recibos Pagos" />
         <CardTicket ticket="total" totalTickets="120" text="Recibos Pagos" />
         <CardTicket
-          ticket="users"
+          ticket="usersHome"
           totalTickets="500"
           text="Usuarios Totales"
           icon="user"

@@ -4,11 +4,7 @@ import com.sergio.spring.rest.usuariosvehiculos.app.models.dto.entity.users.Rece
 import com.sergio.spring.rest.usuariosvehiculos.app.models.entities.Receipt;
 import com.sergio.spring.rest.usuariosvehiculos.app.models.entities.User;
 import com.sergio.spring.rest.usuariosvehiculos.app.models.request.ReceiptRequest;
-import com.sergio.spring.rest.usuariosvehiculos.app.repositorys.IReceiptRepository;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 

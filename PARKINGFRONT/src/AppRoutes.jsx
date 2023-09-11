@@ -8,6 +8,7 @@ import { LayoutAdmin } from "./layout/LayoutAdmin";
 import { ForgetPassword } from "./pages/auth/ForgetPassword";
 import { useAuth } from "./auth/hooks/useAuth";
 import { Home } from "./pages/admin/Home";
+import { Users } from "./pages/admin/Users";
 
 export const AppRoutes = () => {
   const { login } = useAuth();
@@ -24,7 +25,8 @@ export const AppRoutes = () => {
     <Routes>
       {login.isAuth ? (
         <Route path="/" element={<LayoutAdmin />}>
-          <Route index  element={<Home/>}/>
+          <Route index element={<Home />} />
+          <Route path="users" element={<Users />} />
         </Route>
       ) : (
         <>

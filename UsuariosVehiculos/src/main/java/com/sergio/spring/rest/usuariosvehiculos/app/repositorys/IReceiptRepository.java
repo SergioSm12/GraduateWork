@@ -2,7 +2,6 @@ package com.sergio.spring.rest.usuariosvehiculos.app.repositorys;
 
 import com.sergio.spring.rest.usuariosvehiculos.app.models.entities.Receipt;
 import com.sergio.spring.rest.usuariosvehiculos.app.models.entities.User;
-import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 
 import java.util.List;

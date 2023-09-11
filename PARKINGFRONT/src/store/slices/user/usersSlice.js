@@ -5,8 +5,6 @@ export const role = {
   name: "",
 };
 
-
-
 export const initialUserForm = {
   id: 0,
   name: "",
@@ -14,7 +12,7 @@ export const initialUserForm = {
   email: "",
   password: "",
   roles: role,
-  phoneNumber:"",
+  phoneNumber: "",
   admin: false,
   guard: false,
   vehicles: [],
@@ -47,6 +45,11 @@ export const usersSlice = createSlice({
       ];
       state.userSelected = initialUserForm;
     },
+
+    loadingUsers: (state, action) => {
+      state.users = action.payload;
+    },
+
     onUserSelectedForm: (state, action) => {
       state.userSelected = action.payload;
     },
@@ -57,5 +60,5 @@ export const usersSlice = createSlice({
   },
 });
 
-export const { addUser, onUserSelectedForm, loadingError } =
+export const { addUser, loadingUsers, onUserSelectedForm, loadingError } =
   usersSlice.actions;

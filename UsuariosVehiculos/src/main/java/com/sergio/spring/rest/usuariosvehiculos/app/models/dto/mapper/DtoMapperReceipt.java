@@ -4,7 +4,6 @@ import com.sergio.spring.rest.usuariosvehiculos.app.models.dto.entity.users.*;
 import com.sergio.spring.rest.usuariosvehiculos.app.models.entities.*;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 
 public class DtoMapperReceipt {

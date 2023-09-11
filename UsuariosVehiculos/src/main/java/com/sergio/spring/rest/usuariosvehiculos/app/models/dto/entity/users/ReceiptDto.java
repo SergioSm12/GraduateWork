@@ -1,8 +1,5 @@
 package com.sergio.spring.rest.usuariosvehiculos.app.models.dto.entity.users;
 
-import com.sergio.spring.rest.usuariosvehiculos.app.models.entities.User;
-import com.sergio.spring.rest.usuariosvehiculos.app.models.entities.Vehicle;
-import com.sergio.spring.rest.usuariosvehiculos.app.models.entities.VehicleType;
 
 import java.time.LocalDate;
 

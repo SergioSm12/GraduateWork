@@ -10,7 +10,7 @@ import {
   RiEyeOffLine,
   RiUserLine,
   RiRoadsterLine,
-  RiCommunityLine,
+  RiSmartphoneLine,
 } from "react-icons/ri";
 import { useUsers } from "../../hooks/useUsers";
 
@@ -156,7 +156,7 @@ export const Register = () => {
           )}
         </div>
         <div className="relative ">
-          <RiCommunityLine className="absolute top-1/2 -translate-y-1/2 left-2 text-primary" />
+          <RiSmartphoneLine className="absolute top-1/2 -translate-y-1/2 left-2 text-primary" />
           <input
             type="text"
             className="py-3 pl-8 pr-4 bg-secondary-900 w-full outline-none rounded-lg focus:border focus:border-primary"

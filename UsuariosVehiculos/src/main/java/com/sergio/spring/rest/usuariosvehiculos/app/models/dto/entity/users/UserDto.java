@@ -1,6 +1,6 @@
 package com.sergio.spring.rest.usuariosvehiculos.app.models.dto.entity.users;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
+
 
 
 import java.util.List;

@@ -3,7 +3,6 @@ package com.sergio.spring.rest.usuariosvehiculos.app.controllers;
 import com.sergio.spring.rest.usuariosvehiculos.app.Errors.ErrorResponse;
 import com.sergio.spring.rest.usuariosvehiculos.app.models.dto.entity.users.ReceiptDto;
 import com.sergio.spring.rest.usuariosvehiculos.app.models.dto.entity.users.UserDto;
-import com.sergio.spring.rest.usuariosvehiculos.app.models.dto.mapper.DtoMapperUser;
 import com.sergio.spring.rest.usuariosvehiculos.app.models.entities.Receipt;
 import com.sergio.spring.rest.usuariosvehiculos.app.models.entities.User;
 
@@ -17,7 +16,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;

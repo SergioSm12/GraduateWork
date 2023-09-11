@@ -1,24 +1,34 @@
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import {  save } from "../services/userService";
+import { findAllUsers, save } from "../services/userService";
 import {
   addUser,
   loadingError,
   initialUserForm,
+  loadingUsers,
 } from "../store/slices/user/usersSlice";
 import Swal from "sweetalert2";
 import { useAuth } from "../auth/hooks/useAuth";
 
 export const useUsers = () => {
-  const { users, userSelected, errors } = useSelector(
-    (state) => state.users
-  );
+  const { users, userSelected, errors } = useSelector((state) => state.users);
 
   const { login, handlerLogout } = useAuth();
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
+  const getUsers = async () => {
+    try {
+      const result = await findAllUsers();
+      dispatch(loadingUsers(result.data));
+    } catch (error) {
+      if (error.response?.status == 401) {
+        handlerLogout();
+      }
+    }
+  };
 
+  //Regustrar usuario
   const handlerAddUser = async (user) => {
     let response;
     try {
@@ -57,5 +67,6 @@ export const useUsers = () => {
     errors,
     handlerAddUser,
     handlerInitialErrors,
+    getUsers,
   };
 };
