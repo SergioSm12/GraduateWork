@@ -26,6 +26,29 @@ export const save = async ({
   }
 };
 
+export const update = async ({
+  id,
+  name,
+  lastName,
+  email,
+  phoneNumber,
+  admin,
+  guard,
+}) => {
+  try {
+    return await parkingApi.put(`${BASE_URL_USERS}/${id}`, {
+      name,
+      lastName,
+      email,
+      phoneNumber,
+      admin,
+      guard
+    });
+  } catch (error) {
+    throw error;
+  }
+};
+
 export const findAllUsers = async () => {
   try {
     const response = await parkingApi.get(BASE_URL_USERS);

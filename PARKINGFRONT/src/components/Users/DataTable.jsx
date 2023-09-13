@@ -54,8 +54,13 @@ const DebuncedInput = ({ value: keyWord, onchange, ...props }) => {
 };
 
 export const DataTable = ({ dataUsers }) => {
-  const { visibleFormCreate, isLoadingUsers, handlerOpenFormCreate, getUsers } =
-    useUsers();
+  const {
+    visibleFormCreate,
+    isLoadingUsers,
+    handlerOpenFormCreate,
+    getUsers,
+    handlerUserSelectedForm,
+  } = useUsers();
   const [data, setData] = useState(dataUsers);
   const [globalFilter, setGlobalFilter] = useState("");
   const [sorting, setSorting] = useState([]);
@@ -92,25 +97,6 @@ export const DataTable = ({ dataUsers }) => {
     {
       accessorKey: "actions",
       header: "Acciones",
-      cell: (info) => {
-        return (
-          <div className="flex items-center gap-2">
-            <button className="py-2 px-4 bg-primary/80 text-black hover:bg-secondary-100 rounded-lg transition-colors">
-              <RiInformationLine className="text-lg" />
-            </button>
-
-            <button className="py-2 px-4 bg-primary/80 text-black hover:bg-primary rounded-lg transition-colors">
-              <RiEdit2Line className="text-lg" />
-            </button>
-            <button
-              className="py-2 px-4 bg-secondary-100/50 hover:bg-secondary-100 text-red-500/70 hover:text-red-500
-                 transition-colors rounded-lg  flex items-center "
-            >
-              <RiDeleteBin7Line className="text-lg" />
-            </button>
-          </div>
-        );
-      },
       enableSorting: false,
     },
   ];
@@ -151,8 +137,6 @@ export const DataTable = ({ dataUsers }) => {
   });
   return (
     <>
-      {/*Modal para crear*/}
-      {!visibleFormCreate || <ModalForm />}
       <div className="">
         {/*input*/}
         <div className="mb-5">
@@ -187,6 +171,8 @@ export const DataTable = ({ dataUsers }) => {
             </div>
           )}
         </div>
+        {/*Modal para crear*/}
+        {!visibleFormCreate || <ModalForm />}
         {/*Tabla */}
         <div className="overflow-x-auto">
           <table className="table-auto min-w-full">
@@ -236,6 +222,29 @@ export const DataTable = ({ dataUsers }) => {
                         cell.column.columnDef.cell,
                         cell.getContext()
                       )}
+                      {cell.column.id === "actions" && (
+                        <div className="flex items-center gap-2">
+                          <button className="py-2 px-2 bg-primary/80 text-black hover:bg-secondary-100 rounded-lg transition-colors">
+                            <RiInformationLine className="text-lg" />
+                          </button>
+                          <button
+                            type="button"
+                            className="py-2 px-2 bg-primary/80 text-black hover:bg-primary rounded-lg transition-colors"
+                            onClick={() => {
+                              // Pasa los datos del usuario al hacer clic en el botón de edición
+                              handlerUserSelectedForm(row.original);
+                            }}
+                          >
+                            <RiEdit2Line className="text-lg" />
+                          </button>
+                          <button
+                            className="py-2 px-2 bg-secondary-100/50 hover:bg-secondary-100 text-red-500/70 hover:text-red-500
+                 transition-colors rounded-lg  flex items-center "
+                          >
+                            <RiDeleteBin7Line className="text-lg" />
+                          </button>
+                        </div>
+                      )}
                     </td>
                   ))}
                 </tr>
@@ -244,8 +253,8 @@ export const DataTable = ({ dataUsers }) => {
           </table>
         </div>
         {/*Paginador*/}
-        <div className="mt-4 md:flex items-center justify-between space-y-4 text-center">
-          <div className="flex items-center gap-2">
+        <div className="mt-4 flex flex-col  items-center justify-between space-y-4 text-center">
+          <div className="md:flex grid grid-cols-5 items-center gap-2">
             <button
               className="p-2 hover:bg-secondary-900 rounded-lg  hover:text-primary
           disabled:hover:bg-secondary-100 disabled:text-gray-300 transition-colors "

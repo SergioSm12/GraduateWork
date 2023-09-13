@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 //Icons
 import {
@@ -12,7 +12,7 @@ import {
 } from "react-icons/ri";
 import { useUsers } from "../../hooks/useUsers";
 
-export const CreateUser = ({ handlerCloseFormCreate }) => {
+export const CreateUser = ({ userSelected, handlerCloseFormCreate }) => {
   const {
     initialUserForm,
     handlerAddUser,
@@ -22,11 +22,20 @@ export const CreateUser = ({ handlerCloseFormCreate }) => {
   } = useUsers();
 
   //estado para el formulario
-  const [userForm, setUserForm] = useState(initialUserForm);
+  const [userForm, setUserForm] = useState({initialUserForm, password: ""});
 
   const [showPassword, setShowPassword] = useState(false);
   const [passwordMatch, setPasswordMatch] = useState(true);
   const [confirmPassword, setConfirmPassword] = useState("");
+
+  useEffect(() => {
+    setUserForm({
+      ...userSelected,
+      password: userSelected.password || "",
+    });
+  }, [userSelected]);
+
+  //console.log(userSelected);
 
   const onConfirmPasswordChange = (event) => {
     setConfirmPassword(event.target.value);
@@ -91,7 +100,7 @@ export const CreateUser = ({ handlerCloseFormCreate }) => {
             className="py-3 pl-8 pr-4 bg-secondary-900 w-full outline-none rounded-lg focus:border focus:border-primary"
             placeholder="Nombre(s)"
             name="name"
-            value={userForm.name}
+            value={userForm.name || ""}
             onChange={onInputChange}
           />
         </div>
@@ -106,7 +115,7 @@ export const CreateUser = ({ handlerCloseFormCreate }) => {
             className="py-3 pl-8 pr-4 bg-secondary-900 w-full outline-none rounded-lg focus:border focus:border-primary"
             placeholder="Apellido(s)"
             name="lastName"
-            value={userForm.lastName}
+            value={userForm.lastName || ""}
             onChange={onInputChange}
           />
         </div>
@@ -120,66 +129,69 @@ export const CreateUser = ({ handlerCloseFormCreate }) => {
             className="py-3 pl-8 pr-4 bg-secondary-900 w-full outline-none rounded-lg focus:border focus:border-primary"
             placeholder="Coreo electronico"
             name="email"
-            value={userForm.email}
+            value={userForm.email || ""}
             onChange={onInputChange}
           />
         </div>
         <div className="relative mb-4">
           <p className="text-red-500">{errors?.email}</p>
         </div>
-        <div className="relative">
-          <RiLockLine className="absolute top-1/2 -translate-y-1/2 left-2 text-primary" />
-          <input
-            type={showPassword ? "text" : "password"}
-            className="py-3 px-8 pr-4 bg-secondary-900 w-full outline-none rounded-lg focus:border focus:border-primary"
-            placeholder="Contraseña"
-            name="password"
-            value={userForm.password}
-            onChange={onInputChange}
-          />
-          {showPassword ? (
-            <RiEyeOffLine
-              onClick={() => setShowPassword(!showPassword)}
-              className="absolute top-1/2 -translate-y-1/2 right-2 hover:cursor-pointer text-primary"
-            />
-          ) : (
-            <RiEyeLine
-              onClick={() => setShowPassword(!showPassword)}
-              className="absolute top-1/2 -translate-y-1/2 right-2 hover:cursor-pointer text-primary"
-            />
-          )}
-        </div>
-        <div className="relative mb-4">
-          <p className="text-red-500">{errors?.password}</p>
-        </div>
-
-        <div className="relative">
-          <RiLockLine className="absolute top-1/2 -translate-y-1/2 left-2 text-primary" />
-          <input
-            type={showPassword ? "text" : "password"}
-            className="py-3 px-8 pr-4 bg-secondary-900 w-full outline-none rounded-lg focus:border focus:border-primary"
-            placeholder="Confirmar contraseña"
-            name="confirmPassword"
-            value={confirmPassword}
-            onChange={onConfirmPasswordChange}
-          />
-          {showPassword ? (
-            <RiEyeOffLine
-              onClick={() => setShowPassword(!showPassword)}
-              className="absolute top-1/2 -translate-y-1/2 right-2 hover:cursor-pointer text-primary"
-            />
-          ) : (
-            <RiEyeLine
-              onClick={() => setShowPassword(!showPassword)}
-              className="absolute top-1/2 -translate-y-1/2 right-2 hover:cursor-pointer text-primary"
-            />
-          )}
-        </div>
-        <div className="relative mb-4">
-          {!passwordMatch && (
-            <p className="text-red-500">La contraseña no coincide</p>
-          )}
-        </div>
+        {userForm.id > 0 || (
+          <>
+            <div className="relative">
+              <RiLockLine className="absolute top-1/2 -translate-y-1/2 left-2 text-primary" />
+              <input
+                type={showPassword ? "text" : "password"}
+                className="py-3 px-8 pr-4 bg-secondary-900 w-full outline-none rounded-lg focus:border focus:border-primary"
+                placeholder="Contraseña"
+                name="password"
+                value={userForm.password || ""}
+                onChange={onInputChange}
+              />
+              {showPassword ? (
+                <RiEyeOffLine
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="absolute top-1/2 -translate-y-1/2 right-2 hover:cursor-pointer text-primary"
+                />
+              ) : (
+                <RiEyeLine
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="absolute top-1/2 -translate-y-1/2 right-2 hover:cursor-pointer text-primary"
+                />
+              )}
+            </div>
+            <div className="relative mb-4">
+              <p className="text-red-500">{errors?.password}</p>
+            </div>
+            <div className="relative">
+              <RiLockLine className="absolute top-1/2 -translate-y-1/2 left-2 text-primary" />
+              <input
+                type={showPassword ? "text" : "password"}
+                className="py-3 px-8 pr-4 bg-secondary-900 w-full outline-none rounded-lg focus:border focus:border-primary"
+                placeholder="Confirmar contraseña"
+                name="confirmPassword"
+                value={confirmPassword}
+                onChange={onConfirmPasswordChange}
+              />
+              {showPassword ? (
+                <RiEyeOffLine
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="absolute top-1/2 -translate-y-1/2 right-2 hover:cursor-pointer text-primary"
+                />
+              ) : (
+                <RiEyeLine
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="absolute top-1/2 -translate-y-1/2 right-2 hover:cursor-pointer text-primary"
+                />
+              )}
+            </div>
+            <div className="relative mb-4">
+              {!passwordMatch && (
+                <p className="text-red-500">La contraseña no coincide</p>
+              )}
+            </div>
+          </>
+        )}
         <div className="relative ">
           <RiSmartphoneLine className="absolute top-1/2 -translate-y-1/2 left-2 text-primary" />
           <input
@@ -187,7 +199,7 @@ export const CreateUser = ({ handlerCloseFormCreate }) => {
             className="py-3 pl-8 pr-4 bg-secondary-900 w-full outline-none rounded-lg focus:border focus:border-primary"
             placeholder="Numero de celular"
             name="phoneNumber"
-            value={userForm.phoneNumber}
+            value={userForm.phoneNumber || ""}
             onChange={onInputChange}
           />
         </div>
@@ -203,7 +215,7 @@ export const CreateUser = ({ handlerCloseFormCreate }) => {
                 type="checkbox"
                 id="checkAdmin"
                 name="admin"
-                checked={userForm.admin}
+                checked={userForm.admin || ""}
                 onChange={(e) => onCheckboxChange(e, "admin")}
               />
               <span className="text-sm hover:text-primary ">Administrador</span>
@@ -216,7 +228,7 @@ export const CreateUser = ({ handlerCloseFormCreate }) => {
                 type="checkbox"
                 id="checkGuard"
                 name="guard"
-                checked={userForm.guard}
+                checked={userForm.guard || ""}
                 onChange={(e) => onCheckboxChange(e, "guard")}
               />
               <span className="text-sm hover:text-primary">
@@ -225,13 +237,13 @@ export const CreateUser = ({ handlerCloseFormCreate }) => {
             </label>
           </div>
         </div>
-
+      <input type="hidden" name="id" value={userForm.id || ""}/>
         <div>
           <button
             type="submit"
             className="bg-primary text-black uppercase font-bold text-sm w-full py-3 px-4 rounded-lg "
           >
-            Crear
+            {userForm.id > 0 ? "Editar" : "Crear"}
           </button>
         </div>
       </form>

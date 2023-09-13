@@ -1,6 +1,6 @@
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { findAllUsers, save } from "../services/userService";
+import { findAllUsers, save, update } from "../services/userService";
 import {
   addUser,
   loadingError,
@@ -9,6 +9,7 @@ import {
   onUserSelectedForm,
   onOpenFormCreate,
   onCloseFormCreate,
+  updateUser,
 } from "../store/slices/user/usersSlice";
 import Swal from "sweetalert2";
 import { useAuth } from "../auth/hooks/useAuth";
@@ -33,11 +34,17 @@ export const useUsers = () => {
   };
 
   //Regustrar usuario
-  const handlerAddUser = async (user,redirectTo) => {
+  const handlerAddUser = async (user, redirectTo) => {
     let response;
     try {
-      response = await save(user);
-      dispatch(addUser(response.data));
+      if (user.id === 0) {
+        response = await save(user);
+        dispatch(addUser(response.data));
+      } else {
+        //actualizar
+        response = await update(user);
+        dispatch(updateUser(response.data));
+      }
 
       Swal.fire({
         position: "top",
@@ -46,13 +53,11 @@ export const useUsers = () => {
         showConfirmButton: false,
         timer: 1500,
       });
-     
 
-      if(redirectTo){
+      if (redirectTo) {
         handlerCloseFormCreate();
         navigate(redirectTo);
       }
-      
     } catch (error) {
       if (error.response && error.response.status == 400) {
         dispatch(loadingError(error.response.data));

@@ -48,6 +48,19 @@ export const usersSlice = createSlice({
       state.visibleFormCreate = false;
     },
 
+    updateUser: (state, action) => {
+      state.users = state.users.map((u) => {
+        if (u.id === action.payload.id) {
+          return {
+            ...action.payload,
+          };
+        }
+        return u;
+      });
+      state.userSelected= initialUserForm;
+      state.visibleFormCreate=false;
+    },
+
     loadingUsers: (state, action) => {
       state.users = action.payload;
       state.isLoadingUsers = false;
@@ -72,6 +85,7 @@ export const usersSlice = createSlice({
 
 export const {
   addUser,
+  updateUser,
   loadingUsers,
   onUserSelectedForm,
   onOpenFormCreate,
