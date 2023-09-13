@@ -55,7 +55,7 @@ export const Users = () => {
             </span>
           </div>
         ) : (
-          <DataTable />
+          <DataTable dataUsers={users} />
         )}
       </div>
     </div>

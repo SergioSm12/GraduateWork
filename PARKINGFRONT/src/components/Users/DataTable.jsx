@@ -15,15 +15,16 @@ import {
   RiArrowRightDoubleLine,
   RiDeleteBin7Line,
   RiEdit2Line,
-  RiEye2Line,
   RiInformationLine,
   RiLineHeight,
+  RiLoopLeftFill,
   RiSearch2Line,
   RiSortAsc,
   RiSortDesc,
 } from "react-icons/ri";
 import { rankItem } from "@tanstack/match-sorter-utils";
 import classNames from "classnames";
+import { ModalForm } from "./ModalForm";
 const fuzzyFilter = (row, columnId, value, addMeta) => {
   const itemRank = rankItem(row.getValue(columnId), value);
 
@@ -52,11 +53,28 @@ const DebuncedInput = ({ value: keyWord, onchange, ...props }) => {
   );
 };
 
-export const DataTable = () => {
-  const { users } = useUsers();
-  const [data, setData] = useState(users);
+export const DataTable = ({ dataUsers }) => {
+  const { visibleFormCreate, isLoadingUsers, handlerOpenFormCreate, getUsers } =
+    useUsers();
+  const [data, setData] = useState(dataUsers);
   const [globalFilter, setGlobalFilter] = useState("");
   const [sorting, setSorting] = useState([]);
+
+  useEffect(() => {
+    setData(dataUsers);
+  }, [dataUsers]);
+
+  if (isLoadingUsers) {
+    return (
+      <div className="flex flex-col gap-2 items-center bg-secondary-900 py-4 rounded-lg">
+        <div className="animate-spin rounded-full border-t-4 border-secondary border-opacity-50 h-12 w-12"></div>
+        <span className="text-primary text-2xl flex items-center gap-2">
+          {" "}
+          <RiLoopLeftFill /> Cargando usuarios ...
+        </span>
+      </div>
+    );
+  }
 
   const columns = [
     {
@@ -133,6 +151,8 @@ export const DataTable = () => {
   });
   return (
     <>
+      {/*Modal para crear*/}
+      {!visibleFormCreate || <ModalForm />}
       <div className="">
         {/*input*/}
         <div className="mb-5">
@@ -140,21 +160,32 @@ export const DataTable = () => {
             <h1 className=" font-bold text-sm md:text-3xl mb-6">
               Busca el usuario por cualquier campo.
             </h1>
-            <button className="font-bold text-xs py-2 px-4 bg-primary/80 text-black hover:bg-primary rounded-lg transition-colors">
-              Agregar Usuario
-            </button>
+            {visibleFormCreate || (
+              <button
+                className="font-bold text-xs py-2 px-4 bg-primary/80 text-black hover:bg-primary rounded-lg transition-colors"
+                onClick={handlerOpenFormCreate}
+              >
+                Agregar Usuario
+              </button>
+            )}
           </div>
-          <div className="relative">
-            <RiSearch2Line className="absolute top-1/2  -translate-y-1/2 left-4" />
-            <DebuncedInput
-              type="text"
-              value={globalFilter ?? ""}
-              onchange={(value) => setGlobalFilter(String(value))}
-              className="bg-secondary-900 outline-none py-2 pr-4 pl-10 rounded-lg
+
+          {visibleFormCreate || (
+            <div className="relative">
+              <RiSearch2Line className="absolute top-1/2  -translate-y-1/2 left-4" />
+              <DebuncedInput
+                type="text"
+                value={globalFilter ?? ""}
+                onchange={(value) => {
+                  setGlobalFilter(String(value));
+                  getUsers();
+                }}
+                className="bg-secondary-900 outline-none py-2 pr-4 pl-10 rounded-lg
               placeholder:text-gray-500 w-full"
-              placeholder="Buscar..."
-            />
-          </div>
+                placeholder="Buscar..."
+              />
+            </div>
+          )}
         </div>
         {/*Tabla */}
         <div className="overflow-x-auto">

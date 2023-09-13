@@ -6,12 +6,16 @@ import {
   loadingError,
   initialUserForm,
   loadingUsers,
+  onUserSelectedForm,
+  onOpenFormCreate,
+  onCloseFormCreate,
 } from "../store/slices/user/usersSlice";
 import Swal from "sweetalert2";
 import { useAuth } from "../auth/hooks/useAuth";
 
 export const useUsers = () => {
-  const { users, userSelected, errors } = useSelector((state) => state.users);
+  const { users, userSelected, errors, isLoadingUsers, visibleFormCreate } =
+    useSelector((state) => state.users);
 
   const { login, handlerLogout } = useAuth();
   const dispatch = useDispatch();
@@ -29,7 +33,7 @@ export const useUsers = () => {
   };
 
   //Regustrar usuario
-  const handlerAddUser = async (user) => {
+  const handlerAddUser = async (user,redirectTo) => {
     let response;
     try {
       response = await save(user);
@@ -42,8 +46,13 @@ export const useUsers = () => {
         showConfirmButton: false,
         timer: 1500,
       });
-      handlerInitialErrors();
-      navigate("/auth");
+     
+
+      if(redirectTo){
+        handlerCloseFormCreate();
+        navigate(redirectTo);
+      }
+      
     } catch (error) {
       if (error.response && error.response.status == 400) {
         dispatch(loadingError(error.response.data));
@@ -60,13 +69,34 @@ export const useUsers = () => {
     dispatch(loadingError({}));
   };
 
+  //selccionar user para update
+  const handlerUserSelectedForm = (user) => {
+    dispatch(onUserSelectedForm({ ...user }));
+  };
+
+  //mostrar formulario
+  const handlerOpenFormCreate = () => {
+    dispatch(onOpenFormCreate());
+  };
+
+  //Ocultar formulario
+  const handlerCloseFormCreate = () => {
+    dispatch(onCloseFormCreate());
+    dispatch(loadingError({}));
+  };
+
   return {
     users,
+    visibleFormCreate,
     userSelected,
     initialUserForm,
     errors,
+    isLoadingUsers,
     handlerAddUser,
     handlerInitialErrors,
     getUsers,
+    handlerUserSelectedForm,
+    handlerOpenFormCreate,
+    handlerCloseFormCreate,
   };
 };

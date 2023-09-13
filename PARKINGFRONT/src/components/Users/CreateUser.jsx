@@ -1,7 +1,5 @@
 import React, { useState } from "react";
 
-import { Link } from "react-router-dom";
-import logoUsta from "../../assets/pngwing.com.png";
 //Icons
 import {
   RiMailLine,
@@ -9,14 +7,19 @@ import {
   RiEyeLine,
   RiEyeOffLine,
   RiUserLine,
-  RiRoadsterLine,
   RiSmartphoneLine,
+  RiCloseCircleLine,
 } from "react-icons/ri";
 import { useUsers } from "../../hooks/useUsers";
 
-export const Register = () => {
-  const { initialUserForm, handlerAddUser, errors, handlerInitialErrors } =
-    useUsers();
+export const CreateUser = ({ handlerCloseFormCreate }) => {
+  const {
+    initialUserForm,
+    handlerAddUser,
+    errors,
+    handlerInitialErrors,
+    getUsers,
+  } = useUsers();
 
   //estado para el formulario
   const [userForm, setUserForm] = useState(initialUserForm);
@@ -38,6 +41,14 @@ export const Register = () => {
     });
   };
 
+  const onCheckboxChange = (e, checkboxName) => {
+    const { checked } = e.target;
+    setUserForm((prevState) => ({
+      ...prevState,
+      [checkboxName]: checked,
+    }));
+  };
+
   const onSubmit = (e) => {
     e.preventDefault();
 
@@ -45,20 +56,34 @@ export const Register = () => {
       handlerInitialErrors();
       setPasswordMatch(false);
     } else {
-      handlerAddUser(userForm, "/auth");
+      handlerAddUser(userForm, "/users").then(() => {
+        getUsers();
+      });
     }
+  };
+
+  const onCloseForm = () => {
+    handlerCloseFormCreate();
+    setUserForm(initialUserForm);
   };
 
   return (
     <div className="bg-secondary-100 p-8 rounded-xl shadow-2xl w:auto lg:w-[450px]">
-      <h1 className="text-3xl uppercase font-bold tracking-[5px] text-white mb-8">
-        Crear <span className="text-primary">cuenta</span>
-      </h1>
-      <form className="mb-8" onSubmit={onSubmit}>
-        <button className="flex items-center justify-center py-3 px-4 gap-4 bg-secondary-900 w-full rounded-full mb-8 text-gray-100">
-          <img src={logoUsta} className="w-8 h-8" />
-          Universidad Santo Tomás <RiRoadsterLine />
+      <div className="flex items-start justify-between">
+        <h1 className=" text-2xl uppercase font-bold tracking-[5px] text-white mb-8">
+          Crear <span className="text-primary">usuario</span>
+        </h1>
+
+        <button
+          className=" py-2 px-2 text-red-600 hover:text-black bg-secondary-900/80  hover:bg-red-600/50 rounded-lg  transition-colors"
+          type="button"
+          onClick={() => onCloseForm()}
+        >
+          <RiCloseCircleLine className="text-2xl " />
         </button>
+      </div>
+
+      <form className="mb-8" onSubmit={onSubmit}>
         <div className="relative ">
           <RiUserLine className="absolute top-1/2 -translate-y-1/2 left-2 text-primary" />
           <input
@@ -169,25 +194,48 @@ export const Register = () => {
         <div className="relative mb-4">
           <p className="text-red-500">{errors?.phoneNumber}</p>
         </div>
+        <div className="mb-8 flex flex-col md:flex-row md:items-center md:justify-between">
+          {/*Aqui van los checkbox para guarda y administrador  */}
+          <div className="relative">
+            <label htmlFor="checkAdmin" className="flex items-center space-x-2">
+              <input
+                className=""
+                type="checkbox"
+                id="checkAdmin"
+                name="admin"
+                checked={userForm.admin}
+                onChange={(e) => onCheckboxChange(e, "admin")}
+              />
+              <span className="text-sm hover:text-primary ">Administrador</span>
+            </label>
+          </div>
+          <div className="relative">
+            <label htmlFor="checkGuard" className="flex items-center space-x-2">
+              <input
+                className=""
+                type="checkbox"
+                id="checkGuard"
+                name="guard"
+                checked={userForm.guard}
+                onChange={(e) => onCheckboxChange(e, "guard")}
+              />
+              <span className="text-sm hover:text-primary">
+                Guarda de seguridad
+              </span>
+            </label>
+          </div>
+        </div>
 
         <div>
           <button
             type="submit"
             className="bg-primary text-black uppercase font-bold text-sm w-full py-3 px-4 rounded-lg "
           >
-            Registrarme
+            Crear
           </button>
         </div>
       </form>
-      <span className="flex items-center justify-center gap-2">
-        ¿Ya tienes cuenta ?
-        <Link
-          to="/auth"
-          className="text-primary hover:text-gray-100 transition-colors"
-        >
-          Ingresa
-        </Link>
-      </span>
+      <hr className="border border-dashed border-gray-500/50 mb-2" />
     </div>
   );
 };
