@@ -42,7 +42,7 @@ export const update = async ({
       email,
       phoneNumber,
       admin,
-      guard
+      guard,
     });
   } catch (error) {
     throw error;
@@ -55,6 +55,14 @@ export const findAllUsers = async () => {
     return response;
   } catch (error) {
     console.log(error);
+    throw error;
+  }
+};
+
+export const remove = async (id) => {
+  try {
+    await parkingApi.delete(`${BASE_URL_USERS}/${id}`);
+  } catch (error) {
     throw error;
   }
 };

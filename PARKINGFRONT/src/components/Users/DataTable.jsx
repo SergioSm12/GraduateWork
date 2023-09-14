@@ -25,6 +25,7 @@ import {
 import { rankItem } from "@tanstack/match-sorter-utils";
 import classNames from "classnames";
 import { ModalForm } from "./ModalForm";
+import { NavLink } from "react-router-dom";
 const fuzzyFilter = (row, columnId, value, addMeta) => {
   const itemRank = rankItem(row.getValue(columnId), value);
 
@@ -60,6 +61,7 @@ export const DataTable = ({ dataUsers }) => {
     handlerOpenFormCreate,
     getUsers,
     handlerUserSelectedForm,
+    handlerRemoveUser,
   } = useUsers();
   const [data, setData] = useState(dataUsers);
   const [globalFilter, setGlobalFilter] = useState("");
@@ -224,9 +226,9 @@ export const DataTable = ({ dataUsers }) => {
                       )}
                       {cell.column.id === "actions" && (
                         <div className="flex items-center gap-2">
-                          <button className="py-2 px-2 bg-primary/80 text-black hover:bg-secondary-100 rounded-lg transition-colors">
+                          <NavLink className="py-2 px-2 bg-primary/80 text-black hover:bg-secondary-100 rounded-lg transition-colors" to={"users/show/"+row.original.id}>
                             <RiInformationLine className="text-lg" />
-                          </button>
+                          </NavLink>
                           <button
                             type="button"
                             className="py-2 px-2 bg-primary/80 text-black hover:bg-primary rounded-lg transition-colors"
@@ -238,8 +240,12 @@ export const DataTable = ({ dataUsers }) => {
                             <RiEdit2Line className="text-lg" />
                           </button>
                           <button
+                            type="button"
                             className="py-2 px-2 bg-secondary-100/50 hover:bg-secondary-100 text-red-500/70 hover:text-red-500
                  transition-colors rounded-lg  flex items-center "
+                            onClick={() => {
+                              handlerRemoveUser(row.original.id);
+                            }}
                           >
                             <RiDeleteBin7Line className="text-lg" />
                           </button>

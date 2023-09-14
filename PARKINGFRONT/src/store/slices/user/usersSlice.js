@@ -57,10 +57,13 @@ export const usersSlice = createSlice({
         }
         return u;
       });
-      state.userSelected= initialUserForm;
-      state.visibleFormCreate=false;
+      state.userSelected = initialUserForm;
+      state.visibleFormCreate = false;
     },
 
+    removeUser: (state, action) => {
+      state.users = state.users.filter((user) => user.id !== action.payload);
+    },
     loadingUsers: (state, action) => {
       state.users = action.payload;
       state.isLoadingUsers = false;
@@ -86,6 +89,7 @@ export const usersSlice = createSlice({
 export const {
   addUser,
   updateUser,
+  removeUser,
   loadingUsers,
   onUserSelectedForm,
   onOpenFormCreate,

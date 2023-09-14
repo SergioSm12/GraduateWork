@@ -1,6 +1,6 @@
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { findAllUsers, save, update } from "../services/userService";
+import { findAllUsers, remove, save, update } from "../services/userService";
 import {
   addUser,
   loadingError,
@@ -10,6 +10,7 @@ import {
   onOpenFormCreate,
   onCloseFormCreate,
   updateUser,
+  removeUser,
 } from "../store/slices/user/usersSlice";
 import Swal from "sweetalert2";
 import { useAuth } from "../auth/hooks/useAuth";
@@ -21,6 +22,19 @@ export const useUsers = () => {
   const { login, handlerLogout } = useAuth();
   const dispatch = useDispatch();
   const navigate = useNavigate();
+
+  //Alertas
+  const Toast = Swal.mixin({
+    toast: true,
+    position: "top",
+    showConfirmButton: false,
+    timer: 3000,
+    timerProgressBar: true,
+    didOpen: (toast) => {
+      toast.addEventListener("mouseenter", Swal.stopTimer);
+      toast.addEventListener("mouseleave", Swal.resumeTimer);
+    },
+  });
 
   const getUsers = async () => {
     try {
@@ -46,12 +60,9 @@ export const useUsers = () => {
         dispatch(updateUser(response.data));
       }
 
-      Swal.fire({
-        position: "top",
+      Toast.fire({
         icon: "success",
         title: user.id === 0 ? "Usuario Creado" : "Usuario Actualizado",
-        showConfirmButton: false,
-        timer: 1500,
       });
 
       if (redirectTo) {
@@ -63,11 +74,44 @@ export const useUsers = () => {
         dispatch(loadingError(error.response.data));
       } else if (error.response?.status == 401) {
         //manejamos el cierre de sesion cuando tengamos autenticacion
-        //handlerLogout();
+        handlerLogout();
       } else {
         throw error;
       }
     }
+  };
+
+  const handlerRemoveUser = (id) => {
+    //validacion para autorizacion
+
+    Swal.fire({
+      title: "Esta seguro que desea eliminar?",
+      text: "Cuidado el usuario sera eliminado ",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#1E293C",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Si, eliminar!",
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        try {
+          //Eliminar desde el backend
+          await remove(id);
+
+          dispatch(removeUser(id));
+
+          Swal.fire(
+            "Usuario Eliminado!",
+            "El usuario ha sido eliminado con exito",
+            "success"
+          );
+        } catch (error) {
+          if (error.response?.status == 401) {
+            handlerLogout();
+          }
+        }
+      }
+    });
   };
 
   const handlerInitialErrors = () => {
@@ -98,6 +142,7 @@ export const useUsers = () => {
     errors,
     isLoadingUsers,
     handlerAddUser,
+    handlerRemoveUser,
     handlerInitialErrors,
     getUsers,
     handlerUserSelectedForm,

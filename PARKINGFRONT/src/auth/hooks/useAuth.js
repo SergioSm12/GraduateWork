@@ -1,15 +1,34 @@
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { loginUser } from "../services/authService";
-import { onLogin, onLogout, onInitLogin } from "../../store/slices/auth/authSlice";
+import {
+  onLogin,
+  onLogout,
+  onInitLogin,
+} from "../../store/slices/auth/authSlice";
 import Swal from "sweetalert2";
 
 export const useAuth = () => {
   const dispatch = useDispatch();
 
-  const { user, isAdmin, isGuard, isAuth, isLoginLoading } = useSelector((state) => state.auth);
+  const { user, isAdmin, isGuard, isAuth, isLoginLoading } = useSelector(
+    (state) => state.auth
+  );
 
   const navigate = useNavigate();
+
+  //Alertas
+  const Toast = Swal.mixin({
+    toast: true,
+    position: "top",
+    showConfirmButton: false,
+    timer: 3000,
+    timerProgressBar: true,
+    didOpen: (toast) => {
+      toast.addEventListener("mouseenter", Swal.stopTimer);
+      toast.addEventListener("mouseleave", Swal.resumeTimer);
+    },
+  });
 
   const handlerLogin = async ({ email, password }) => {
     try {
@@ -32,6 +51,11 @@ export const useAuth = () => {
         })
       );
       sessionStorage.setItem("token", `Bearer ${token}`);
+
+      Toast.fire({
+        icon: "success",
+        title: `Bienvenido ${email}`,
+      });
       navigate("/");
     } catch (error) {
       dispatch(onLogout());
@@ -42,7 +66,6 @@ export const useAuth = () => {
           title: "correo o contraseña requeridos",
           showConfirmButton: false,
           timer: 1500,
-          theme: "dark",
         });
       } else if (error.response?.status == 403) {
         Swal.fire({
@@ -51,7 +74,6 @@ export const useAuth = () => {
           title: "Error de validacion",
           showConfirmButton: false,
           timer: 1500,
-          theme: "dark",
         });
       } else {
         throw error;
