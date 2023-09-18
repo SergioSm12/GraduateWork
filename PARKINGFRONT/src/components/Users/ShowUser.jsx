@@ -28,18 +28,14 @@ export const ShowUser = () => {
   const [globalFilter, setGlobalFilter] = useState("");
 
   //Traer datos del contexto
-  const { initialUserForm, users = [] } = useUsers();
-  const [userSelected, setUserSelected] = useState(initialUserForm);
+  const { userByid, getUserById } = useUsers();
 
   //Traemos el parametro de la url
   const { id } = useParams();
 
   useEffect(() => {
-    if (id) {
-      const user = users.find((u) => u.id == id) || initialUserForm;
-      setUserSelected(user);
-    }
-  }, [id]);
+    getUserById(id);
+  }, [, id]);
 
 
   return (
@@ -76,10 +72,6 @@ export const ShowUser = () => {
               <h1 className=" font-bold text-sm md:text-3xl mb-6">
                 Busca el recibo por cualquier campo.
               </h1>
-
-              <button className="font-bold text-xs py-2 px-4 bg-primary/80 text-black hover:bg-primary rounded-lg transition-colors mb-2 ">
-                Agregar Recibo
-              </button>
             </div>
 
             <div className="relative">
@@ -100,8 +92,8 @@ export const ShowUser = () => {
         </div>
         {/*Seccion 2*/}
         <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-1 gap-8 ">
-          <ShowUserInformation userSelected={userSelected}/>
-          <ShowUserVehicles id={id} userSelected={userSelected}/>
+          <ShowUserInformation userByid={userByid} />
+          <ShowUserVehicles userByid={userByid} />
         </div>
       </div>
     </div>

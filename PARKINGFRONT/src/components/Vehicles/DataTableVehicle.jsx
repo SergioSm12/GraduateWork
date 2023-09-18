@@ -11,14 +11,13 @@ import {
 import "@szhsin/react-menu/dist/index.css";
 import "@szhsin/react-menu/dist/transitions/slide.css";
 import { Menu, MenuItem, MenuButton } from "@szhsin/react-menu";
-import { Link } from "react-router-dom";
-export const DataTableVehicle = ({ id }) => {
+import { Link, useParams } from "react-router-dom";
+export const DataTableVehicle = () => {
   const { vehicles, getVehicles } = useVehicle();
-
+  const { id } = useParams();
   useEffect(() => {
     getVehicles(id);
   }, []);
-  console.log(vehicles);
   return (
     <>
       <h1 className="text-2xl text-white mb-8">Vehiculos</h1>
@@ -66,7 +65,7 @@ export const DataTableVehicle = ({ id }) => {
                           className="rounded-lg transition-colors text-gray-300 hover:bg-secondary-900
                      flex items-center gap-x-2 p-2 flex-1"
                         >
-                          <RiEdit2Line className="text-blue-500" /> Editar
+                          <RiEdit2Line className="text-blue-500" /> Editar vehiculo
                         </button>
                       </MenuItem>
 
@@ -75,7 +74,7 @@ export const DataTableVehicle = ({ id }) => {
                           className="rounded-lg transition-colors text-gray-300 hover:bg-secondary-900
                      flex items-center gap-x-2 p-2 flex-1"
                         >
-                          <RiDeleteBinLine className="text-red-500" /> Eliminar
+                          <RiDeleteBinLine className="text-red-500" /> Eliminar vehiculo
                         </button>
                       </MenuItem>
                     </Menu>

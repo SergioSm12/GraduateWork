@@ -32,6 +32,7 @@ export const usersSlice = createSlice({
     users: [],
     paginator: {},
     userSelected: initialUserForm,
+    userByid: initialUserForm,
     visibleFormCreate: false,
     errors: initialErrors,
     isLoadingUsers: true,
@@ -69,6 +70,10 @@ export const usersSlice = createSlice({
       state.isLoadingUsers = false;
     },
 
+    loadingUserById: (state, action) => {
+      state.userByid = action.payload;
+    },
+
     onUserSelectedForm: (state, action) => {
       state.userSelected = action.payload;
       state.visibleFormCreate = true;
@@ -95,4 +100,5 @@ export const {
   onOpenFormCreate,
   onCloseFormCreate,
   loadingError,
+  loadingUserById
 } = usersSlice.actions;

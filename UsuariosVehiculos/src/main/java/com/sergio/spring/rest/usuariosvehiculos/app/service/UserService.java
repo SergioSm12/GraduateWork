@@ -2,6 +2,7 @@ package com.sergio.spring.rest.usuariosvehiculos.app.service;
 
 import com.sergio.spring.rest.usuariosvehiculos.app.models.dto.entity.users.UserDto;
 import com.sergio.spring.rest.usuariosvehiculos.app.models.dto.entity.users.VehicleDto;
+import com.sergio.spring.rest.usuariosvehiculos.app.models.dto.entity.users.VehicleTypeDto;
 import com.sergio.spring.rest.usuariosvehiculos.app.models.dto.mapper.DtoMapperUser;
 import com.sergio.spring.rest.usuariosvehiculos.app.models.dto.mapper.DtoMapperVehicleDto;
 import com.sergio.spring.rest.usuariosvehiculos.app.models.entities.*;
@@ -34,7 +35,11 @@ public class UserService implements IUserService {
     private IVehicleRepository vehicleRepository;
 
     //Rate
+    @Autowired
     private IRateRepository rateRepository;
+
+    @Autowired
+    private IVehicleTypeRepository vehicleTypeRepository;
 
     //Encriptar
     @Autowired
@@ -50,6 +55,8 @@ public class UserService implements IUserService {
                         .setUser(u)
                         .build()).collect(Collectors.toList());
     }
+
+
 
     @Override
     @Transactional(readOnly = true)
@@ -180,6 +187,13 @@ public class UserService implements IUserService {
     @Transactional
     public void removeVehicleByUser(Long vehicleId) {
         vehicleRepository.deleteByVehicleId(vehicleId);
+    }
+
+    //Traer vehicle
+    @Override
+    @Transactional(readOnly = true)
+    public List<VehicleType> findAllVehicleType() {
+        return (List<VehicleType>) vehicleTypeRepository.findAll();
     }
 
     //Create

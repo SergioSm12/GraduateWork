@@ -1,6 +1,12 @@
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { findAllUsers, remove, save, update } from "../services/userService";
+import {
+  findAllUsers,
+  findUserById,
+  remove,
+  save,
+  update,
+} from "../services/userService";
 import {
   addUser,
   loadingError,
@@ -11,12 +17,13 @@ import {
   onCloseFormCreate,
   updateUser,
   removeUser,
+  loadingUserById,
 } from "../store/slices/user/usersSlice";
 import Swal from "sweetalert2";
 import { useAuth } from "../auth/hooks/useAuth";
 
 export const useUsers = () => {
-  const { users, userSelected, errors, isLoadingUsers, visibleFormCreate } =
+  const { users, userSelected, errors, isLoadingUsers, visibleFormCreate, userByid } =
     useSelector((state) => state.users);
 
   const { login, handlerLogout } = useAuth();
@@ -40,6 +47,17 @@ export const useUsers = () => {
     try {
       const result = await findAllUsers();
       dispatch(loadingUsers(result.data));
+    } catch (error) {
+      if (error.response?.status == 401) {
+        handlerLogout();
+      }
+    }
+  };
+
+  const getUserById = async (id) => {
+    try {
+      const result = await findUserById(id);
+      dispatch(loadingUserById(result.data));
     } catch (error) {
       if (error.response?.status == 401) {
         handlerLogout();
@@ -148,5 +166,7 @@ export const useUsers = () => {
     handlerUserSelectedForm,
     handlerOpenFormCreate,
     handlerCloseFormCreate,
+    getUserById,
+    userByid
   };
 };

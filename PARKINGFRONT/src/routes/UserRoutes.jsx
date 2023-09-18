@@ -7,7 +7,7 @@ export const UserRoutes = () => {
   return (
     <Routes>
         <Route index element={<Users />} />
-        <Route path="users/show/:id" element={<ShowUser />} />
+        <Route path="/show/:id" element={<ShowUser />} />
     </Routes>
   )
 }

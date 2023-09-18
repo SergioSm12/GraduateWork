@@ -11,15 +11,15 @@ import {
 import { Link } from "react-router-dom";
 import { useUsers } from "../../hooks/useUsers";
 
-export const ShowUserInformation = ({ userSelected }) => {
+export const ShowUserInformation = ({ userByid }) => {
   const { initialUserForm } = useUsers();
   const [userShow, setUserShow] = useState(initialUserForm);
   useEffect(() => {
     setUserShow({
-      ...userSelected,
+      ...userByid,
       password: "",
     });
-  }, [userSelected]);
+  }, [userByid]);
   return (
     <div className="bg-secondary-900 p-8 rounded-lg xl:mb-8">
       <h1 className="text-2xl text-white mb-8">Información</h1>
@@ -37,9 +37,7 @@ export const ShowUserInformation = ({ userSelected }) => {
           <RiDiscussLine className="text-4xl text-primary" />
           <div className="flex flex-col gap-1">
             <h5 className="text-white">Correo</h5>
-            <p className="text-xs">
-              {userShow.email}
-            </p>
+            <p className="text-xs">{userShow.email}</p>
           </div>
         </div>
         <div className="flex items-center gap-4 mb-8">

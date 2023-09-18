@@ -59,6 +59,15 @@ export const findAllUsers = async () => {
   }
 };
 
+export const findUserById= async (id)=>{
+  try {
+   const response=  await parkingApi.get(`${BASE_URL_USERS}/${id}`);
+   return response;
+  } catch (error) {
+    throw error;
+  }
+}
+
 export const remove = async (id) => {
   try {
     await parkingApi.delete(`${BASE_URL_USERS}/${id}`);

@@ -226,7 +226,10 @@ export const DataTable = ({ dataUsers }) => {
                       )}
                       {cell.column.id === "actions" && (
                         <div className="flex items-center gap-2">
-                          <NavLink className="py-2 px-2 bg-primary/80 text-black hover:bg-secondary-100 rounded-lg transition-colors" to={"users/show/"+row.original.id}>
+                          <NavLink
+                            className="py-2 px-2 bg-primary/80 text-black hover:bg-secondary-100 rounded-lg transition-colors"
+                            to={"show/" + row.original.id}
+                          >
                             <RiInformationLine className="text-lg" />
                           </NavLink>
                           <button
