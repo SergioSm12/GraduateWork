@@ -6,7 +6,7 @@ import {
 } from "react-icons/ri";
 import { useVehicle } from "../../hooks/useVehicle";
 import { useParams } from "react-router-dom";
-export const CreateVehicle = ({ handlerCloseFormVehicle }) => {
+export const CreateVehicle = ({ handlerCloseFormVehicle, vehicleSelected }) => {
   const {
     handlerAddVehicle,
     initialVehicleForm,
@@ -24,13 +24,17 @@ export const CreateVehicle = ({ handlerCloseFormVehicle }) => {
     getVehicleTypes();
   }, []);
 
-  //Monitorea y guarda el cambio del selected
   useEffect(() => {
-    setVehicleForm({
-      ...vehicleForm,
-      vehicleType: selectedTypeVehicle,
-    });
-  }, [selectedTypeVehicle]);
+    if (vehicleSelected) {
+      setVehicleForm({
+        ...vehicleForm,
+        id:vehicleSelected.id,
+        plate: vehicleSelected.plate,
+        vehicleType: vehicleSelected.vehicleType,
+      });
+      setSelectedTypeVehicle(vehicleSelected.vehicleType);
+    }
+  }, [vehicleSelected]);
 
   const onCloseForm = () => {
     handlerCloseFormVehicle();
@@ -40,24 +44,29 @@ export const CreateVehicle = ({ handlerCloseFormVehicle }) => {
     const { name, value } = target;
 
     //validar type Vehicle y traer
-    if (name == "typeVehicle") {
-      const selectedTypeVehicleId = target.value;
+    if (name === "vehicleType") {
+      const selectedTypeVehicleId = value;
       const typeVehicle = vehicleTypes.find(
         (tV) => tV.id === parseInt(selectedTypeVehicleId)
       );
       setSelectedTypeVehicle(typeVehicle);
-    }
 
-    setVehicleForm({
-      ...vehicleForm,
-      [name]: value,
-    });
+      setVehicleForm({
+        ...vehicleForm,
+        [name]: typeVehicle,
+      });
+    } else {
+      setVehicleForm({
+        ...vehicleForm,
+        [name]: value,
+      });
+    }
   };
 
   const onSubmit = (e) => {
     e.preventDefault();
     handlerAddVehicle(id, vehicleForm).then(() => {
-      getVehicles();
+      getVehicles(id);
     });
   };
 
@@ -94,8 +103,8 @@ export const CreateVehicle = ({ handlerCloseFormVehicle }) => {
           <RiPoliceCarLine className="absolute top-1/2 -translate-y-1/2 left-2 text-primary" />
           <select
             className="py-3 pl-8 pr-4 bg-secondary-900 w-full outline-none rounded-lg focus:border focus:border-primary appearance-none"
-            id="typeVehicle"
-            name="typeVehicle"
+            id="vehicleType"
+            name="vehicleType"
             value={selectedTypeVehicle ? selectedTypeVehicle.id : ""}
             onChange={onInputChange}
           >
@@ -109,7 +118,12 @@ export const CreateVehicle = ({ handlerCloseFormVehicle }) => {
         </div>
 
         <div className="relative mb-8">
-          <p className="text-red-500"></p>
+          <p className="text-red-500">
+            {errorsVehicle?.vehicleType ==
+            "Debe seleccionar un tipo de vehiculo."
+              ? JSON.stringify(errorsVehicle?.vehicleType)
+              : ""}
+          </p>
         </div>
         <div>
           <button

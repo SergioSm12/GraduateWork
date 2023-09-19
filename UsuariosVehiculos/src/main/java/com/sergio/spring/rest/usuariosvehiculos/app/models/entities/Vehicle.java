@@ -3,6 +3,7 @@ package com.sergio.spring.rest.usuariosvehiculos.app.models.entities;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 
@@ -21,6 +22,7 @@ public class Vehicle {
     @ManyToOne(fetch = FetchType.LAZY)
     private User user;
 
+    @NotNull(message = "Debe seleccionar un tipo de vehiculo.")
     @ManyToOne(fetch = FetchType.LAZY)
     private VehicleType vehicleType;
 

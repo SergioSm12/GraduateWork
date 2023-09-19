@@ -37,6 +37,23 @@ export const vehicleSlice = createSlice({
       state.vehicleSelected = initialUserForm;
       state.visibleFormVehicle = false;
     },
+    updateVehicleSlice: (state, action) => {
+      state.vehicles = state.vehicles.map((v) => {
+        if (v.id === action.payload.id) {
+          return {
+            ...action.payload,
+          };
+        }
+        return v;
+      });
+      state.vehicleSelected = initialVehicleForm;
+      state.visibleFormVehicle = false;
+    },
+    removeVehicleSlice: (state, action) => {
+      state.vehicles = state.vehicles.filter(
+        (vehicle) => vehicle.id !== action.payload
+      );
+    },
     loadingVehicleTypes: (state, action) => {
       state.vehicleTypes = action.payload;
     },
@@ -62,6 +79,8 @@ export const vehicleSlice = createSlice({
 
 export const {
   addVehicle,
+  updateVehicleSlice,
+  removeVehicleSlice,
   loadingVehicles,
   loadingVehicleTypes,
   onVehicleSelectedForm,

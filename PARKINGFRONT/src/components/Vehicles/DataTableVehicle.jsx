@@ -13,10 +13,10 @@ import "@szhsin/react-menu/dist/transitions/slide.css";
 import { Menu, MenuItem, MenuButton } from "@szhsin/react-menu";
 import { Link, useParams } from "react-router-dom";
 export const DataTableVehicle = () => {
-  const { vehicles, getVehicles } = useVehicle();
-  const { id } = useParams();
+  const { vehicles, getVehicles, handlerVehicleSelectedForm, handlerRemoveVehicle} = useVehicle();
+  const { id:userId } = useParams();
   useEffect(() => {
-    getVehicles(id);
+    getVehicles(userId);
   }, []);
   return (
     <>
@@ -64,8 +64,16 @@ export const DataTableVehicle = () => {
                         <button
                           className="rounded-lg transition-colors text-gray-300 hover:bg-secondary-900
                      flex items-center gap-x-2 p-2 flex-1"
+                          onClick={() => {
+                            handlerVehicleSelectedForm({
+                              id: id,
+                              plate: plate,
+                              vehicleType: vehicleType,
+                            });
+                          }}
                         >
-                          <RiEdit2Line className="text-blue-500" /> Editar vehiculo
+                          <RiEdit2Line className="text-blue-500" /> Editar
+                          vehiculo
                         </button>
                       </MenuItem>
 
@@ -73,8 +81,10 @@ export const DataTableVehicle = () => {
                         <button
                           className="rounded-lg transition-colors text-gray-300 hover:bg-secondary-900
                      flex items-center gap-x-2 p-2 flex-1"
+                        onClick={()=>handlerRemoveVehicle(userId,id)}
                         >
-                          <RiDeleteBinLine className="text-red-500" /> Eliminar vehiculo
+                          <RiDeleteBinLine className="text-red-500" /> Eliminar
+                          vehiculo
                         </button>
                       </MenuItem>
                     </Menu>

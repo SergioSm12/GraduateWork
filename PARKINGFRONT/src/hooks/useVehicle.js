@@ -2,7 +2,9 @@ import { useDispatch, useSelector } from "react-redux";
 import {
   findAllVehicleType,
   findAllVehiclesByUser,
+  removeVehicle,
   saveVehicle,
+  updateVehicle,
 } from "../services/vehicleService";
 import {
   addVehicle,
@@ -13,6 +15,8 @@ import {
   onOpenFormVehicle,
   onVehicleSelectedForm,
   loadingVehicleTypes,
+  updateVehicleSlice,
+  removeVehicleSlice,
 } from "../store/slices/vehicle/vehicleSlice";
 import Swal from "sweetalert2";
 import { useNavigate } from "react-router-dom";
@@ -65,7 +69,9 @@ export const useVehicle = () => {
         response = await saveVehicle(userId, vehicle);
         dispatch(addVehicle(response.data));
       } else {
-        console.log("actualizar");
+        //console.log(vehicle);
+        response = await updateVehicle(userId, vehicle);
+        dispatch(updateVehicleSlice(response.data));
       }
       Toast.fire({
         icon: "success",
@@ -83,6 +89,33 @@ export const useVehicle = () => {
         throw error;
       }
     }
+  };
+
+  const handlerRemoveVehicle = (userId, id) => {
+    Swal.fire({
+      title: "Esta seguro que desea eliminar?",
+      text: "Cuidado el vehiculo sera eliminado ",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#1E293C",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Si, eliminar!",
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        try {
+          await removeVehicle(userId, id);
+
+          dispatch(removeVehicleSlice(id));
+          Swal.fire(
+            "Vehiculo Eliminado!",
+            "El vehiculo ha sido eliminado con exito",
+            "success"
+          );
+        } catch (error) {
+          console.log(error);
+        }
+      }
+    });
   };
 
   const handlerInitialErrorsVehicle = () => {
@@ -111,6 +144,7 @@ export const useVehicle = () => {
     vehicleSelected,
     errorsVehicle,
     handlerAddVehicle,
+    handlerRemoveVehicle,
     handlerInitialErrorsVehicle,
     getVehicles,
     getVehicleTypes,
@@ -119,6 +153,5 @@ export const useVehicle = () => {
     handlerCloseFormVehicle,
     initialVehicleForm,
     vehicleTypes,
-    
   };
 };
