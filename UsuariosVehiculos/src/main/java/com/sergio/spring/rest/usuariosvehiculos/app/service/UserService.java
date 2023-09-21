@@ -198,13 +198,6 @@ public class UserService implements IUserService {
 
     //Create
 
-    //Metodo para validar placa
-    @Override
-    @Transactional(readOnly = true)
-    public boolean checkIfVehiclePlateExists(String plate) {
-        return vehicleRepository.existsByPlate(plate);
-    }
-
     //Roles
     private List<Role> getRoles(IUser user) {
         Optional<Role> ou = roleRepository.findByName("ROLE_USER");

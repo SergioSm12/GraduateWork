@@ -3,6 +3,7 @@ package com.sergio.spring.rest.usuariosvehiculos.app.models.entities;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
 
 @Entity
 @Table(name = "rates")
@@ -10,12 +11,14 @@ public class Rate {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @NotNull(message = "Debe seleccionar un tipo de vehiculo.")
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "vehcile_type_id")
     private VehicleType vehicleType;
-    @NotBlank
+    @NotBlank(message = "El campo tiempo no puede estar vacio")
     private String time;
-    @NotNull
+    @NotNull(message = "El campo valor no puede estar vacio")
+    @Positive(message = "El valor debe ser mayor a cero.")
     private double amount;
 
     public Long getId() {

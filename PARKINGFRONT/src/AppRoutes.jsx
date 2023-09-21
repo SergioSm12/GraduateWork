@@ -9,6 +9,7 @@ import { ForgetPassword } from "./pages/auth/ForgetPassword";
 import { useAuth } from "./auth/hooks/useAuth";
 import { Home } from "./pages/admin/Home";
 import { UserRoutes } from "./routes/UserRoutes";
+import { Rates } from "./pages/admin/Rates";
 
 export const AppRoutes = () => {
   const { login } = useAuth();
@@ -27,6 +28,7 @@ export const AppRoutes = () => {
         <Route path="/" element={<LayoutAdmin />}>
           <Route index element={<Home />} />
           <Route path="users/*" element={<UserRoutes />} />
+          <Route path= "rate" element={<Rates/>}/>
         </Route>
       ) : (
         <>

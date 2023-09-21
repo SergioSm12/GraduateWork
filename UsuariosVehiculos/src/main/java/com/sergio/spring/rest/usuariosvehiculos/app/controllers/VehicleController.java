@@ -68,12 +68,7 @@ public class VehicleController {
             Optional<User> optionalUser = userService.findByIdUser(userDto.getId());
             User user = optionalUser.get();
             vehicle.setUser(user);
-/*
-            //validar placa
-            boolean vehicleExists = userService.checkIfVehiclePlateExists(vehicle.getPlate());
-            if (vehicleExists) {
-                return ResponseEntity.badRequest().body(new ErrorResponse("La placa ya existe "));
-            }*/
+
 
 
             return ResponseEntity.status(HttpStatus.CREATED).body(userService.saveVehicle(vehicle));

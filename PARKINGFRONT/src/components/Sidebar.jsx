@@ -94,11 +94,11 @@ export const Sidebar = () => {
 
           <li>
             <Link
-              to="/"
+              to="/rate"
               className="flex items-center gap-4 py-2 px-4 rounded-lg hover:bg-secondary-900 transition-colors"
             >
               <RiCalendarTodoLine className="text-primary" />
-              Calendario
+              Adminitrar Tarifas.
             </Link>
           </li>
         </ul>

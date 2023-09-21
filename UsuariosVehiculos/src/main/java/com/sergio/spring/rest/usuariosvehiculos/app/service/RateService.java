@@ -39,6 +39,8 @@ public class RateService implements IRateService {
 
     @Transactional
     public RateDto createRate(Rate rate) {
+        String timeUpper = rate.getTime().toUpperCase();
+        rate.setTime(timeUpper);
         return DtoMapperRate.builder().setRate(rateRepository.save(rate)).build();
     }
 
