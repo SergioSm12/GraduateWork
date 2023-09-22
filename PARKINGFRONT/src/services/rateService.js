@@ -34,3 +34,11 @@ export const updateRate = async ({ id, amount, time, vehicleType }) => {
     throw error;
   }
 };
+
+export const removeRate = async (id)=>{
+  try {
+    await parkingApi.delete(`${BASE_URL_RATES}/${id}`);
+  } catch (error) {
+    throw error;
+  }
+}

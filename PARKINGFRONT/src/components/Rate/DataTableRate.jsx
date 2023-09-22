@@ -11,7 +11,7 @@ const formatCurrency = (amount) => {
   }).format(amount);
 };
 export const DataTableRate = () => {
-  const { rates, handlerRateSelectedForm } = useRates();
+  const { rates, handlerRateSelectedForm, handlerRemoveRate } = useRates();
   return (
     <div className="overflow-x-auto">
       <table className="table-auto min-w-full  border ">
@@ -51,6 +51,7 @@ export const DataTableRate = () => {
                 <button
                   className="py-2 px-4 bg-secondary-100/50 hover:bg-secondary-100 text-red-500/70 hover:text-red-500
                  transition-colors rounded-lg  "
+                  onClick={() => handlerRemoveRate(rate.id)}
                 >
                   <RiDeleteBin5Line className="text-xl" />
                 </button>

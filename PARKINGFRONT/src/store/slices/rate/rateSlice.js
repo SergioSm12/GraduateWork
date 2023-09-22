@@ -47,6 +47,9 @@ export const rateSlice = createSlice({
       });
       state.rateSelected = initialRateForm;
     },
+    removeRateSlice: (state, action) => {
+      state.rates = state.rates.filter((rate) => rate.id !== action.payload);
+    },
     loadingRates: (state, action) => {
       state.rates = action.payload;
     },
@@ -66,4 +69,5 @@ export const {
   loadingErrorRates,
   updateRateSlice,
   onRateSelectedForm,
+  removeRateSlice,
 } = rateSlice.actions;

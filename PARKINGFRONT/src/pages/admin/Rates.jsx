@@ -4,8 +4,9 @@ import { Link } from "react-router-dom";
 import { CreateRate } from "../../components/Rate/CreateRate";
 import { DataTableRate } from "../../components/Rate/DataTableRate";
 import { useRates } from "../../hooks/useRates";
+import { RiAlertLine } from "react-icons/ri";
 export const Rates = () => {
-  const { getRates, rateSelected } = useRates();
+  const { rates, getRates, rateSelected } = useRates();
   useEffect(() => {
     getRates();
   }, []);
@@ -34,12 +35,23 @@ export const Rates = () => {
         </div>
         {/*Card Listar rate*/}
         <div className="bg-secondary-100 p-8 rounded-lg">
-          <div className="text-white text-xl md:text-2xl mb-4">
-            <h1>Tarifas:</h1>
-          </div>
+          {rates.length > 0 ? (
+            <div className="text-white text-xl md:text-2xl mb-4">
+              <h1>Tarifas:</h1>
+            </div>
+          ):("")}
           <div>
             {/*Tabla de tarifas*/}
-            <DataTableRate />
+            {rates.length > 0 ? (
+              <DataTableRate />
+            ) : (
+              <div className=" flex justify-center">
+                <span className="flex items-center gap-2  bg-secondary-900 py-4 px-4 rounded-lg">
+                  <RiAlertLine className="text-red-600" /> No hay tarifas
+                  registradas en la base de datos
+                </span>
+              </div>
+            )}
           </div>
         </div>
       </div>
