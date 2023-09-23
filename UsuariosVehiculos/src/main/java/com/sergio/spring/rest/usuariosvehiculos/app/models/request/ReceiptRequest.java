@@ -3,18 +3,19 @@ package com.sergio.spring.rest.usuariosvehiculos.app.models.request;
 import jakarta.validation.constraints.NotNull;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 public class ReceiptRequest {
     @NotNull
-    private LocalDate dueDate;
+    private LocalDateTime dueDate;
     @NotNull
     private boolean paymentStatus;
 
-    public LocalDate getDueDate() {
+    public LocalDateTime getDueDate() {
         return dueDate;
     }
 
-    public void setDueDate(LocalDate dueDate) {
+    public void setDueDate(LocalDateTime dueDate) {
         this.dueDate = dueDate;
     }
 

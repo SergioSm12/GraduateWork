@@ -51,7 +51,7 @@ public class RateService implements IRateService {
         Rate rateOptional = null;
         if (ro.isPresent()) {
             Rate rateDB = ro.orElseThrow();
-            rateDB.setTime(rate.getTime());
+            rateDB.setTime(rate.getTime().toUpperCase());
             rateDB.setAmount(rate.getAmount());
             rateDB.setVehicleType(rate.getVehicleType());
             rateOptional = rateRepository.save(rateDB);

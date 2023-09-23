@@ -16,6 +16,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -107,7 +109,7 @@ public class ReceiptService implements IReceiptService {
             throw new IllegalArgumentException("Vehicle is not associated with the user");
         }
 
-
+//Obtiene el rate asociado
         Optional<Rate> rateOptional = rateRepository.findById(receipt.getRate().getId());
         if (rateOptional.isEmpty()) {
             throw new IllegalArgumentException("Rate not found");
@@ -116,8 +118,17 @@ public class ReceiptService implements IReceiptService {
         receipt.setUser(userOptional.get());
         receipt.setVehicle(vehicleOptional.get());
         receipt.setRate(rateOptional.get());
-        receipt.setIssueDate(LocalDate.now());
-        receipt.setDueDate(null);
+        receipt.setIssueDate(LocalDateTime.now());
+        //Calcular dueDate segunRateTime
+        //FECHA ACTUAL
+        LocalDateTime currentDateTime = LocalDateTime.now();
+        //VARIABLE
+        String rateTime = rateOptional.get().getTime();
+        //CACLCULAR
+        LocalDateTime dueDate = calculateDueDate(rateTime,currentDateTime);
+        receipt.setDueDate(dueDate);
+
+
         receipt.setPaymentStatus(false);
 
         Receipt savedReceipt = receiptRepository.save(receipt);
@@ -146,5 +157,16 @@ public class ReceiptService implements IReceiptService {
         receiptRepository.deleteById(receiptId);
     }
 
+    private LocalDateTime calculateDueDate(String rateTime, LocalDateTime currentDate) {
+        //casos segun rateTime y calculo
+        rateTime = rateTime.replaceAll("\\s","");
+        return switch (rateTime.toUpperCase()) {
+            case "DIAMOTO","MOTODIA","DIACARRO","CARRODIA" -> currentDate.plusDays(1);
+            case "SEMANAMOTO","MOTOSEMANA","SEMANACARRO","CARROSEMANA" -> currentDate.plusWeeks(1);
+            case "QUINCENAMOTO", "MOTOQUINCENA","QUINCENACARRO","CARROQUINCENA" -> currentDate.plus(2, ChronoUnit.WEEKS);
+            case "MESMOTO","MOTOMES","MESCARRO","CARROMES" -> currentDate.plusMonths(1);
+            default -> null;
+        };
+    }
 
 }

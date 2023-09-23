@@ -1,39 +1,22 @@
 import React, { useEffect, useState } from "react";
-import { RiArrowLeftLine, RiSearch2Line } from "react-icons/ri";
+import { RiArrowLeftLine } from "react-icons/ri";
 import { Link, useParams } from "react-router-dom";
 import { useUsers } from "../../hooks/useUsers";
 import { ShowUserInformation } from "./ShowUserInformation";
 import { ShowUserVehicles } from "./ShowUserVehicles";
+import { DataTableReceiptsUser } from "./DataTableReceiptsUser";
+import { useReceipts } from "../../hooks/useReceipts";
 
-const DebuncedInput = ({ value: keyWord, onchange, ...props }) => {
-  const [value, setValue] = useState(keyWord);
-
-  useEffect(() => {
-    const timeout = setTimeout(() => {
-      onchange(value);
-    }, 500);
-
-    return () => clearTimeout(timeout);
-  }, [value]);
-
-  return (
-    <input
-      {...props}
-      value={value}
-      onChange={(e) => setValue(e.target.value)}
-    />
-  );
-};
 export const ShowUser = () => {
-  const [globalFilter, setGlobalFilter] = useState("");
-
   //Traer datos del contexto
   const { userByid, getUserById } = useUsers();
+ const {receiptsByUser,getReciptsByUser}= useReceipts();
 
   //Traemos el parametro de la url
   const { id } = useParams();
 
-  useEffect(() => {
+  useEffect(() => {  
+    getReciptsByUser(id);
     getUserById(id);
   }, [, id]);
 
@@ -66,29 +49,7 @@ export const ShowUser = () => {
       <div className="bg-secondary-100 p-8 rounded-lg grid grid-cols-1 xl:grid-cols-4 gap-8">
         {/*Seccion 1*/}
         <div className="md:col-span-3">
-          {/*input*/}
-          <div className="mb-5">
-            <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-y-4 ">
-              <h1 className=" font-bold text-sm md:text-3xl mb-6">
-                Busca el recibo por cualquier campo.
-              </h1>
-            </div>
-
-            <div className="relative">
-              <RiSearch2Line className="absolute top-1/2  -translate-y-1/2 left-4" />
-              <DebuncedInput
-                type="text"
-                value={globalFilter ?? ""}
-                onchange={(value) => {
-                  setGlobalFilter(String(value));
-                  //getUsers();
-                }}
-                className="bg-secondary-900 outline-none py-2 pr-4 pl-10 rounded-lg
-              placeholder:text-gray-500 w-full"
-                placeholder="Buscar..."
-              />
-            </div>
-          </div>
+          <DataTableReceiptsUser dataReceipts={receiptsByUser} />
         </div>
         {/*Seccion 2*/}
         <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-1 gap-8 ">

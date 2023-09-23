@@ -17,7 +17,6 @@ export const CreateRate = ({ rateSelected }) => {
     getVehicleTypes();
   }, []);
 
-
   useEffect(() => {
     if (rateSelected) {
       setRateForm({
@@ -30,8 +29,6 @@ export const CreateRate = ({ rateSelected }) => {
       setSelectedTypeVehicle(rateSelected.vehicleType);
     }
   }, [rateSelected]);
-
-
 
   const onInputChange = ({ target }) => {
     const { name, value } = target;
@@ -56,6 +53,11 @@ export const CreateRate = ({ rateSelected }) => {
     }
   };
 
+  const handlerCancelEdit = () => {
+    setRateForm(initialRateForm);
+    setSelectedTypeVehicle(null);
+  };
+
   const onSubmit = (e) => {
     e.preventDefault();
     handlerAddRate(rateForm);
@@ -67,7 +69,8 @@ export const CreateRate = ({ rateSelected }) => {
     <div className="bg-secondary-900 p-8 rounded-xl shadow-2xl w-auto lg:w-[450px]">
       <div className="flex items-start justify-between">
         <h1 className=" text-2xl uppercase font-bold tracking-[5px] text-white mb-8">
-          Crear <span className="text-primary">tarifa</span>
+          {rateForm.id > 0 ? "Editar" : "Crear"}{" "}
+          <span className="text-primary">tarifa</span>
         </h1>
       </div>
       <form className="mb-8" onSubmit={onSubmit}>
@@ -125,12 +128,24 @@ export const CreateRate = ({ rateSelected }) => {
           </p>
         </div>
         <div>
-          <button
-            type="submit"
-            className="bg-primary text-black uppercase font-bold text-sm w-full py-3 px-4 rounded-lg "
-          >
-            Crear
-          </button>
+          <div className="flex items-center justify-center gap-2">
+            <button
+              type="submit"
+              className="bg-primary/80 hover:bg-primary text-black uppercase font-bold text-sm w-full py-3 px-4 rounded-lg "
+            >
+              {rateForm.id > 0 ? "Editar" : "Crear"}
+            </button>
+
+            {rateForm.id > 0 ? (
+              <button
+                type="button"
+                className=" py-3 px-4 text-red-600 hover:text-black bg-secondary-100/80  hover:bg-red-600 rounded-lg  transition-colors"
+                onClick={() => handlerCancelEdit()}
+              >
+                Cancelar
+              </button>
+            ):("")}
+          </div>
         </div>
       </form>
     </div>
