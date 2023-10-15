@@ -8,7 +8,6 @@ import {
   RiUser3Line,
   RiUserSettingsLine,
 } from "react-icons/ri";
-import { Link } from "react-router-dom";
 import { useUsers } from "../../hooks/useUsers";
 
 export const ShowUserInformation = ({ userByid }) => {

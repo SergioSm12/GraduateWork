@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { RiArrowLeftLine } from "react-icons/ri";
+import { RiAlertLine, RiArrowLeftLine } from "react-icons/ri";
 import { Link, useParams } from "react-router-dom";
 import { useUsers } from "../../hooks/useUsers";
 import { ShowUserInformation } from "./ShowUserInformation";
@@ -10,16 +10,15 @@ import { useReceipts } from "../../hooks/useReceipts";
 export const ShowUser = () => {
   //Traer datos del contexto
   const { userByid, getUserById } = useUsers();
- const {receiptsByUser,getReciptsByUser}= useReceipts();
+  const { receiptsByUser, getReciptsByUser } = useReceipts();
 
   //Traemos el parametro de la url
   const { id } = useParams();
 
-  useEffect(() => {  
+  useEffect(() => {
     getReciptsByUser(id);
     getUserById(id);
   }, [, id]);
-
 
   return (
     <div>
@@ -49,7 +48,16 @@ export const ShowUser = () => {
       <div className="bg-secondary-100 p-8 rounded-lg grid grid-cols-1 xl:grid-cols-4 gap-8">
         {/*Seccion 1*/}
         <div className="md:col-span-3">
-          <DataTableReceiptsUser dataReceipts={receiptsByUser} />
+          {receiptsByUser.length === 0 ? (
+            <div className=" flex justify-center">
+              <span className="flex items-center gap-2  bg-secondary-900 py-4 px-4 rounded-lg">
+                <RiAlertLine className="text-red-600" /> No hay recibos
+                registrados para este usuario
+              </span>
+            </div>
+          ) : (
+            <DataTableReceiptsUser dataReceipts={receiptsByUser} />
+          )}
         </div>
         {/*Seccion 2*/}
         <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-1 gap-8 ">

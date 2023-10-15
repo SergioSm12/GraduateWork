@@ -20,9 +20,14 @@ import {
 } from "react-icons/ri";
 import { NavLink } from "react-router-dom";
 import { format } from "date-fns";
+import { Paginator } from "../Paginator";
+import { useReceipts } from "../../hooks/useReceipts";
+import { ModalReceipt } from "../Receipts/ModalReceipt";
+
+//Componente con TanStackReacttable
 
 const fuzzyFilter = (row, columnId, value, addMeta) => {
-  const itemRank = rankItem(row.getValue(columnId), value);
+  const itemRank = rankItem(row.original.vehicle.plate, value);
 
   addMeta({ itemRank });
 
@@ -52,17 +57,18 @@ export const DataTableReceiptsUser = ({ dataReceipts }) => {
   const [data, setData] = useState(dataReceipts);
   const [globalFilter, setGlobalFilter] = useState("");
   const [sorting, setSorting] = useState([]);
+  const { handlerReceiptSelectedModalShow, visibleShowReceiptModal } =
+    useReceipts();
 
   useEffect(() => {
     setData(dataReceipts);
   }, [dataReceipts]);
 
-  console.log(data);
-
   const columns = [
     {
       accessorKey: "vehiclePlate",
       header: () => <span>Placa</span>,
+      enableSorting: false,
     },
     {
       accessorKey: "paymentStatus",
@@ -76,7 +82,7 @@ export const DataTableReceiptsUser = ({ dataReceipts }) => {
       accessorKey: "dueDate",
       header: () => <span>Fecha de vencimiento</span>,
     },
-    
+
     {
       accessorKey: "actions",
       header: "Acciones",
@@ -125,7 +131,7 @@ export const DataTableReceiptsUser = ({ dataReceipts }) => {
       <div className="mb-5">
         <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-y-4 ">
           <h1 className=" font-bold text-sm md:text-3xl mb-6">
-            Busca el recibo por cualquier campo.
+            Busca el recibo por placa.
           </h1>
         </div>
 
@@ -144,19 +150,16 @@ export const DataTableReceiptsUser = ({ dataReceipts }) => {
           />
         </div>
       </div>
+      {/*Modal showreceipt */}
+      {!visibleShowReceiptModal ||<ModalReceipt/> }
+      {/*Table */}
       <div className="overflow-x-auto">
-        <table className="table-auto min-w-full">
+        <table className="table-auto min-w-full border-collapse">
           <thead>
             {table.getHeaderGroups().map((headerGroup) => (
               <tr key={headerGroup.id}>
                 {headerGroup.headers.map((header) => (
-                  <th
-                    key={header.id}
-                    className={classNames({
-                      "py-2 px-4 sm:px-6 md:px-8 lg:px-10 xl:px-12": true,
-                      "": header.id === "vehiclePlate",
-                    })}
-                  >
+                  <th key={header.id}>
                     {header.isPlaceholder ? null : (
                       <div
                         className={classNames({
@@ -190,22 +193,21 @@ export const DataTableReceiptsUser = ({ dataReceipts }) => {
                   <td
                     key={cell.id}
                     className={classNames({
-                      "py-2 px-4 sm:px-6 md:px-8 lg:px-10 xl:px-12 border ": true,
-                      "w-1/4": cell.column.id === "vehiclePlate",
+                      "px-2 border text-lg": true,
+                      "w-0": cell.column.id === "vehiclePlate",
                     })}
                   >
                     {cell.column.id === "vehiclePlate" && (
                       <div className=" flex justify-center">
                         {row.original.vehicle.plate}
-            
                       </div>
                     )}
                     {cell.column.id === "paymentStatus" && (
                       <div
                         className={classNames({
-                          "p-2 text-red-500/80 bg-secondary-100 rounded-lg":
+                          "p-1 text-red-500/80 bg-secondary-100 rounded-lg text-center":
                             !row.original.paymentStatus,
-                          "p-2 text-green-500/80 bg-secondary-100 rounded-lg":
+                          "p-1 text-green-500/80 bg-secondary-100 text-center rounded-lg":
                             row.original.paymentStatus,
                         })}
                       >
@@ -223,7 +225,12 @@ export const DataTableReceiptsUser = ({ dataReceipts }) => {
                     )}
 
                     {cell.column.id === "dueDate" && (
-                      <div>
+                      <div
+                        className={classNames({
+                          "text-red-500/50":
+                            new Date(row.original.dueDate) <= new Date(),
+                        })}
+                      >
                         {format(
                           new Date(row.original.dueDate),
                           "dd 'de' MMMM 'del' yyyy 'a las' HH:mm"
@@ -233,12 +240,15 @@ export const DataTableReceiptsUser = ({ dataReceipts }) => {
 
                     {cell.column.id === "actions" && (
                       <div className="flex items-center gap-2">
-                        <NavLink
+                        <button
+                          type="button"
                           className="py-2 px-2 bg-primary/80 text-black hover:bg-secondary-100 rounded-lg transition-colors"
-                          to={"show/" + row.original.id}
+                          onClick={() => {
+                            handlerReceiptSelectedModalShow(row.original);
+                          }}
                         >
                           <RiInformationLine className="text-lg" />
-                        </NavLink>
+                        </button>
                         <button
                           type="button"
                           className="py-2 px-2 bg-primary/80 text-black hover:bg-primary rounded-lg transition-colors"
@@ -267,6 +277,8 @@ export const DataTableReceiptsUser = ({ dataReceipts }) => {
             ))}
           </tbody>
         </table>
+        {/*paginator*/}
+        <Paginator getStateTable={getStateTable} table={table} />
       </div>
     </>
   );

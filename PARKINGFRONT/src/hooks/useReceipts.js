@@ -1,9 +1,17 @@
 import { useDispatch, useSelector } from "react-redux";
 import { findReceiptsByUser } from "../services/receiptService";
-import { loadingReceiptsByUser } from "../store/slices/receipt/receiptSlice";
+import {
+  loadingReceiptsByUser,
+  onCloseShowModalReceipt,
+  onOpenModalShowReceipt,
+  onReceiptShowModalSelected,
+  initialReceiptForm
+} from "../store/slices/receipt/receiptSlice";
 
 export const useReceipts = () => {
-  const { receiptsByUser } = useSelector((state) => state.receipts);
+  const { receiptsByUser, visibleShowReceiptModal, receiptSelected } = useSelector(
+    (state) => state.receipts
+  );
   const dispatch = useDispatch();
 
   const getReciptsByUser = async (id) => {
@@ -15,8 +23,26 @@ export const useReceipts = () => {
     }
   };
 
+  const handlerReceiptSelectedModalShow = (receipt) => {
+    dispatch(onReceiptShowModalSelected({ ...receipt }));
+  };
+
+  const handlerOpenModalShowReceipt = () => {
+    dispatch(onOpenModalShowReceipt());
+  };
+
+  const handlerCloseModalShowReceipt = () => {
+    dispatch(onCloseShowModalReceipt());
+  };
+
   return {
     getReciptsByUser,
     receiptsByUser,
+    handlerOpenModalShowReceipt,
+    handlerReceiptSelectedModalShow,
+    handlerCloseModalShowReceipt,
+    visibleShowReceiptModal,
+    receiptSelected,
+    initialReceiptForm
   };
 };
