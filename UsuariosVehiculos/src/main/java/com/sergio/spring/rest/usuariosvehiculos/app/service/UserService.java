@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -33,10 +34,6 @@ public class UserService implements IUserService {
     //vehicle
     @Autowired
     private IVehicleRepository vehicleRepository;
-
-    //Rate
-    @Autowired
-    private IRateRepository rateRepository;
 
     @Autowired
     private IVehicleTypeRepository vehicleTypeRepository;
@@ -55,7 +52,6 @@ public class UserService implements IUserService {
                         .setUser(u)
                         .build()).collect(Collectors.toList());
     }
-
 
 
     @Override
@@ -127,6 +123,26 @@ public class UserService implements IUserService {
         return vehicles.stream().map(v -> DtoMapperVehicleDto.builder().setVehicle(v).build()).collect(Collectors.toList());
     }
 
+    //Listar vehiculos activos por usuario
+    @Override
+    @Transactional(readOnly = true)
+    public List<VehicleDto> findActiveVehiclesByUserId(Long userId) {
+        Optional<User> userOptional = userRepository.findById(userId);
+        List<Vehicle> activeVehicles =
+                userOptional.map(user -> user.getVehicles().stream().filter(Vehicle::isActive).collect(Collectors.toList()))
+                        .orElse(Collections.emptyList());
+        return activeVehicles.stream().map(v -> DtoMapperVehicleDto.builder().setVehicle(v).build()).collect(Collectors.toList());
+    }
+
+    //Listar vehiculos desactivados por usuario
+    @Override
+    @Transactional(readOnly = true)
+    public List<VehicleDto> findInactiveVehiclesByUserId(Long userId) {
+        List<Vehicle> inactiveVehicles = vehicleRepository.findByUserIdAndActiveFalse(userId);
+        return inactiveVehicles.stream().map(v -> DtoMapperVehicleDto.builder().setVehicle(v).build()).collect(Collectors.toList());
+
+    }
+
     //listar un vehiculo por id
     @Override
     @Transactional(readOnly = true)
@@ -140,6 +156,7 @@ public class UserService implements IUserService {
     public VehicleDto saveVehicle(Vehicle vehicle) {
         String plateUpper = vehicle.getPlate().toUpperCase();
         vehicle.setPlate(plateUpper);
+        vehicle.setActive(true);
 
         //optener user y asociarlo
         UserDto userDto = DtoMapperUser.builder().setUser(vehicle.getUser()).build();
@@ -176,6 +193,8 @@ public class UserService implements IUserService {
             VehicleType vehicleType = vehicle.getVehicleType();
             vehicleaUpdate.setVehicleType(vehicleType);
         }
+        //Actualizar y activar vehiculo
+        vehicleaUpdate.setActive(vehicle.isActive());
 
         Vehicle updateVehicle = vehicleRepository.save(vehicleaUpdate);
 
@@ -186,7 +205,31 @@ public class UserService implements IUserService {
     @Override
     @Transactional
     public void removeVehicleByUser(Long vehicleId) {
-        vehicleRepository.deleteByVehicleId(vehicleId);
+        Optional<Vehicle> vehicleOptional = vehicleRepository.findById(vehicleId);
+        if (vehicleOptional.isPresent()) {
+            Vehicle vehicle = vehicleOptional.get();
+            vehicle.setActive(false);
+            vehicleRepository.save(vehicle);
+        }
+
+    }
+
+    //Activar Vehiculo
+    @Override
+    @Transactional
+    public void activateVehicleByUser(Long vehicleId) {
+        Optional<Vehicle> vehicleOptional = vehicleRepository.findById(vehicleId);
+        if (vehicleOptional.isPresent()) {
+            Vehicle vehicle = vehicleOptional.get();
+            vehicle.setActive(true);
+            vehicleRepository.save(vehicle);
+        }
+    }
+
+    //Validar Placa
+    @Override
+    public boolean existsVehicleWithPlateForUser(Long userId, String plate) {
+        return vehicleRepository.existsByUserIdAndPlate(userId, plate);
     }
 
     //Traer vehicle

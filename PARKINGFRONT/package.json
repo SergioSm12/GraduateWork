@@ -10,6 +10,8 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@headlessui/react": "^1.7.17",
+    "@headlessui/tailwindcss": "^0.2.0",
     "@reduxjs/toolkit": "^1.9.5",
     "@sweetalert2/theme-dark": "^5.0.15",
     "@szhsin/react-menu": "^4.0.3",

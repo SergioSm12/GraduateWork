@@ -46,20 +46,51 @@ export const initialReceiptForm = {
   vehicle: vehicle,
 };
 
+const initialErrosReceipt = {
+  vehicle: vehicle,
+  rate: rate,
+};
+
 export const receiptSlice = createSlice({
   name: "receipts",
   initialState: {
     receiptsByUser: [],
     receiptSelected: initialReceiptForm,
+    vehicleSelected: vehicle,
+    
     visibleShowReceiptModal: false,
+    visibleFormReceiptModal: false,
+    errorsReceipt: initialErrosReceipt,
   },
   reducers: {
+    addReceipt: (state, action) => {
+      state.receiptsByUser = [
+        ...state.receiptsByUser,
+        {
+          ...action.payload,
+        },
+      ];
+      state.receiptSelected = initialReceiptForm;
+      state.visibleFormReceiptModal = false;
+    },
+
     loadingReceiptsByUser: (state, action) => {
       state.receiptsByUser = action.payload;
     },
-    onReceiptSelected: (state, action) => {
+    //form
+    onReceiptSelectedForm: (state, action) => {
       state.receiptSelected = action.payload;
+      state.visibleFormReceiptModal = true;
     },
+    onOpenModalFormReceipt: (state,action) => {
+      state.vehicleSelected= action.payload;
+      state.visibleFormReceiptModal = true;
+    },
+    onCloseModalFormReceipt: (state) => {
+      state.visibleFormReceiptModal = false;
+      state.receiptSelected = initialReceiptForm;
+    },
+
     //info
     onOpenModalShowReceipt: (state) => {
       state.visibleShowReceiptModal = true;
@@ -68,18 +99,26 @@ export const receiptSlice = createSlice({
       state.visibleShowReceiptModal = false;
       state.receiptSelected = initialReceiptForm;
     },
-    onReceiptShowModalSelected : (state, action)=>{
+    onReceiptShowModalSelected: (state, action) => {
       state.receiptSelected = action.payload;
-      state.visibleShowReceiptModal=true;
-    }
+      state.visibleShowReceiptModal = true;
+    },
+    loadingErrorReceipt: (state, action) => {
+      state.errorsReceipt = action.payload;
+    },
   },
 });
 
 export const {
+  addReceipt,
   loadingReceiptsByUser,
-  onReceiptSelected,
+  onReceiptSelectedForm,
+  onOpenModalFormReceipt,
+  onCloseModalFormReceipt,
+
   onReceiptShowModalSelected,
   onOpenModalShowReceipt,
   onCloseShowModalReceipt,
- 
+
+  loadingErrorReceipt,
 } = receiptSlice.actions;

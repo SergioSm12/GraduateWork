@@ -6,9 +6,12 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
 
+import java.util.List;
 import java.util.Optional;
 
 public interface IVehicleRepository extends CrudRepository<Vehicle, Long> {
+
+    List<Vehicle> findByUserIdAndActiveFalse(Long userId);
     @Query("select  v from Vehicle v where v.id= :vehicleId and v.user.id = :userId")
     Optional<Vehicle> findByIdAndUserId(Long vehicleId, Long userId);
 
@@ -18,5 +21,5 @@ public interface IVehicleRepository extends CrudRepository<Vehicle, Long> {
     void deleteByVehicleId(@Param("vehicleId") Long vehicleId);
 
     //Metodo para comparar placa
-    boolean existsByPlate(String plate);
+    boolean existsByUserIdAndPlate(Long userId, String plate);
 }

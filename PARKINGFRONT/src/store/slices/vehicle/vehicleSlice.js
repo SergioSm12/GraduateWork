@@ -9,7 +9,8 @@ export const vehicleType = {
 export const initialVehicleForm = {
   id: 0,
   plate: "",
-  vehicleType: vehicleType,
+  vehicleType: null,
+  active: true,
 };
 
 const initialErrorsVehicle = {
@@ -21,6 +22,8 @@ export const vehicleSlice = createSlice({
   name: "vehicles",
   initialState: {
     vehicles: [],
+    vehiclesActive: [],
+    vehiclesInactive: [],
     vehicleTypes: [],
     vehicleSelected: initialVehicleForm,
     visibleFormVehicle: false,
@@ -49,16 +52,17 @@ export const vehicleSlice = createSlice({
       state.vehicleSelected = initialVehicleForm;
       state.visibleFormVehicle = false;
     },
-    removeVehicleSlice: (state, action) => {
-      state.vehicles = state.vehicles.filter(
-        (vehicle) => vehicle.id !== action.payload
-      );
-    },
     loadingVehicleTypes: (state, action) => {
       state.vehicleTypes = action.payload;
     },
     loadingVehicles: (state, action) => {
       state.vehicles = action.payload;
+    },
+    loadingVehiclesActive: (state, action) => {
+      state.vehiclesActive = action.payload;
+    },
+    loadingVehiclesInactive: (state, action) => {
+      state.vehiclesInactive = action.payload;
     },
     onVehicleSelectedForm: (state, action) => {
       state.vehicleSelected = action.payload;
@@ -80,8 +84,9 @@ export const vehicleSlice = createSlice({
 export const {
   addVehicle,
   updateVehicleSlice,
-  removeVehicleSlice,
   loadingVehicles,
+  loadingVehiclesActive,
+  loadingVehiclesInactive,
   loadingVehicleTypes,
   onVehicleSelectedForm,
   onOpenFormVehicle,

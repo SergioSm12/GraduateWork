@@ -12,5 +12,8 @@ export default {
       },
     },
   },
-  plugins: [],
+  plugins: [
+    //Configuracion para el selected del tab en hadles
+    require("@headlessui/tailwindcss"),
+  ],
 };

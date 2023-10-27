@@ -32,6 +32,10 @@ public interface IUserService {
     //Vehicles
     List<VehicleDto> findVehiclesByUserId(Long userId);
 
+    List<VehicleDto> findActiveVehiclesByUserId(Long userId);
+
+    List<VehicleDto> findInactiveVehiclesByUserId(Long userId);
+
     Optional<Vehicle> findVehicleByIdAndUserId(Long vehicleId, Long userId);
 
     VehicleDto saveVehicle(Vehicle vehicle);
@@ -39,6 +43,10 @@ public interface IUserService {
     Optional<VehicleDto> updateVehicle(Long userId, Long vehicleId, Vehicle vehicle);
 
     void removeVehicleByUser(Long vehicleId);
+
+    void activateVehicleByUser(Long vehicleId);
+
+    boolean existsVehicleWithPlateForUser(Long userId, String plate);
 
     //vehicle type
     List<VehicleType> findAllVehicleType();

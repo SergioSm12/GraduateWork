@@ -4,16 +4,18 @@ package com.sergio.spring.rest.usuariosvehiculos.app.models.dto.entity.users;
 public class VehicleDto {
     private Long id;
     private String plate;
-    private  UserDto userDto;
+    private UserDto userDto;
     private VehicleTypeDto vehicleType;
+    private Boolean active;
 
     public VehicleDto() {
     }
 
-    public VehicleDto(Long id, String plate, VehicleTypeDto vehicleType) {
+    public VehicleDto(Long id, String plate, VehicleTypeDto vehicleType, boolean active) {
         this.id = id;
         this.plate = plate;
         this.vehicleType = vehicleType;
+        this.active = active;
     }
 
     public Long getId() {
@@ -40,5 +42,21 @@ public class VehicleDto {
 
     public void setVehicleType(VehicleTypeDto vehicleType) {
         this.vehicleType = vehicleType;
+    }
+
+    public UserDto getUserDto() {
+        return userDto;
+    }
+
+    public void setUserDto(UserDto userDto) {
+        this.userDto = userDto;
+    }
+
+    public boolean isActive() {
+        return active;
+    }
+
+    public void setActive(Boolean active) {
+        this.active = active;
     }
 }

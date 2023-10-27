@@ -55,10 +55,10 @@ export const Register = () => {
         Crear <span className="text-primary">cuenta</span>
       </h1>
       <form className="mb-8" onSubmit={onSubmit}>
-        <button className="flex items-center justify-center py-3 px-4 gap-4 bg-secondary-900 w-full rounded-full mb-8 text-gray-100">
+        <div className="flex items-center justify-center py-3 px-4 gap-4 bg-secondary-900 w-full rounded-full mb-8 text-gray-100">
           <img src={logoUsta} className="w-8 h-8" />
           Universidad Santo Tomás <RiRoadsterLine />
-        </button>
+        </div>
         <div className="relative ">
           <RiUserLine className="absolute top-1/2 -translate-y-1/2 left-2 text-primary" />
           <input

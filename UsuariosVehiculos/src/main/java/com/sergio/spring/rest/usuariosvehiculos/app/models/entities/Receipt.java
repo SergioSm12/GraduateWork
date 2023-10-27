@@ -1,6 +1,7 @@
 package com.sergio.spring.rest.usuariosvehiculos.app.models.entities;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 
 
 import java.time.LocalDate;
@@ -17,9 +18,11 @@ public class Receipt {
     @JoinColumn(name = "usuario_id")
     private User user;
 
+    @NotNull(message = "No hay un vehiculo seleccionado")
     @ManyToOne
     @JoinColumn(name = "vehicle_id")
     private Vehicle vehicle;
+    @NotNull(message = "Debe seleccionar una tarifa")
     @ManyToOne
     @JoinColumn(name = "rate_id")
     private Rate rate;

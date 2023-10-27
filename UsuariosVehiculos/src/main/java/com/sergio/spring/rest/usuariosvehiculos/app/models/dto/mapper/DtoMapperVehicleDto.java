@@ -33,7 +33,7 @@ public class DtoMapperVehicleDto {
         vehicleTypeDto.setId(vehicleType.getId());
         vehicleTypeDto.setName(vehicleType.getName());
 
-        return new VehicleDto(this.vehicle.getId(), this.vehicle.getPlate(), vehicleTypeDto);
+        return new VehicleDto(this.vehicle.getId(), this.vehicle.getPlate(), vehicleTypeDto,this.vehicle.isActive());
     }
 
 

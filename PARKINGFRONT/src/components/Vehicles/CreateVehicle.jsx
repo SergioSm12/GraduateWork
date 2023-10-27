@@ -11,10 +11,11 @@ export const CreateVehicle = ({ handlerCloseFormVehicle, vehicleSelected }) => {
     handlerAddVehicle,
     initialVehicleForm,
     errorsVehicle,
-    handlerInitialErrorsVehicle,
     getVehicleTypes,
     vehicleTypes,
     getVehicles,
+    getVehiclesActive,
+    getVehiclesInactive,
   } = useVehicle();
   const [vehicleForm, setVehicleForm] = useState(initialVehicleForm);
   const [selectedTypeVehicle, setSelectedTypeVehicle] = useState(null);
@@ -28,7 +29,7 @@ export const CreateVehicle = ({ handlerCloseFormVehicle, vehicleSelected }) => {
     if (vehicleSelected) {
       setVehicleForm({
         ...vehicleForm,
-        id:vehicleSelected.id,
+        id: vehicleSelected.id,
         plate: vehicleSelected.plate,
         vehicleType: vehicleSelected.vehicleType,
       });
@@ -65,8 +66,11 @@ export const CreateVehicle = ({ handlerCloseFormVehicle, vehicleSelected }) => {
 
   const onSubmit = (e) => {
     e.preventDefault();
+
     handlerAddVehicle(id, vehicleForm).then(() => {
       getVehicles(id);
+      getVehiclesActive(id);
+      getVehiclesInactive(id);
     });
   };
 
@@ -74,7 +78,8 @@ export const CreateVehicle = ({ handlerCloseFormVehicle, vehicleSelected }) => {
     <div className="bg-secondary-100 p-8 rounded-xl shadow-2xl w-auto lg:w-[450px]">
       <div className="flex items-start justify-between">
         <h1 className=" text-2xl uppercase font-bold tracking-[5px] text-white mb-8">
-          {vehicleForm.id >0 ? "Editar": "Registrar"} <span className="text-primary">vehiculo</span>
+          {vehicleForm.id > 0 ? "Editar" : "Registrar"}{" "}
+          <span className="text-primary">vehiculo</span>
         </h1>
         <button
           className=" py-2 px-2 text-red-600 hover:text-black bg-secondary-900/80  hover:bg-red-600/50 rounded-lg  transition-colors"
@@ -108,7 +113,7 @@ export const CreateVehicle = ({ handlerCloseFormVehicle, vehicleSelected }) => {
             value={selectedTypeVehicle ? selectedTypeVehicle.id : ""}
             onChange={onInputChange}
           >
-            <option defaultValue="">Tipo de vehiculo</option>
+            <option defaultValue={-1}>Tipo de vehiculo</option>
             {vehicleTypes.map((vehicleType) => (
               <option key={vehicleType.id} value={vehicleType.id}>
                 {vehicleType.name}
@@ -130,7 +135,7 @@ export const CreateVehicle = ({ handlerCloseFormVehicle, vehicleSelected }) => {
             type="submit"
             className="bg-primary text-black uppercase font-bold text-sm w-full py-3 px-4 rounded-lg "
           >
-            {vehicleForm.id>0 ? "Editar":"Registrar"}
+            {vehicleForm.id > 0 ? "Editar" : "Registrar"}
           </button>
         </div>
       </form>

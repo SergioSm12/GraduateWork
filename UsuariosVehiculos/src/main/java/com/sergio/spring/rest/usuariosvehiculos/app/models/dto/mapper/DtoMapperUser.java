@@ -41,7 +41,7 @@ public class DtoMapperUser {
                                     vehicle.getVehicleType().getName()
                             );
 
-                            return new VehicleDto(vehicle.getId(), vehicle.getPlate(), vehicleTypeDto);
+                            return new VehicleDto(vehicle.getId(), vehicle.getPlate(), vehicleTypeDto, vehicle.isActive());
                         }
                 ).collect(Collectors.toList());
 

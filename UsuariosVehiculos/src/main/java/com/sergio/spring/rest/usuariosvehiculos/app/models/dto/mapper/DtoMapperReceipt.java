@@ -40,7 +40,7 @@ public class DtoMapperReceipt {
                                     vehicle.getVehicleType().getName()
                             );
 
-                            return  new VehicleDto(vehicle.getId(), vehicle.getPlate(), vehicleTypeDto);
+                            return  new VehicleDto(vehicle.getId(), vehicle.getPlate(), vehicleTypeDto, vehicle.isActive());
                         }
                 ).toList();
 
@@ -65,6 +65,7 @@ public class DtoMapperReceipt {
         vehicleDto.setId(vehicle.getId());
         vehicleDto.setPlate(vehicle.getPlate());
         vehicleDto.setVehicleType(vehicleTypeDto);
+        vehicleDto.setActive(vehicle.isActive());
 
 
         //Conversion de rate

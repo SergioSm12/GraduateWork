@@ -16,7 +16,6 @@ public class Vehicle {
     @NotBlank(message = "El campo placa no puede estar vacio")
     @Size(min = 5, max = 6, message = "La placa debe tener entre 5 y 6 caracteres")
     @Pattern(regexp = "^[A-Za-z]{1,3}\\d{1,3}[A-Za-z]?\\d?$", message = "El formato de la placa no es válido")
-    @Column(unique = true)
     private String plate;
     @JsonBackReference
     @ManyToOne(fetch = FetchType.LAZY)
@@ -25,6 +24,9 @@ public class Vehicle {
     @NotNull(message = "Debe seleccionar un tipo de vehiculo.")
     @ManyToOne(fetch = FetchType.LAZY)
     private VehicleType vehicleType;
+
+    @Column(name = "active")
+    private Boolean active;
 
     public Long getId() {
         return id;
@@ -56,5 +58,13 @@ public class Vehicle {
 
     public void setVehicleType(VehicleType vehicleType) {
         this.vehicleType = vehicleType;
+    }
+
+    public Boolean isActive() {
+        return active;
+    }
+
+    public void setActive(Boolean active) {
+        this.active = active;
     }
 }

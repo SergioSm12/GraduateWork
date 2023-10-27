@@ -10,3 +10,16 @@ export const findReceiptsByUser = async (id) => {
     throw error;
   }
 };
+
+export const createReceiptByUser = async (userId, { vehicle, rate }) => {
+  try {
+    return await parkingApi.post(`${BASE_URL_RECEIPT}/${userId}/create`, {
+      vehicle,
+      rate,
+    });
+  } catch (error) {
+    throw error;
+  }
+};
+
+

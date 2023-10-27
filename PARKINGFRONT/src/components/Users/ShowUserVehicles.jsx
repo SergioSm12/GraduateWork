@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { useUsers } from "../../hooks/useUsers";
 import { RiAlertLine, RiRoadsterLine } from "react-icons/ri";
-import { DataTableVehicle } from "../Vehicles/DataTableVehicle";
 import { useVehicle } from "../../hooks/useVehicle";
 import { ModalFormVehicle } from "../Vehicles/ModalFormVehicle";
+import { ListVehicles } from "../Vehicles/ListVehicles";
 
 
 export const ShowUserVehicles = ({ userByid }) => {
@@ -34,7 +34,7 @@ export const ShowUserVehicles = ({ userByid }) => {
           )}
         </div>
         {userShow.vehicles.length > 0 ? (
-          <DataTableVehicle />
+          <ListVehicles />
         ) : (
           <div className=" flex justify-center">
             <span className="flex items-center gap-2  bg-secondary-900 py-4 px-4 rounded-lg">

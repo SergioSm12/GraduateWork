@@ -46,41 +46,58 @@ public class VehicleController {
         return ResponseEntity.ok(vehicles);
     }
 
+    @GetMapping("/{userId}/active-vehicles")
+    public ResponseEntity<List<VehicleDto>> listActiveVehiclesByUser(@PathVariable Long userId) {
+        List<VehicleDto> activeVehicles = userService.findActiveVehiclesByUserId(userId);
+        return ResponseEntity.ok(activeVehicles);
+    }
+
+    @GetMapping("/{userId}/inactive-vehicles")
+    public ResponseEntity<List<VehicleDto>> listInactiveVehiclesByUser(@PathVariable Long userId) {
+        List<VehicleDto> inactiveVehicles = userService.findInactiveVehiclesByUserId(userId);
+        return ResponseEntity.ok(inactiveVehicles);
+    }
+
     @PostMapping("/{userId}/create")
     public ResponseEntity<?> createVehicleByUser(@PathVariable Long userId, @Valid @RequestBody Vehicle vehicle, BindingResult result) {
         if (result.hasErrors()) {
-            return validation(result, null);
+            return validation(result);
         }
 
-        try {
-            //Validar usuario para permitir crear
-            Optional<UserDto> userOptional = userService.findById(userId);
-            if (userOptional.isEmpty()) {
-                return ResponseEntity.notFound().build();
-            }
-
-            UserDto userDto = userOptional.get();
-            if (!userDto.getId().equals(userId)) {
-                return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new ErrorResponse("No tienes permiso para crear un vehiculo con este usuario"));
-            }
-
-            //Agregar User al vehicle
-            Optional<User> optionalUser = userService.findByIdUser(userDto.getId());
-            User user = optionalUser.get();
-            vehicle.setUser(user);
-
-
-
-            return ResponseEntity.status(HttpStatus.CREATED).body(userService.saveVehicle(vehicle));
-        } catch (DataIntegrityViolationException ex) {
-            return validation(result, ex);
+        //Validar usuario para permitir crear
+        Optional<UserDto> userOptional = userService.findById(userId);
+        if (userOptional.isEmpty()) {
+            return ResponseEntity.notFound().build();
         }
+
+        UserDto userDto = userOptional.get();
+        if (!userDto.getId().equals(userId)) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new ErrorResponse("No tienes permiso para crear un vehiculo con este usuario"));
+        }
+
+        //Validar si el usuario ya tiene un vehiculo con la misma placa
+        if (userService.existsVehicleWithPlateForUser(userId, vehicle.getPlate())) {
+            return validation("plate", "Ya tiene un vehiculo registrado con la misma placa");
+        }
+
+        //Agregar User al vehicle
+        Optional<User> optionalUser = userService.findByIdUser(userDto.getId());
+        User user = optionalUser.get();
+        vehicle.setUser(user);
+
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(userService.saveVehicle(vehicle));
+
     }
 
     @PutMapping("/{userId}/update/{vehicleId}")
     public ResponseEntity<?> updateVehicleByUser(@PathVariable Long userId, @PathVariable Long vehicleId, @Valid @RequestBody Vehicle vehicle, BindingResult result) {
         if (result.hasErrors()) {
-            return validation(result, null);
+            return validation(result);
+        }
+        //Validar si el usuario ya tiene un vehiculo con la misma placa
+        if (userService.existsVehicleWithPlateForUser(userId, vehicle.getPlate())) {
+            return validation("plate", "Ya tiene un vehiculo registrado con la misma placa");
         }
         vehicle.setPlate(vehicle.getPlate().toUpperCase());
         Optional<VehicleDto> updateVehicleOptional = userService.updateVehicle(userId, vehicleId, vehicle);
@@ -109,20 +126,34 @@ public class VehicleController {
 
     }
 
-    private ResponseEntity<?> validation(BindingResult result, Exception ex) {
+    @GetMapping("/{userId}/activate-vehicle/{vehicleId}")
+    public ResponseEntity<?> activateVehicleByUser(@PathVariable Long userId, @PathVariable Long vehicleId) {
+        Optional<UserDto> userDtoOptional = userService.findById(userId);
+        if (userDtoOptional.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+        Optional<Vehicle> vehicleOptional = userService.findVehicleByIdAndUserId(vehicleId, userId);
+        if (vehicleOptional.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+
+        userService.activateVehicleByUser(vehicleId);
+        return ResponseEntity.ok().build();
+    }
+
+    private ResponseEntity<?> validation(BindingResult result) {
         Map<String, String> errors = new HashMap<>();
         result.getFieldErrors().forEach(err -> {
             errors.put(err.getField(), err.getDefaultMessage());
         });
-
-        if (ex instanceof DataIntegrityViolationException) {
-            String constraintMessage = ex.getMessage();
-            if (constraintMessage.contains("Duplicate entry")) {
-                errors.put("plate", "La placa que ingresaste ya esta registrada");
-            }
-        }
         return ResponseEntity.badRequest().body(errors);
-
-
     }
+
+    private ResponseEntity<?> validation(String fieldName, String errorMessage) {
+        Map<String, String> error = new HashMap<>();
+        error.put(fieldName, errorMessage);
+        return ResponseEntity.badRequest().body(error);
+    }
+
+
 }

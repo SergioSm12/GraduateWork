@@ -1,18 +1,45 @@
 import { useDispatch, useSelector } from "react-redux";
-import { findReceiptsByUser } from "../services/receiptService";
+import {
+  createReceiptByUser,
+  findReceiptsByUser,
+} from "../services/receiptService";
 import {
   loadingReceiptsByUser,
   onCloseShowModalReceipt,
   onOpenModalShowReceipt,
   onReceiptShowModalSelected,
-  initialReceiptForm
+  initialReceiptForm,
+  addReceipt,
+  loadingErrorReceipt,
+  onReceiptSelectedForm,
+  onOpenModalFormReceipt,
+  onCloseModalFormReceipt,
+  vehicle
 } from "../store/slices/receipt/receiptSlice";
+import Swal from "sweetalert2";
 
 export const useReceipts = () => {
-  const { receiptsByUser, visibleShowReceiptModal, receiptSelected } = useSelector(
-    (state) => state.receipts
-  );
+  const {
+    receiptsByUser,
+    visibleFormReceiptModal,
+    visibleShowReceiptModal,
+    receiptSelected,
+    vehicleSelected
+  } = useSelector((state) => state.receipts);
   const dispatch = useDispatch();
+
+  //Alertas
+  const Toast = Swal.mixin({
+    toast: true,
+    position: "top",
+    showConfirmButton: false,
+    timer: 3000,
+    timerProgressBar: true,
+    didOpen: (toast) => {
+      toast.addEventListener("mouseenter", Swal.stopTimer);
+      toast.addEventListener("mouseleave", Swal.resumeTimer);
+    },
+  });
 
   const getReciptsByUser = async (id) => {
     try {
@@ -23,6 +50,48 @@ export const useReceipts = () => {
     }
   };
 
+  //crear Receipt by user
+  const handlerAddReceiptByUser = async (userId, receipt) => {
+    let response;
+    try {
+      if (receipt.id === 0) {
+        response = await createReceiptByUser(userId, receipt);
+        dispatch(addReceipt(response.data));
+      } else {
+        //actualizar receipt
+      }
+
+      Toast.fire({
+        icon: "success",
+        title: receipt.id === 0 ? "Recibo creado" : "Recibo actualizado",
+      });
+      handlerCloseFormVehicle();
+    } catch (error) {
+      if (error.response && error.response.status == 400) {
+        dispatch(loadingErrorReceipt(error.response.data));
+      } else if (error.response?.status == 401) {
+        //manejamos el cierre de sesion cuando tengamos autenticacion
+        // handlerLogout();
+      } else {
+        throw error;
+      }
+    }
+  };
+
+  //Form
+  const handlerReceiptSelectedModalForm = (receipt) => {
+    dispatch(onReceiptSelectedForm({ ...receipt }));
+  };
+
+  const handlerOpenModalFormReceipt = (vehicle) => {
+    dispatch(onOpenModalFormReceipt({...vehicle}));
+  };
+
+  const handlerCloseModalFormReceipt = () => {
+    dispatch(onCloseModalFormReceipt());
+  };
+
+  //Show
   const handlerReceiptSelectedModalShow = (receipt) => {
     dispatch(onReceiptShowModalSelected({ ...receipt }));
   };
@@ -38,11 +107,19 @@ export const useReceipts = () => {
   return {
     getReciptsByUser,
     receiptsByUser,
+    handlerAddReceiptByUser,
+    handlerReceiptSelectedModalForm,
+    handlerOpenModalFormReceipt,
+    handlerCloseModalFormReceipt,
+    visibleFormReceiptModal,
+    vehicle,
+
     handlerOpenModalShowReceipt,
     handlerReceiptSelectedModalShow,
     handlerCloseModalShowReceipt,
     visibleShowReceiptModal,
     receiptSelected,
-    initialReceiptForm
+    vehicleSelected,
+    initialReceiptForm,
   };
 };
