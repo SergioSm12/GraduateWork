@@ -37,6 +37,18 @@ public class UserController {
         return userService.findAll(pageable);
     }
 
+    @GetMapping("/users/active-users")
+    public ResponseEntity<List<UserDto>> listActiveUsers() {
+        List<UserDto> activeUsers = userService.findActiveUsers();
+        return ResponseEntity.ok(activeUsers);
+    }
+
+    @GetMapping("/users/inactive-users")
+    public ResponseEntity<List<UserDto>> listDeactivateUsers() {
+        List<UserDto> deactivateUsers = userService.findInactiveUsers();
+        return ResponseEntity.ok(deactivateUsers);
+    }
+
     @GetMapping("/users/{id}")
     public ResponseEntity<?> show(@PathVariable Long id) {
         Optional<UserDto> userOptional = userService.findById(id);
@@ -71,6 +83,26 @@ public class UserController {
             return ResponseEntity.status(HttpStatus.CREATED).body(o.orElseThrow());
         }
         return ResponseEntity.notFound().build();
+    }
+
+    @PutMapping("/users/activate/{id}")
+    public ResponseEntity<?> activateUser(@PathVariable Long id) {
+        Optional<UserDto> userOptional = userService.findById(id);
+        if (userOptional.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+        userService.activateUser(id);
+        return ResponseEntity.ok().build();
+    }
+
+    @PutMapping("/users/deactivate/{id}")
+    public ResponseEntity<?> deactivateUser(@PathVariable Long id) {
+        Optional<UserDto> userOptional = userService.findById(id);
+        if (userOptional.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+        userService.deactivateUser(id);
+        return ResponseEntity.ok().build();
     }
 
     @DeleteMapping("users/{id}")

@@ -47,6 +47,6 @@ public class DtoMapperUser {
 
         boolean isAdmin = user.getRoles().stream().anyMatch(r -> "ROLE_ADMIN".equals(r.getName()));
         boolean isGuard = user.getRoles().stream().anyMatch(r -> "ROLE_GUARD".equals(r.getName()));
-        return new UserDto(this.user.getId(), this.user.getName(), this.user.getLastName(), this.user.getEmail(), this.user.getPhoneNumber(), vehicleDtos, isAdmin, isGuard);
+        return new UserDto(this.user.getId(), this.user.getName(), this.user.getLastName(), this.user.getEmail(), this.user.getPhoneNumber(), vehicleDtos, this.user.isActive(), isAdmin, isGuard);
     }
 }

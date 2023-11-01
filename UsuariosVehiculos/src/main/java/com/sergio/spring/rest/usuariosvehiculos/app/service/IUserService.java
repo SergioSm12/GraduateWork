@@ -21,11 +21,19 @@ public interface IUserService {
 
     Optional<UserDto> findById(Long id);
 
+    List<UserDto> findActiveUsers();
+
+    List<UserDto> findInactiveUsers();
+
     Optional<User> findByIdUser(Long id);
 
     UserDto save(User user);
 
     Optional<UserDto> update(UserRequest user, Long id);
+
+    void activateUser(Long userId);
+
+    void deactivateUser(Long userId);
 
     void remove(Long id);
 

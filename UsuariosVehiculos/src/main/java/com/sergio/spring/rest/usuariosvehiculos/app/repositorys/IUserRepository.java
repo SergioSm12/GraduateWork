@@ -7,10 +7,14 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 
 
+import java.util.List;
 import java.util.Optional;
 
 public interface IUserRepository extends CrudRepository<User, Long> {
 
+    List<User> findByActiveTrue();
+
+    List<User> findByActiveFalse();
 
     @Query("select u from User  u where u.email=?1")
     Optional<User> getUserByEmail(String email);

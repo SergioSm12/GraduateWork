@@ -5,13 +5,24 @@ import portadaUsers from "../../assets/portadaUsers.png";
 import { DataTable } from "../../components/Users/DataTable";
 import { useUsers } from "../../hooks/useUsers";
 import { RiAlertLine } from "react-icons/ri";
+import { Tab } from "@headlessui/react";
 export const Users = () => {
-  const { users, getUsers } = useUsers();
+  const {
+    users,
+    activeUsers,
+    inactiveUsers,
+    getUsers,
+    getActiveUsers,
+    getInactiveUsers,
+    visibleFormCreate,
+    handlerOpenFormCreate,
+  } = useUsers();
   useEffect(() => {
     getUsers();
+    getActiveUsers();
+    getInactiveUsers();
   }, []);
 
- 
   return (
     <div>
       {/*Title */}
@@ -42,7 +53,7 @@ export const Users = () => {
             textEnd="user"
           />
         </div>
-        <div className="flex justify-center">
+        <div className="flex justify-center mt-2">
           <img src={portadaUsers} className="w-72 " />
         </div>
       </div>
@@ -51,11 +62,85 @@ export const Users = () => {
         {users.length === 0 ? (
           <div className=" flex justify-center">
             <span className="flex items-center gap-2  bg-secondary-900 py-4 px-4 rounded-lg">
-              <RiAlertLine className="text-red-600"/> No hay usuarios registrados en la base de datos
+              <RiAlertLine className="text-red-600" /> No hay usuarios
+              registrados en la base de datos
             </span>
           </div>
         ) : (
-          <DataTable dataUsers={users} />
+          <Tab.Group>
+            <div className="bg-secondary-100  p-8 rounded-bl-lg rounded-br-lg ">
+              <Tab.List className="flex flex-col md:flex-row md:items-center md:justify-between gap-x-2 gap-y-6 bg-secondary-900/50  py-3 px-4 rounded-lg">
+                <div className="flex flex-col md:flex-row  md:items-center gap-2">
+                  <Tab
+                    className="py-2 px-4 rounded-lg hover:bg-secondary-900 hover:text-gray-100
+               transition-colors outline-none ui-selected:bg-secondary-900 ui-selected:text-primary "
+                  >
+                    Activos
+                  </Tab>
+                  <Tab
+                    className="py-2 px-4 rounded-lg hover:bg-secondary-900 hover:text-gray-100
+                 transition-colors outline-none ui-selected:bg-secondary-900 ui-selected:text-primary "
+                  >
+                    Inactivos
+                  </Tab>
+                  <Tab
+                    className="py-2 px-4 rounded-lg hover:bg-secondary-900 hover:text-gray-100
+                 transition-colors outline-none ui-selected:bg-secondary-900 ui-selected:text-primary "
+                  >
+                    Todos
+                  </Tab>
+                </div>
+                <div className="flex justify-center">
+                  {visibleFormCreate || (
+                    <button
+                      className="font-bold text-xs py-2 px-4 bg-primary/80 text-black hover:bg-primary rounded-lg transition-colors"
+                      onClick={handlerOpenFormCreate}
+                    >
+                      Agregar Usuario
+                    </button>
+                  )}
+                </div>
+              </Tab.List>
+            </div>
+            <Tab.Panels className="mt-8">
+              <Tab.Panel>
+                {activeUsers.length == 0 ? (
+                  <div className=" flex justify-center">
+                    <span className="flex items-center gap-2  bg-secondary-900 py-4 px-4 rounded-lg">
+                      <RiAlertLine className="text-red-600" /> No hay usuarios
+                      activos.
+                    </span>
+                  </div>
+                ) : (
+                  <DataTable
+                    dataUsers={activeUsers}
+                    visibleFormCreate={visibleFormCreate}
+                  />
+                )}
+              </Tab.Panel>
+              <Tab.Panel>
+                {inactiveUsers.length == 0 ? (
+                  <div className=" flex justify-center">
+                    <span className="flex items-center gap-2  bg-secondary-900 py-4 px-4 rounded-lg">
+                      <RiAlertLine className="text-red-600" /> No hay usuarios
+                      inactivos.
+                    </span>
+                  </div>
+                ) : (
+                  <DataTable
+                    dataUsers={inactiveUsers}
+                    visibleFormCreate={visibleFormCreate}
+                  />
+                )}
+              </Tab.Panel>
+              <Tab.Panel>
+                <DataTable
+                  dataUsers={users}
+                  visibleFormCreate={visibleFormCreate}
+                />
+              </Tab.Panel>
+            </Tab.Panels>
+          </Tab.Group>
         )}
       </div>
     </div>

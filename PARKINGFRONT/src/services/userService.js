@@ -59,14 +59,50 @@ export const findAllUsers = async () => {
   }
 };
 
-export const findUserById= async (id)=>{
+export const findActiveUsers = async () => {
   try {
-   const response=  await parkingApi.get(`${BASE_URL_USERS}/${id}`);
-   return response;
+    const response = await parkingApi.get(`${BASE_URL_USERS}/active-users`);
+    return response;
   } catch (error) {
     throw error;
   }
-}
+};
+
+export const findInactiveUsers = async () => {
+  try {
+    const response = await parkingApi.get(`${BASE_URL_USERS}/inactive-users`);
+    return response;
+  } catch (error) {
+    throw error;
+  }
+};
+
+
+export const findUserById = async (id) => {
+  try {
+    const response = await parkingApi.get(`${BASE_URL_USERS}/${id}`);
+    return response;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const activateUser = async (id) => {
+  try {
+    await parkingApi.put(`${BASE_URL_USERS}/activate/${id}`);
+  } catch (error) {
+    throw error;
+  }
+};
+
+
+export const deactivateUser = async (id) => {
+  try {
+    await parkingApi.put(`${BASE_URL_USERS}/deactivate/${id}`);
+  } catch (error) {
+    throw error;
+  }
+};
 
 export const remove = async (id) => {
   try {

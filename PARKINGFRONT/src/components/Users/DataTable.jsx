@@ -9,13 +9,13 @@ import {
   getSortedRowModel,
 } from "@tanstack/react-table";
 import {
-
   RiDeleteBin7Line,
   RiEdit2Line,
   RiInformationLine,
   RiLineHeight,
   RiLoopLeftFill,
   RiSearch2Line,
+  RiShutDownLine,
   RiSortAsc,
   RiSortDesc,
 } from "react-icons/ri";
@@ -52,13 +52,13 @@ const DebuncedInput = ({ value: keyWord, onchange, ...props }) => {
   );
 };
 
-export const DataTable = ({ dataUsers }) => {
+export const DataTable = ({ dataUsers, visibleFormCreate }) => {
   const {
-    visibleFormCreate,
     isLoadingUsers,
-    handlerOpenFormCreate,
     getUsers,
     handlerUserSelectedForm,
+    handlerDeactivateUser,
+    handlerActivateUser,
     handlerRemoveUser,
   } = useUsers();
   const [data, setData] = useState(dataUsers);
@@ -95,8 +95,25 @@ export const DataTable = ({ dataUsers }) => {
       header: () => <span>Correo</span>,
     },
     {
+      accessorKey: "active",
+      header: () => <span>Estado</span>,
+      cell:(row)=>{
+       if(row.getValue()== true){
+        return(
+          <span className="py-2 px-2 rounded-lg bg-secondary-100 text-gray-400">Activo</span>
+        )
+       }else{
+        return(
+          <span className="py-2 px-2 rounded-lg text-red-500/80 bg-secondary-100 ">
+Inactivo
+          </span>
+        )
+       }
+      }
+    },
+    {
       accessorKey: "actions",
-      header: "Acciones",
+      header: <span>Acciones</span>,
       enableSorting: false,
     },
   ];
@@ -144,14 +161,6 @@ export const DataTable = ({ dataUsers }) => {
             <h1 className=" font-bold text-sm md:text-3xl mb-6">
               Busca el usuario por cualquier campo.
             </h1>
-            {visibleFormCreate || (
-              <button
-                className="font-bold text-xs py-2 px-4 bg-primary/80 text-black hover:bg-primary rounded-lg transition-colors"
-                onClick={handlerOpenFormCreate}
-              >
-                Agregar Usuario
-              </button>
-            )}
           </div>
 
           {visibleFormCreate || (
@@ -222,6 +231,7 @@ export const DataTable = ({ dataUsers }) => {
                         cell.column.columnDef.cell,
                         cell.getContext()
                       )}
+
                       {cell.column.id === "actions" && (
                         <div className="flex items-center gap-2">
                           <NavLink
@@ -240,6 +250,29 @@ export const DataTable = ({ dataUsers }) => {
                           >
                             <RiEdit2Line className="text-lg" />
                           </button>
+
+                          {row.original.active == false ? (
+                            <button
+                              type="button"
+                              className="py-2 px-2 bg-green-500/80 text-black  rounded-lg  hover:bg-green-500"
+                              onClick={() => {
+                                handlerActivateUser(row.original.id);
+                              }}
+                            >
+                              <RiShutDownLine className="text-lg" />
+                            </button>
+                          ) : (
+                            <button
+                              type="button"
+                              className="py-2 px-2 bg-red-500/80 text-black  rounded-lg  hover:bg-red-500"
+                              onClick={() => {
+                                handlerDeactivateUser(row.original.id);
+                              }}
+                            >
+                              <RiShutDownLine className="text-lg" />
+                            </button>
+                          )}
+
                           <button
                             type="button"
                             className="py-2 px-2 bg-secondary-100/50 hover:bg-secondary-100 text-red-500/70 hover:text-red-500

@@ -71,6 +71,27 @@ public class UserService implements IUserService {
                         .build());
     }
 
+    //Listar vehiculos activos
+    @Override
+    @Transactional(readOnly = true)
+    public List<UserDto> findActiveUsers() {
+        List<User> activeUsers = userRepository.findByActiveTrue();
+        return activeUsers.stream()
+                .map(u -> DtoMapperUser.builder().setUser(u).build())
+                .collect(Collectors.toList());
+    }
+
+
+    //listar vehiculos desactivados
+    @Override
+    @Transactional(readOnly = true)
+    public List<UserDto> findInactiveUsers() {
+        List<User> inactiveUsers = userRepository.findByActiveFalse();
+        return inactiveUsers.stream()
+                .map(u -> DtoMapperUser.builder().setUser(u).build())
+                .collect(Collectors.toList());
+    }
+
     @Override
     @Transactional(readOnly = true)
     public Optional<User> findByIdUser(Long id) {
@@ -82,6 +103,7 @@ public class UserService implements IUserService {
     public UserDto save(User user) {
         String passwordBCrypt = passwordEncoder.encode(user.getPassword());
         user.setPassword(passwordBCrypt);
+        user.setActive(true);
         user.setRoles(getRoles(user));
         String emailLower = user.getEmail().toLowerCase();
         user.setEmail(emailLower);
@@ -102,9 +124,34 @@ public class UserService implements IUserService {
             userDb.setLastName(user.getLastName());
             userDb.setEmail(user.getEmail());
             userDb.setPhoneNumber(user.getPhoneNumber());
+            userDb.setActive(true);
             userOptional = userRepository.save(userDb);
         }
         return Optional.ofNullable(DtoMapperUser.builder().setUser(userOptional).build());
+    }
+
+    //activate Vehicle
+    @Override
+    @Transactional
+    public void activateUser(Long userId) {
+        Optional<User> userOptional = userRepository.findById(userId);
+        if (userOptional.isPresent()) {
+            User user = userOptional.get();
+            user.setActive(true);
+            userRepository.save(user);
+        }
+    }
+
+    //Deactivate Vehicle
+    @Override
+    @Transactional
+    public void deactivateUser(Long userId) {
+        Optional<User> userOptional = userRepository.findById(userId);
+        if (userOptional.isPresent()) {
+            User user = userOptional.get();
+            user.setActive(false);
+            userRepository.save(user);
+        }
     }
 
     @Override
@@ -200,6 +247,7 @@ public class UserService implements IUserService {
 
         return Optional.of(DtoMapperVehicleDto.builder().setVehicle(updateVehicle).build());
     }
+
 
     //Delete vehicle id
     @Override

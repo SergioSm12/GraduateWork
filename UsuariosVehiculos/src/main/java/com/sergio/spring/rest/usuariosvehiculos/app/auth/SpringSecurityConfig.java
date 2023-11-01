@@ -43,10 +43,14 @@ public class SpringSecurityConfig {
         return http.authorizeHttpRequests(authRules -> authRules
                         //usuario
                         .requestMatchers(HttpMethod.GET, "/users").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/users/active-users").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/users/inactive-users").permitAll()
                         .requestMatchers(HttpMethod.GET, "/users/page/{page}").permitAll()
                         .requestMatchers(HttpMethod.GET, "/users/{id}").permitAll()
                         .requestMatchers(HttpMethod.POST, "/users").permitAll()
                         .requestMatchers(HttpMethod.PUT, "/users/{id}").permitAll()
+                        .requestMatchers(HttpMethod.PUT, "/users/activate/{id}").permitAll()
+                        .requestMatchers(HttpMethod.PUT, "/users/deactivate/{id}").permitAll()
                         .requestMatchers(HttpMethod.DELETE, "/users/{id}").permitAll()
 
                         //usuario

@@ -30,6 +30,8 @@ export const usersSlice = createSlice({
   name: "users",
   initialState: {
     users: [],
+    activeUsers:[],
+    inactiveUsers:[],
     paginator: {},
     userSelected: initialUserForm,
     userByid: initialUserForm,
@@ -69,6 +71,13 @@ export const usersSlice = createSlice({
       state.users = action.payload;
       state.isLoadingUsers = false;
     },
+    loadingActiveUsers:(state, action) =>{
+      state.activeUsers = action.payload;
+    },
+
+    loadingInactiveUsers:(state, action) =>{
+      state.inactiveUsers = action.payload;
+    },
 
     loadingUserById: (state, action) => {
       state.userByid = action.payload;
@@ -96,6 +105,8 @@ export const {
   updateUser,
   removeUser,
   loadingUsers,
+  loadingActiveUsers,
+  loadingInactiveUsers,
   onUserSelectedForm,
   onOpenFormCreate,
   onCloseFormCreate,

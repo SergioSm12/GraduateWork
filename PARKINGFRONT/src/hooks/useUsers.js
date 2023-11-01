@@ -1,7 +1,11 @@
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import {
+  activateUser,
+  deactivateUser,
+  findActiveUsers,
   findAllUsers,
+  findInactiveUsers,
   findUserById,
   remove,
   save,
@@ -18,13 +22,23 @@ import {
   updateUser,
   removeUser,
   loadingUserById,
+  loadingActiveUsers,
+  loadingInactiveUsers,
 } from "../store/slices/user/usersSlice";
 import Swal from "sweetalert2";
 import { useAuth } from "../auth/hooks/useAuth";
 
 export const useUsers = () => {
-  const { users, userSelected, errors, isLoadingUsers, visibleFormCreate, userByid } =
-    useSelector((state) => state.users);
+  const {
+    users,
+    activeUsers,
+    inactiveUsers,
+    userSelected,
+    errors,
+    isLoadingUsers,
+    visibleFormCreate,
+    userByid,
+  } = useSelector((state) => state.users);
 
   const { login, handlerLogout } = useAuth();
   const dispatch = useDispatch();
@@ -47,6 +61,28 @@ export const useUsers = () => {
     try {
       const result = await findAllUsers();
       dispatch(loadingUsers(result.data));
+    } catch (error) {
+      if (error.response?.status == 401) {
+        handlerLogout();
+      }
+    }
+  };
+
+  const getActiveUsers = async () => {
+    try {
+      const result = await findActiveUsers();
+      dispatch(loadingActiveUsers(result.data));
+    } catch (error) {
+      if (error.response?.status == 401) {
+        handlerLogout();
+      }
+    }
+  };
+
+  const getInactiveUsers = async () => {
+    try {
+      const result = await findInactiveUsers();
+      dispatch(loadingInactiveUsers(result.data));
     } catch (error) {
       if (error.response?.status == 401) {
         handlerLogout();
@@ -99,12 +135,72 @@ export const useUsers = () => {
     }
   };
 
+  const handlerActivateUser = (id) => {
+    Swal.fire({
+      title: "¿ Desea activar el usuario ?",
+      text: "¡ El usuario sera activado !  ",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#1E293C",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Si, activar!",
+      cancelButtonText: "Cancelar",
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        try {
+          await activateUser(id);
+          getUsers();
+          getActiveUsers();
+          getInactiveUsers();
+
+          Swal.fire(
+            "Usuario activado !",
+            "El usuario ha sido activado con exito",
+            "success"
+          );
+        } catch (error) {
+          throw error;
+        }
+      }
+    });
+  };
+
+  const handlerDeactivateUser = (id) => {
+    Swal.fire({
+      title: "¿ Esta seguro que desea desactivar ?",
+      text: "Cuidado el usuario sera desactivado ",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#1E293C",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Si, desactivar!",
+      cancelButtonText: "Cancelar",
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        try {
+          await deactivateUser(id);
+          getUsers();
+          getActiveUsers();
+          getInactiveUsers();
+
+          Swal.fire(
+            "Usuario desactivado!",
+            "El vehiculo ha sido desactivado con exito",
+            "success"
+          );
+        } catch (error) {
+          throw error;
+        }
+      }
+    });
+  };
+
   const handlerRemoveUser = (id) => {
     //validacion para autorizacion
 
     Swal.fire({
       title: "Esta seguro que desea eliminar?",
-      text: "Cuidado el usuario sera eliminado ",
+      text: "El usuario sera eliminado junto con los recivos correspondientes a este usuario",
       icon: "warning",
       showCancelButton: true,
       confirmButtonColor: "#1E293C",
@@ -154,19 +250,25 @@ export const useUsers = () => {
 
   return {
     users,
+    activeUsers,
+    inactiveUsers,
     visibleFormCreate,
     userSelected,
     initialUserForm,
     errors,
     isLoadingUsers,
     handlerAddUser,
+    handlerActivateUser,
+    handlerDeactivateUser,
     handlerRemoveUser,
     handlerInitialErrors,
     getUsers,
+    getInactiveUsers,
+    getActiveUsers,
     handlerUserSelectedForm,
     handlerOpenFormCreate,
     handlerCloseFormCreate,
     getUserById,
-    userByid
+    userByid,
   };
 };

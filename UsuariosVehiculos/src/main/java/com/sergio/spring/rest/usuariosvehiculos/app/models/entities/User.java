@@ -43,9 +43,11 @@ public class User implements IUser {
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Vehicle> vehicles = new ArrayList<>();
 
-    @OneToMany(mappedBy = "user",fetch = FetchType.LAZY, cascade =  CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Receipt> receipts;
 
+    @Column(name = "active")
+    private Boolean active;
     @Transient
     private boolean admin;
     @Transient
@@ -122,6 +124,14 @@ public class User implements IUser {
 
     public void setReceipts(List<Receipt> receipts) {
         this.receipts = receipts;
+    }
+
+    public Boolean isActive() {
+        return active;
+    }
+
+    public void setActive(Boolean active) {
+        this.active = active;
     }
 
     @Override

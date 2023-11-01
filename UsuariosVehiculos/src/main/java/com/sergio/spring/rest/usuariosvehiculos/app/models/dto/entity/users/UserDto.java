@@ -1,8 +1,6 @@
 package com.sergio.spring.rest.usuariosvehiculos.app.models.dto.entity.users;
 
 
-
-
 import java.util.List;
 
 //Creamos clase que recibe los datos del entity
@@ -13,11 +11,12 @@ public class UserDto {
     private String email;
     private String phoneNumber;
     private List<VehicleDto> vehicles;
+    private Boolean active;
     private boolean admin;
     private boolean guard;
 
 
-    public UserDto(Long id, String name, String lastName, String email, String phoneNumber,List<VehicleDto> vehicles, boolean isAdmin, boolean isGuard) {
+    public UserDto(Long id, String name, String lastName, String email, String phoneNumber, List<VehicleDto> vehicles, Boolean active, boolean isAdmin, boolean isGuard) {
         this.id = id;
         this.name = name;
         this.lastName = lastName;
@@ -25,7 +24,8 @@ public class UserDto {
         this.phoneNumber = phoneNumber;
         this.admin = isAdmin;
         this.guard = isGuard;
-        this.vehicles=vehicles;
+        this.vehicles = vehicles;
+        this.active = active;
     }
 
     public UserDto() {
@@ -77,6 +77,14 @@ public class UserDto {
 
     public void setVehicles(List<VehicleDto> vehicles) {
         this.vehicles = vehicles;
+    }
+
+    public Boolean isActive() {
+        return active;
+    }
+
+    public void setActive(Boolean active) {
+        this.active = active;
     }
 
     public boolean isAdmin() {
