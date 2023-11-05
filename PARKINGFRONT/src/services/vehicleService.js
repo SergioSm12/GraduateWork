@@ -33,14 +33,6 @@ export const findInactiveVehiclesByUser = async (id) => {
   }
 };
 
-export const findAllVehicleType = async () => {
-  try {
-    const response = await parkingApi.get(`${BASE_URL_VEHICLES}/type`);
-    return response;
-  } catch (error) {
-    throw error;
-  }
-};
 
 export const saveVehicle = async (userId, { plate, vehicleType }) => {
   try {

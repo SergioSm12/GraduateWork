@@ -10,6 +10,7 @@ import { useAuth } from "./auth/hooks/useAuth";
 import { Home } from "./pages/admin/Home";
 import { UserRoutes } from "./routes/UserRoutes";
 import { Rates } from "./pages/admin/Rates";
+import { VehicleTypes } from "./pages/admin/VehicleTypes";
 
 export const AppRoutes = () => {
   const { login } = useAuth();
@@ -29,6 +30,7 @@ export const AppRoutes = () => {
           <Route index element={<Home />} />
           <Route path="users/*" element={<UserRoutes />} />
           <Route path= "rate" element={<Rates/>}/>
+          <Route path = "vehicleType" element={<VehicleTypes/>}/>
         </Route>
       ) : (
         <>

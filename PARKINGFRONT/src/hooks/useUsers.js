@@ -185,7 +185,7 @@ export const useUsers = () => {
 
           Swal.fire(
             "Usuario desactivado!",
-            "El vehiculo ha sido desactivado con exito",
+            "El usuario ha sido desactivado con exito",
             "success"
           );
         } catch (error) {

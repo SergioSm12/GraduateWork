@@ -18,11 +18,11 @@ export const CreateUser = ({ userSelected, handlerCloseFormCreate }) => {
     handlerAddUser,
     errors,
     handlerInitialErrors,
-    getUsers,
+    getActiveUsers,
   } = useUsers();
 
   //estado para el formulario
-  const [userForm, setUserForm] = useState({initialUserForm, password: ""});
+  const [userForm, setUserForm] = useState({ initialUserForm, password: "" });
 
   const [showPassword, setShowPassword] = useState(false);
   const [passwordMatch, setPasswordMatch] = useState(true);
@@ -66,7 +66,7 @@ export const CreateUser = ({ userSelected, handlerCloseFormCreate }) => {
       setPasswordMatch(false);
     } else {
       handlerAddUser(userForm, "/users").then(() => {
-        getUsers();
+        getActiveUsers();
       });
     }
   };
@@ -237,7 +237,7 @@ export const CreateUser = ({ userSelected, handlerCloseFormCreate }) => {
             </label>
           </div>
         </div>
-      <input type="hidden" name="id" value={userForm.id || ""}/>
+        <input type="hidden" name="id" value={userForm.id || ""} />
         <div>
           <button
             type="submit"

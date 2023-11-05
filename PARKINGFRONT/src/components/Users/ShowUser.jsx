@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import  { useEffect,} from "react";
 import { RiAlertLine, RiArrowLeftLine } from "react-icons/ri";
 import { Link, useParams } from "react-router-dom";
 import { useUsers } from "../../hooks/useUsers";

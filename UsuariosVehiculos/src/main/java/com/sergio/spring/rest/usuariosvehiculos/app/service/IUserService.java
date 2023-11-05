@@ -56,8 +56,6 @@ public interface IUserService {
 
     boolean existsVehicleWithPlateForUser(Long userId, String plate);
 
-    //vehicle type
-    List<VehicleType> findAllVehicleType();
 
 
 }

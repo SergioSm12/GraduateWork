@@ -79,4 +79,5 @@ public class RateController {
         return ResponseEntity.badRequest().body(errors);
     }
 
+
 }

@@ -1,7 +1,6 @@
 import { useDispatch, useSelector } from "react-redux";
 import {
   activateVehicle,
-  findAllVehicleType,
   findAllVehiclesActiveByUser,
   findAllVehiclesByUser,
   findInactiveVehiclesByUser,
@@ -17,24 +16,25 @@ import {
   onCloseFormVehicle,
   onOpenFormVehicle,
   onVehicleSelectedForm,
-  loadingVehicleTypes,
   updateVehicleSlice,
   loadingVehiclesActive,
   loadingVehiclesInactive,
 } from "../store/slices/vehicle/vehicleSlice";
 import Swal from "sweetalert2";
 import { useNavigate } from "react-router-dom";
+import { findAllVehicleType } from "../services/vehicleTypeService";
+import { loadingVehicleTypes } from "../store/slices/vehicle/vehicleTypeSlice";
 
 export const useVehicle = () => {
   const {
     vehicles,
     vehiclesActive,
     vehiclesInactive,
-    vehicleTypes,
     vehicleSelected,
     errorsVehicle,
     visibleFormVehicle,
   } = useSelector((state) => state.vehicles);
+  const { vehicleTypes } = useSelector((state) => state.vehicleType);
   const dispatch = useDispatch();
   const navigate = useNavigate();
   //Alertas
@@ -132,13 +132,12 @@ export const useVehicle = () => {
           getVehicles(userId);
           getVehiclesActive(userId);
           getVehiclesInactive(userId);
-          
+
           Swal.fire(
             "Vehiculo desactivado!",
             "El vehiculo ha sido desactivado con exito",
             "success"
           );
-         
         } catch (error) {
           throw error;
         }
@@ -163,21 +162,18 @@ export const useVehicle = () => {
           getVehicles(userId);
           getVehiclesActive(userId);
           getVehiclesInactive(userId);
-          
+
           Swal.fire(
             "Vehiculo activado !",
             "El vehiculo ha sido activado con exito",
             "success"
           );
-         
         } catch (error) {
           throw error;
         }
       }
     });
   };
-
-
 
   const handlerInitialErrorsVehicle = () => {
     dispatch(loadingErrorVehicle({}));

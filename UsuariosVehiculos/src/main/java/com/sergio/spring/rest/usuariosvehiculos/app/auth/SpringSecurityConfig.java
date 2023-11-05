@@ -1,7 +1,7 @@
 package com.sergio.spring.rest.usuariosvehiculos.app.auth;
 
-import com.sergio.spring.rest.usuariosvehiculos.app.auth.filters.JwtAuthenticationFilter;
-import com.sergio.spring.rest.usuariosvehiculos.app.auth.filters.JwtValidationFilter;
+import java.util.Arrays;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
@@ -20,14 +20,15 @@ import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
 
-import java.util.Arrays;
+import com.sergio.spring.rest.usuariosvehiculos.app.auth.filters.JwtAuthenticationFilter;
+import com.sergio.spring.rest.usuariosvehiculos.app.auth.filters.JwtValidationFilter;
 
 @Configuration
 public class SpringSecurityConfig {
     @Autowired
     private AuthenticationConfiguration authenticationConfiguration;
 
-    //Codificar el password
+    // Codificar el password
     @Bean
     PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
@@ -41,46 +42,52 @@ public class SpringSecurityConfig {
     @Bean
     SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         return http.authorizeHttpRequests(authRules -> authRules
-                        //usuario
-                        .requestMatchers(HttpMethod.GET, "/users").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/users/active-users").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/users/inactive-users").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/users/page/{page}").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/users/{id}").permitAll()
-                        .requestMatchers(HttpMethod.POST, "/users").permitAll()
-                        .requestMatchers(HttpMethod.PUT, "/users/{id}").permitAll()
-                        .requestMatchers(HttpMethod.PUT, "/users/activate/{id}").permitAll()
-                        .requestMatchers(HttpMethod.PUT, "/users/deactivate/{id}").permitAll()
-                        .requestMatchers(HttpMethod.DELETE, "/users/{id}").permitAll()
+                // usuario
+                .requestMatchers(HttpMethod.GET, "/users").permitAll()
+                .requestMatchers(HttpMethod.GET, "/users/active-users").permitAll()
+                .requestMatchers(HttpMethod.GET, "/users/inactive-users").permitAll()
+                .requestMatchers(HttpMethod.GET, "/users/page/{page}").permitAll()
+                .requestMatchers(HttpMethod.GET, "/users/{id}").permitAll()
+                .requestMatchers(HttpMethod.POST, "/users").permitAll()
+                .requestMatchers(HttpMethod.PUT, "/users/{id}").permitAll()
+                .requestMatchers(HttpMethod.PUT, "/users/activate/{id}").permitAll()
+                .requestMatchers(HttpMethod.PUT, "/users/deactivate/{id}").permitAll()
+                .requestMatchers(HttpMethod.DELETE, "/users/{id}").permitAll()
 
-                        //usuario
-                        .requestMatchers(HttpMethod.POST, "/vehicle/{userId}/create").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/vehicle/{userId}/list").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/vehicle/{userId}/active-vehicles").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/vehicle/{userId}/inactive-vehicles").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/vehicle/type").permitAll()
-                        .requestMatchers(HttpMethod.PUT, "/vehicle/{userId}/update/{vehicleId}").permitAll()
-                        .requestMatchers(HttpMethod.DELETE, "/vehicle/{userId}/delete/{vehicleId}").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/vehicle/{userId}/activate-vehicle/{vehicleId}").permitAll()
+                // usuario
+                .requestMatchers(HttpMethod.POST, "/vehicle/{userId}/create").permitAll()
+                .requestMatchers(HttpMethod.GET, "/vehicle/{userId}/list").permitAll()
+                .requestMatchers(HttpMethod.GET, "/vehicle/{userId}/active-vehicles").permitAll()
+                .requestMatchers(HttpMethod.GET, "/vehicle/{userId}/inactive-vehicles").permitAll()
+                .requestMatchers(HttpMethod.PUT, "/vehicle/{userId}/update/{vehicleId}").permitAll()
+                .requestMatchers(HttpMethod.DELETE, "/vehicle/{userId}/delete/{vehicleId}").permitAll()
+                .requestMatchers(HttpMethod.GET, "/vehicle/{userId}/activate-vehicle/{vehicleId}").permitAll()
 
-                        .requestMatchers(HttpMethod.GET, "/rate").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/rate/{rateId}").permitAll()
-                        .requestMatchers(HttpMethod.POST, "/rate").permitAll()
-                        .requestMatchers(HttpMethod.PUT, "/rate/{rateId}").permitAll()
-                        .requestMatchers(HttpMethod.DELETE, "/rate/{rateId}").permitAll()
+                //vehicle type 
+                .requestMatchers(HttpMethod.GET, "/vehicleType").permitAll()
+                .requestMatchers(HttpMethod.POST, "/vehicleType").permitAll()
+                .requestMatchers(HttpMethod.PUT, "/vehicleType/{id}").permitAll()
+                .requestMatchers(HttpMethod.DELETE, "/vehicleType/{id}").permitAll()
 
-                        .requestMatchers(HttpMethod.GET, "/receipt").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/receipt/unpaid").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/receipt/paid").permitAll()
-                        .requestMatchers(HttpMethod.PUT, "/receipt/{receiptId}/update").permitAll()
-                        .requestMatchers(HttpMethod.DELETE, "/receipt/{receiptId}").permitAll()
 
-                        //usuario
-                        .requestMatchers(HttpMethod.GET, "/receipt/user/{userId}").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/receipt/user/{userId}/unpaid").permitAll()
-                        .requestMatchers(HttpMethod.POST, "/receipt/{userId}/create").permitAll()
+                .requestMatchers(HttpMethod.GET, "/rate").permitAll()
+                .requestMatchers(HttpMethod.GET, "/rate/{rateId}").permitAll()
+                .requestMatchers(HttpMethod.POST, "/rate").permitAll()
+                .requestMatchers(HttpMethod.PUT, "/rate/{rateId}").permitAll()
+                .requestMatchers(HttpMethod.DELETE, "/rate/{rateId}").permitAll()
 
-                        .anyRequest().authenticated())
+                .requestMatchers(HttpMethod.GET, "/receipt").permitAll()
+                .requestMatchers(HttpMethod.GET, "/receipt/unpaid").permitAll()
+                .requestMatchers(HttpMethod.GET, "/receipt/paid").permitAll()
+                .requestMatchers(HttpMethod.PUT, "/receipt/{receiptId}/update").permitAll()
+                .requestMatchers(HttpMethod.DELETE, "/receipt/{receiptId}").permitAll()
+
+                // usuario
+                .requestMatchers(HttpMethod.GET, "/receipt/user/{userId}").permitAll()
+                .requestMatchers(HttpMethod.GET, "/receipt/user/{userId}/unpaid").permitAll()
+                .requestMatchers(HttpMethod.POST, "/receipt/{userId}/create").permitAll()
+
+                .anyRequest().authenticated())
                 .addFilter(new JwtAuthenticationFilter(authenticationConfiguration.getAuthenticationManager()))
                 .addFilter(new JwtValidationFilter(authenticationConfiguration.getAuthenticationManager()))
                 .csrf(config -> config.disable())
@@ -89,7 +96,7 @@ public class SpringSecurityConfig {
                 .build();
     }
 
-    //Configurar CORS
+    // Configurar CORS
     @Bean
     CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration config = new CorsConfiguration();
@@ -103,10 +110,11 @@ public class SpringSecurityConfig {
         return source;
     }
 
-    //Filtro de prioridad
+    // Filtro de prioridad
     @Bean
     FilterRegistrationBean<CorsFilter> corsFilter() {
-        FilterRegistrationBean<CorsFilter> bean = new FilterRegistrationBean<>(new CorsFilter(corsConfigurationSource()));
+        FilterRegistrationBean<CorsFilter> bean = new FilterRegistrationBean<>(
+                new CorsFilter(corsConfigurationSource()));
         bean.setOrder(Ordered.HIGHEST_PRECEDENCE);
         return bean;
     }

@@ -8,9 +8,10 @@ import com.sergio.spring.rest.usuariosvehiculos.app.models.entities.Vehicle;
 
 import com.sergio.spring.rest.usuariosvehiculos.app.models.entities.VehicleType;
 import com.sergio.spring.rest.usuariosvehiculos.app.service.IUserService;
+import com.sergio.spring.rest.usuariosvehiculos.app.service.IVehicleTypeService;
+
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
@@ -30,11 +31,7 @@ public class VehicleController {
     @Autowired
     private IUserService userService;
 
-    @GetMapping("/type")
-    public ResponseEntity<?> listVehicleTypes() {
-        List<VehicleType> vehicleTypes = userService.findAllVehicleType();
-        return ResponseEntity.ok(vehicleTypes);
-    }
+    
 
     @GetMapping("/{userId}/list")
     public ResponseEntity<?> listVehiclesByUser(@PathVariable Long userId) {
@@ -154,6 +151,7 @@ public class VehicleController {
         error.put(fieldName, errorMessage);
         return ResponseEntity.badRequest().body(error);
     }
+    
 
 
 }

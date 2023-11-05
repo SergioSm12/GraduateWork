@@ -6,7 +6,6 @@ import {
 } from "react-icons/ri";
 import { useRates } from "../../hooks/useRates";
 import { useVehicle } from "../../hooks/useVehicle";
-import { vehicleType } from "../../store/slices/rate/rateSlice";
 export const CreateRate = ({ rateSelected }) => {
   const { initialRateForm, handlerAddRate, errorsRate } = useRates();
   const { vehicleTypes, getVehicleTypes } = useVehicle();

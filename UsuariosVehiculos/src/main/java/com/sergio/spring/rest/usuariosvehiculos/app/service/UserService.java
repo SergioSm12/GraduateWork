@@ -2,7 +2,6 @@ package com.sergio.spring.rest.usuariosvehiculos.app.service;
 
 import com.sergio.spring.rest.usuariosvehiculos.app.models.dto.entity.users.UserDto;
 import com.sergio.spring.rest.usuariosvehiculos.app.models.dto.entity.users.VehicleDto;
-import com.sergio.spring.rest.usuariosvehiculos.app.models.dto.entity.users.VehicleTypeDto;
 import com.sergio.spring.rest.usuariosvehiculos.app.models.dto.mapper.DtoMapperUser;
 import com.sergio.spring.rest.usuariosvehiculos.app.models.dto.mapper.DtoMapperVehicleDto;
 import com.sergio.spring.rest.usuariosvehiculos.app.models.entities.*;
@@ -26,8 +25,7 @@ import java.util.stream.Collectors;
 public class UserService implements IUserService {
     @Autowired
     private IUserRepository userRepository;
-    @Autowired
-    private IReceiptRepository receiptRepository;
+ 
     @Autowired
     private IRoleRepository roleRepository;
 
@@ -35,8 +33,6 @@ public class UserService implements IUserService {
     @Autowired
     private IVehicleRepository vehicleRepository;
 
-    @Autowired
-    private IVehicleTypeRepository vehicleTypeRepository;
 
     //Encriptar
     @Autowired
@@ -280,12 +276,7 @@ public class UserService implements IUserService {
         return vehicleRepository.existsByUserIdAndPlate(userId, plate);
     }
 
-    //Traer vehicle
-    @Override
-    @Transactional(readOnly = true)
-    public List<VehicleType> findAllVehicleType() {
-        return (List<VehicleType>) vehicleTypeRepository.findAll();
-    }
+   
 
     //Create
 

@@ -9,7 +9,8 @@ import {
   RiLogoutCircleLine,
   RiArrowRightSLine,
   RiMenu3Line,
-  RiCloseLine
+  RiCloseLine,
+  RiRoadsterFill
 } from "react-icons/ri";
 import { useAuth } from "../auth/hooks/useAuth";
 
@@ -33,53 +34,8 @@ export const Sidebar = () => {
               className="flex items-center gap-4 py-2 px-4 rounded-lg hover:bg-secondary-900 transition-colors"
             >
               <RiBarChart2Line className="text-primary" />
-              Analiticas
+              Recibos y estadísticas.
             </Link>
-          </li>
-          <li>
-            <button onClick={()=> setShowSubmenu(!showSubmenu)} className="w-full flex items-center justify-between gap-4 py-2 px-4 rounded-lg
-             hover:bg-secondary-900 transition-colors">
-              <span className="flex items-center gap-4">
-                <RiWalletLine className="text-primary" />
-                Recibos
-              </span>
-              <RiArrowRightSLine className={`mt-1 ${showSubmenu && "rotate-90"} transition-all` }/>
-            </button>
-            <ul className={`${showSubmenu ? "h-[150px]" :"h-0" } overflow-y-hidden transition-all `}>
-              <li>
-                <Link
-                  to="/"
-                  className="py-2 px-4 border-l border-gray-500 ml-6 block 
-                  relative before:w-3 before:h-3 before:absolute before:bg-primary
-                  before:rounded-full before:-left-[6.5px] before:top-1/2 before:-translate-y-1/2
-                  before:border-4 before:border-secondary-100 hover:text-white transition-colors"
-                >
-                  Pendientes
-                </Link>
-              </li>
-              <li>
-                <Link
-                  to="/"
-                  className="py-2 px-4 border-l border-gray-500 ml-6 block 
-                  relative before:w-3 before:h-3 before:absolute before:bg-gray-500
-                  before:rounded-full before:-left-[6.5px] before:top-1/2 before:-translate-y-1/2
-                  before:border-4 before:border-secondary-100 hover:text-white"
-                >
-                  Pagados
-                </Link>
-              </li>
-              <li>
-                <Link
-                  to="/"
-                  className="py-2 px-4 border-l border-gray-500 ml-6 block 
-                  relative before:w-3 before:h-3 before:absolute before:bg-gray-500
-                  before:rounded-full before:-left-[6.5px] before:top-1/2 before:-translate-y-1/2
-                  before:border-4 before:border-secondary-100 hover:text-white"
-                >
-                 Todos
-                </Link>
-              </li>
-            </ul>
           </li>
 
           <li>
@@ -88,7 +44,7 @@ export const Sidebar = () => {
               className="flex items-center gap-4 py-2 px-4 rounded-lg hover:bg-secondary-900 transition-colors"
             >
               <RiGroupLine className="text-primary" />
-              Administar Usuarios
+              Administar usuarios.
             </Link>
           </li>
 
@@ -98,7 +54,16 @@ export const Sidebar = () => {
               className="flex items-center gap-4 py-2 px-4 rounded-lg hover:bg-secondary-900 transition-colors"
             >
               <RiCalendarTodoLine className="text-primary" />
-              Adminitrar Tarifas.
+              Adminitrar tarifas.
+            </Link>
+          </li>
+          <li>
+            <Link
+            to="/vehicleType"
+            className="flex items-center gap-4 py-2 px-4 rounded-lg hover:bg-secondary-900 transition-colors"
+            >
+              <RiRoadsterFill className="text-primary"/>
+              Administrar vehículos.
             </Link>
           </li>
         </ul>

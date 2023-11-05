@@ -2,7 +2,6 @@ package com.sergio.spring.rest.usuariosvehiculos.app.models.request;
 
 import jakarta.validation.constraints.NotNull;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 public class ReceiptRequest {
