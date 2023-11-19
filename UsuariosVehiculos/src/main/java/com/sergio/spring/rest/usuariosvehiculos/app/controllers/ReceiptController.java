@@ -30,7 +30,7 @@ public class ReceiptController {
     @Autowired
     private IUserService userService;
 
-    //Admin
+    // Admin
     @GetMapping
     public List<ReceiptDto> listReceipts() {
         return receiptService.receiptList();
@@ -46,14 +46,14 @@ public class ReceiptController {
         return receiptService.getPaidReceipts();
     }
 
-    //Obtener  recipts por usuario
+    // Obtener recipts por usuario
     @GetMapping("/user/{userId}")
     public ResponseEntity<List<ReceiptDto>> getReceiptsByUserId(@PathVariable Long userId) {
         List<ReceiptDto> receipts = receiptService.getReceiptsByUserId(userId);
         return ResponseEntity.ok(receipts);
     }
 
-    //Obtener receipts sin pagar por usuario
+    // Obtener receipts sin pagar por usuario
     @GetMapping("/user/{userId}/unpaid")
     public ResponseEntity<?> getUnpaidReceiptsForUser(@PathVariable Long userId) {
         Optional<UserDto> userDtoOptional = userService.findById(userId);
@@ -62,7 +62,8 @@ public class ReceiptController {
         }
         UserDto userDto = userDtoOptional.get();
         if (!userDto.getId().equals(userId)) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new ErrorResponse("No tienes permiso para acceder a los permisos de este usuario"));
+            return ResponseEntity.status(HttpStatus.FORBIDDEN)
+                    .body(new ErrorResponse("No tienes permiso para acceder a los permisos de este usuario"));
         }
 
         Optional<User> userOptional = userService.findByIdUser(userDto.getId());
@@ -72,12 +73,14 @@ public class ReceiptController {
         return ResponseEntity.ok(unpaidReceipts);
     }
 
-    //user create
+    // user create
     @PostMapping("/{userId}/create")
-    public ResponseEntity<?> createReceiptByUser(@PathVariable Long userId, @Valid @RequestBody Receipt receipt, BindingResult result) {
+    public ResponseEntity<?> createReceiptByUser(@PathVariable Long userId, @Valid @RequestBody Receipt receipt,
+            BindingResult result) {
         if (result.hasErrors()) {
             return validation(result);
         }
+
         Optional<UserDto> userDtoOptional = userService.findById(userId);
         if (userDtoOptional.isEmpty()) {
             return ResponseEntity.notFound().build();
@@ -85,25 +88,21 @@ public class ReceiptController {
 
         UserDto userDto = userDtoOptional.get();
         if (!userDto.getId().equals(userId)) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new ErrorResponse("No tienes permiso para crear este usuario"));
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new ErrorResponse("Usuario no encontrado"));
         }
 
-        //Asignar la entidad user al Receipt
+        // Asignar la entidad user al Receipt
         Optional<User> optionalUser = userService.findByIdUser(userDto.getId());
         User user = optionalUser.orElseThrow();
         receipt.setUser(user);
 
-        try {
-            ReceiptDto creaReceipt = receiptService.saveReceipt(receipt);
-            return ResponseEntity.status(HttpStatus.CREATED).body(creaReceipt);
-        } catch (IllegalArgumentException e) {
-            return ResponseEntity.badRequest().body(new ErrorResponse("Error al crear el recibo "));
-        }
+        return ResponseEntity.status(HttpStatus.CREATED).body(receiptService.saveReceipt(receipt));
     }
 
-    //Admin
+    // Admin update
     @PutMapping("/{receiptId}/update")
-    public ResponseEntity<?> updateReceipt(@Valid @RequestBody ReceiptRequest receipt, BindingResult result, @PathVariable Long receiptId) {
+    public ResponseEntity<?> updateReceipt(@Valid @RequestBody ReceiptRequest receipt, BindingResult result,
+            @PathVariable Long receiptId) {
         if (result.hasErrors()) {
             return validation(result);
         }
@@ -114,7 +113,7 @@ public class ReceiptController {
         return ResponseEntity.notFound().build();
     }
 
-    //Admin
+    // Admin
     @DeleteMapping("/{receiptId}")
     public ResponseEntity<?> deleteReceipt(@PathVariable Long receiptId) {
         Optional<ReceiptDto> ro = receiptService.findByIdReceipt(receiptId);
@@ -124,7 +123,6 @@ public class ReceiptController {
         }
         return ResponseEntity.notFound().build();
     }
-
 
     private ResponseEntity<?> validation(BindingResult result) {
         Map<String, String> errors = new HashMap<>();

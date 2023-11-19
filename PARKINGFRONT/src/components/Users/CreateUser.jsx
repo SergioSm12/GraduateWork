@@ -35,7 +35,7 @@ export const CreateUser = ({ userSelected, handlerCloseFormCreate }) => {
     });
   }, [userSelected]);
 
-  //console.log(userSelected);
+
 
   const onConfirmPasswordChange = (event) => {
     setConfirmPassword(event.target.value);

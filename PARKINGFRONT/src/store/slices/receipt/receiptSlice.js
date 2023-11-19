@@ -41,7 +41,7 @@ export const initialReceiptForm = {
   issueDate: new Date().toISOString(),
   dueDate: null,
   paymentStatus: false,
-  rate: rate,
+  rate: null,
   user: user,
   vehicle: vehicle,
 };
@@ -57,7 +57,7 @@ export const receiptSlice = createSlice({
     receiptsByUser: [],
     receiptSelected: initialReceiptForm,
     vehicleSelected: vehicle,
-    
+
     visibleShowReceiptModal: false,
     visibleFormReceiptModal: false,
     errorsReceipt: initialErrosReceipt,
@@ -74,6 +74,19 @@ export const receiptSlice = createSlice({
       state.visibleFormReceiptModal = false;
     },
 
+    updateReceiptSlice: (state, action) => {
+      state.receiptsByUser = state.receiptsByUser.map((r) => {
+        if (r.id === action.payload.id) {
+          return {
+            ...action.payload,
+          };
+        }
+        return r;
+      });
+      state.receiptSelected = initialReceiptForm;
+      state.visibleFormReceiptModal = false;
+    },
+
     loadingReceiptsByUser: (state, action) => {
       state.receiptsByUser = action.payload;
     },
@@ -82,13 +95,14 @@ export const receiptSlice = createSlice({
       state.receiptSelected = action.payload;
       state.visibleFormReceiptModal = true;
     },
-    onOpenModalFormReceipt: (state,action) => {
-      state.vehicleSelected= action.payload;
+    onOpenModalFormReceipt: (state, action) => {
+      state.vehicleSelected = action.payload;
       state.visibleFormReceiptModal = true;
     },
     onCloseModalFormReceipt: (state) => {
       state.visibleFormReceiptModal = false;
       state.receiptSelected = initialReceiptForm;
+      state.vehicleSelected = vehicle;
     },
 
     //info
@@ -111,6 +125,7 @@ export const receiptSlice = createSlice({
 
 export const {
   addReceipt,
+  updateReceiptSlice,
   loadingReceiptsByUser,
   onReceiptSelectedForm,
   onOpenModalFormReceipt,

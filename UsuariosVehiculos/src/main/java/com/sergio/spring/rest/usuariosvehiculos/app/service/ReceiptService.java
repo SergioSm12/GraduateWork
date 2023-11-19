@@ -15,7 +15,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
@@ -33,7 +32,7 @@ public class ReceiptService implements IReceiptService {
     @Autowired
     private IVehicleRepository vehicleRepository;
 
-    //Rate
+    // Rate
     @Autowired
     private IRateRepository rateRepository;
 
@@ -41,7 +40,8 @@ public class ReceiptService implements IReceiptService {
     @Transactional(readOnly = true)
     public List<ReceiptDto> receiptList() {
         List<Receipt> receipts = (List<Receipt>) receiptRepository.findAll();
-        return receipts.stream().map(r -> DtoMapperReceipt.builder().setReceipt(r).build()).collect(Collectors.toList());
+        return receipts.stream().map(r -> DtoMapperReceipt.builder().setReceipt(r).build())
+                .collect(Collectors.toList());
     }
 
     @Override
@@ -54,17 +54,19 @@ public class ReceiptService implements IReceiptService {
     @Transactional(readOnly = true)
     public List<ReceiptDto> getUnpaidReceipts() {
         List<Receipt> unpaidReceipts = receiptRepository.findByPaymentStatusFalse();
-        return unpaidReceipts.stream().map(ru -> DtoMapperReceipt.builder().setReceipt(ru).build()).collect(Collectors.toList());
+        return unpaidReceipts.stream().map(ru -> DtoMapperReceipt.builder().setReceipt(ru).build())
+                .collect(Collectors.toList());
     }
 
     @Override
     @Transactional(readOnly = true)
     public List<ReceiptDto> getPaidReceipts() {
         List<Receipt> paidReceipts = receiptRepository.findByPaymentStatusTrue();
-        return paidReceipts.stream().map(rp -> DtoMapperReceipt.builder().setReceipt(rp).build()).collect(Collectors.toList());
+        return paidReceipts.stream().map(rp -> DtoMapperReceipt.builder().setReceipt(rp).build())
+                .collect(Collectors.toList());
     }
 
-    //Obtener recibos por usuario
+    // Obtener recibos por usuario
     @Override
     @Transactional(readOnly = true)
     public List<ReceiptDto> getReceiptsByUserId(Long userId) {
@@ -75,10 +77,11 @@ public class ReceiptService implements IReceiptService {
         User user = userOptional.get();
         List<Receipt> receipts = receiptRepository.findByUser(user);
 
-        return receipts.stream().map(r -> DtoMapperReceipt.builder().setReceipt(r).build()).collect(Collectors.toList());
+        return receipts.stream().map(r -> DtoMapperReceipt.builder().setReceipt(r).build())
+                .collect(Collectors.toList());
     }
 
-    //Obtener recibos pendientes de pago por user
+    // Obtener recibos pendientes de pago por user
     @Override
     @Transactional(readOnly = true)
     public List<ReceiptDto> getUnpaidReceiptsByUser(User user) {
@@ -88,12 +91,12 @@ public class ReceiptService implements IReceiptService {
                 .collect(Collectors.toList());
     }
 
-    //Receipt
-    //save Receipt
+    // Receipt
+    // save Receipt
     @Override
     @Transactional
     public ReceiptDto saveReceipt(Receipt receipt) {
-        //Obtener user y asociarlo
+        // Obtener user y asociarlo
         Optional<User> userOptional = userRepository.findById(receipt.getUser().getId());
         if (userOptional.isEmpty()) {
             throw new IllegalArgumentException("User not found");
@@ -102,14 +105,15 @@ public class ReceiptService implements IReceiptService {
         if (vehicleOptional.isEmpty()) {
             throw new IllegalArgumentException("Vehicle not found");
         }
-        //Validacion para que solo se permita crear cuando el vehiculo se encuentra en los vehiculos del user
+        // Validacion para que solo se permita crear cuando el vehiculo se encuentra en
+        // los vehiculos del user
         User user = userOptional.get();
         Vehicle vehicle = vehicleOptional.get();
         if (!user.getVehicles().contains(vehicle)) {
             throw new IllegalArgumentException("Vehicle is not associated with the user");
         }
 
-//Obtiene el rate asociado
+        // Obtiene el rate asociado
         Optional<Rate> rateOptional = rateRepository.findById(receipt.getRate().getId());
         if (rateOptional.isEmpty()) {
             throw new IllegalArgumentException("Rate not found");
@@ -119,15 +123,14 @@ public class ReceiptService implements IReceiptService {
         receipt.setVehicle(vehicleOptional.get());
         receipt.setRate(rateOptional.get());
         receipt.setIssueDate(LocalDateTime.now());
-        //Calcular dueDate segunRateTime
-        //FECHA ACTUAL
+        // Calcular dueDate segunRateTime
+        // FECHA ACTUAL
         LocalDateTime currentDateTime = LocalDateTime.now();
-        //VARIABLE
+        // VARIABLE
         String rateTime = rateOptional.get().getTime();
-        //CACLCULAR
-        LocalDateTime dueDate = calculateDueDate(rateTime,currentDateTime);
+        // CACLCULAR
+        LocalDateTime dueDate = calculateDueDate(rateTime, currentDateTime);
         receipt.setDueDate(dueDate);
-
 
         receipt.setPaymentStatus(false);
 
@@ -138,18 +141,20 @@ public class ReceiptService implements IReceiptService {
 
     @Override
     @Transactional
-    public Optional<ReceiptDto> updateReceipt(ReceiptRequest receipt, Long receiptId) {
+    public Optional<ReceiptDto> updateReceipt(ReceiptRequest receiptRequest, Long receiptId) {
         Optional<Receipt> o = receiptRepository.findById(receiptId);
         Receipt receiptOptional = null;
         if (o.isPresent()) {
             Receipt receiptDb = o.orElseThrow();
-            receiptDb.setDueDate(receipt.getDueDate());
-            receiptDb.setPaymentStatus(receipt.isPaymentStatus());
+            receiptDb.setIssueDate(receiptRequest.getIssueDate());
+            receiptDb.setDueDate(receiptRequest.getDueDate());
+            receiptDb.setPaymentStatus(receiptRequest.isPaymentStatus());
+            receiptDb.setRate(receiptRequest.getRate());
+
             receiptOptional = receiptRepository.save(receiptDb);
         }
         return Optional.ofNullable(DtoMapperReceipt.builder().setReceipt(receiptOptional).build());
     }
-
 
     @Override
     @Transactional
@@ -158,13 +163,18 @@ public class ReceiptService implements IReceiptService {
     }
 
     private LocalDateTime calculateDueDate(String rateTime, LocalDateTime currentDate) {
-        //casos segun rateTime y calculo
-        rateTime = rateTime.replaceAll("\\s","");
+        // casos segun rateTime y calculo
+        rateTime = rateTime.replaceAll("\\s", "");
         return switch (rateTime.toUpperCase()) {
-            case "DIAMOTO","MOTODIA","DIACARRO","CARRODIA" -> currentDate.plusDays(1);
-            case "SEMANAMOTO","MOTOSEMANA","SEMANACARRO","CARROSEMANA" -> currentDate.plusWeeks(1);
-            case "QUINCENAMOTO", "MOTOQUINCENA","QUINCENACARRO","CARROQUINCENA" -> currentDate.plus(2, ChronoUnit.WEEKS);
-            case "MESMOTO","MOTOMES","MESCARRO","CARROMES" -> currentDate.plusMonths(1);
+            case "DIAMOTO", "MOTODIA", "DIACARRO", "CARRODIA", "DIABICICLETA", "BICICLETADIA" ->
+                currentDate.plusDays(1);
+            case "SEMANAMOTO", "MOTOSEMANA", "SEMANACARRO", "CARROSEMANA", "SEMANABICICLETA", "BICICLETASEMANA" ->
+                currentDate.plusWeeks(1);
+            case "QUINCENAMOTO", "MOTOQUINCENA", "QUINCENACARRO", "CARROQUINCENA", "QUINCENABICICLETA",
+                    "BICICLETAQUINCENA" ->
+                currentDate.plus(2, ChronoUnit.WEEKS);
+            case "MESMOTO", "MOTOMES", "MESCARRO", "CARROMES", "MESBICICLETA", "BICICLETAMES" ->
+                currentDate.plusMonths(1);
             default -> null;
         };
     }

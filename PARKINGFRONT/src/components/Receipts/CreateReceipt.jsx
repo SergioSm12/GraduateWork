@@ -23,6 +23,7 @@ export const CreateReceipt = () => {
     vehicle,
     handlerAddReceiptByUser,
     initialReceiptForm,
+    errorsReceipt,
   } = useReceipts();
   const { rates, getRates } = useRates();
 
@@ -30,23 +31,25 @@ export const CreateReceipt = () => {
 
   //estado para traer los datos del vehicle
   const [vehicleForm, setVehicleForm] = useState(vehicle);
+  const [vehicleFormEdit, setVehicleFormEdit] = useState(vehicle);
   //Estado para guardar lso datos del recibo
   const [receiptForm, setReceiptForm] = useState(initialReceiptForm);
   const [selectedRate, setSelectedRate] = useState(null);
 
+  //Busca el vehiculo seleccionado
+
+  //Agrega el recibo
   useEffect(() => {
-    if (vehicleSelected) {
-      setVehicleForm({
-        ...vehicleForm,
-        id: vehicleSelected.id,
-        plate: vehicleSelected.plate,
-        vehicleType: vehicleSelected.vehicleType,
-      });
-    }
-  }, [vehicleSelected]);
+    setReceiptForm({
+      ...receiptSelected,
+    });
+    setSelectedRate(receiptSelected.rate);
+    setVehicleFormEdit(receiptSelected.vehicle);
+  }, [receiptSelected]);
 
   useEffect(() => {
     getRates();
+    setVehicleForm(vehicleSelected);
   }, []);
   const onCloseForm = () => {
     handlerCloseModalFormReceipt();
@@ -54,19 +57,6 @@ export const CreateReceipt = () => {
 
   const onInputChange = ({ target }) => {
     const { name, value } = target;
-
-    /*
-    if (name === "vehicle") {
-      const selectVehicleId = value;
-      console.log(selectVehicleId);
-      if (vehicleSelected.id == selectVehicleId) {
-        setReceiptForm({
-          ...receiptForm,
-          [name]: vehicleForm,
-        });
-      }
-      console.log(vehicleForm);
-    }*/
 
     if (name === "rate") {
       const rateId = value;
@@ -91,9 +81,10 @@ export const CreateReceipt = () => {
       ...receiptForm,
       vehicle: vehicleForm,
     };
-    console.log(updatedReceiptForm);
+
     handlerAddReceiptByUser(id, updatedReceiptForm);
   };
+
   return (
     <div className="bg-secondary-100 p-8 rounded-xl shadow-2xl w-auto lg:w-[450px]">
       <div className="flex items-start justify-between">
@@ -115,7 +106,8 @@ export const CreateReceipt = () => {
             className="py-3 pl-8 pr-4 bg-secondary-900 w-full outline-none rounded-lg focus:border focus:border-primary appearance-none"
             id="vehicle"
           >
-            {`${vehicleForm.plate} - ${vehicleForm.vehicleType.name}`}
+            {receiptForm.id>0 ? (`${vehicleFormEdit.plate} - ${vehicleFormEdit.vehicleType.name}`):(`${vehicleForm.plate} - ${vehicleForm.vehicleType.name}`)}
+            {}
           </div>
         </div>
         <div className="relative mb-4">
@@ -135,6 +127,14 @@ export const CreateReceipt = () => {
             ))}
           </select>
         </div>
+        <div className="relative mb-8">
+          <p className="text-red-500">
+            {errorsReceipt?.rate == "Debe seleccionar una tarifa"
+              ? JSON.stringify(errorsReceipt?.rate)
+              : ""}
+          </p>
+        </div>
+
         <button
           type="submit"
           className="bg-primary text-black uppercase font-bold text-sm w-full py-3 px-4 rounded-lg "

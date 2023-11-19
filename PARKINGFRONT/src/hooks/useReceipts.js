@@ -2,6 +2,7 @@ import { useDispatch, useSelector } from "react-redux";
 import {
   createReceiptByUser,
   findReceiptsByUser,
+  updateReceipt,
 } from "../services/receiptService";
 import {
   loadingReceiptsByUser,
@@ -14,7 +15,8 @@ import {
   onReceiptSelectedForm,
   onOpenModalFormReceipt,
   onCloseModalFormReceipt,
-  vehicle
+  vehicle,
+  updateReceiptSlice,
 } from "../store/slices/receipt/receiptSlice";
 import Swal from "sweetalert2";
 
@@ -24,7 +26,8 @@ export const useReceipts = () => {
     visibleFormReceiptModal,
     visibleShowReceiptModal,
     receiptSelected,
-    vehicleSelected
+    vehicleSelected,
+    errorsReceipt,
   } = useSelector((state) => state.receipts);
   const dispatch = useDispatch();
 
@@ -59,13 +62,16 @@ export const useReceipts = () => {
         dispatch(addReceipt(response.data));
       } else {
         //actualizar receipt
+        console.log(receipt);
+        response = await updateReceipt(receipt.id, receipt);
+        dispatch(updateReceiptSlice(response.data));
       }
 
       Toast.fire({
         icon: "success",
         title: receipt.id === 0 ? "Recibo creado" : "Recibo actualizado",
       });
-      handlerCloseFormVehicle();
+      handlerCloseModalFormReceipt();
     } catch (error) {
       if (error.response && error.response.status == 400) {
         dispatch(loadingErrorReceipt(error.response.data));
@@ -84,11 +90,12 @@ export const useReceipts = () => {
   };
 
   const handlerOpenModalFormReceipt = (vehicle) => {
-    dispatch(onOpenModalFormReceipt({...vehicle}));
+    dispatch(onOpenModalFormReceipt({ ...vehicle }));
   };
 
   const handlerCloseModalFormReceipt = () => {
     dispatch(onCloseModalFormReceipt());
+    dispatch(loadingErrorReceipt({}));
   };
 
   //Show
@@ -121,5 +128,7 @@ export const useReceipts = () => {
     receiptSelected,
     vehicleSelected,
     initialReceiptForm,
+
+    errorsReceipt,
   };
 };

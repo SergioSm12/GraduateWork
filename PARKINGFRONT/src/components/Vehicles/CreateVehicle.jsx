@@ -74,6 +74,7 @@ export const CreateVehicle = ({ handlerCloseFormVehicle, vehicleSelected }) => {
     });
   };
 
+
   return (
     <div className="bg-secondary-100 p-8 rounded-xl shadow-2xl w-auto lg:w-[450px]">
       <div className="flex items-start justify-between">

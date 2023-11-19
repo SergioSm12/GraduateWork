@@ -10,12 +10,13 @@ import { format } from "date-fns/esm";
 export const ModalReceipt = () => {
   const { receiptSelected, handlerCloseModalShowReceipt, initialReceiptForm } =
     useReceipts();
-  const [receiptShow, setReceiptShow] = useState(initialReceiptForm);
+  const [receiptShow, setReceiptShow] = useState(receiptSelected);
 
   useEffect(() => {
     if (receiptSelected) {
       setReceiptShow({ ...receiptSelected });
     }
+  
   }, [receiptSelected]);
 
   const onCloseModal = () => {

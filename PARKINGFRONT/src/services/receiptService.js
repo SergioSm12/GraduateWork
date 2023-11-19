@@ -22,4 +22,18 @@ export const createReceiptByUser = async (userId, { vehicle, rate }) => {
   }
 };
 
-
+export const updateReceipt = async (
+  receiptId,
+  { issueDate, dueDate, paymentStatus, rate }
+) => {
+  try {
+    return await parkingApi.put(`${BASE_URL_RECEIPT}/${receiptId}/update`, {
+      issueDate,
+      dueDate,
+      paymentStatus,
+      rate,
+    });
+  } catch (error) {
+    throw error;
+  }
+};

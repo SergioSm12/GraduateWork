@@ -4,7 +4,6 @@ import com.sergio.spring.rest.usuariosvehiculos.app.models.dto.entity.users.User
 import com.sergio.spring.rest.usuariosvehiculos.app.models.dto.entity.users.VehicleDto;
 import com.sergio.spring.rest.usuariosvehiculos.app.models.entities.User;
 import com.sergio.spring.rest.usuariosvehiculos.app.models.entities.Vehicle;
-import com.sergio.spring.rest.usuariosvehiculos.app.models.entities.VehicleType;
 import com.sergio.spring.rest.usuariosvehiculos.app.models.request.UserRequest;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

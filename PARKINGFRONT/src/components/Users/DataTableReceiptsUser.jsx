@@ -57,8 +57,11 @@ export const DataTableReceiptsUser = ({ dataReceipts }) => {
   const [data, setData] = useState(dataReceipts);
   const [globalFilter, setGlobalFilter] = useState("");
   const [sorting, setSorting] = useState([]);
-  const { handlerReceiptSelectedModalShow, visibleShowReceiptModal } =
-    useReceipts();
+  const {
+    handlerReceiptSelectedModalShow,
+    visibleShowReceiptModal,
+    handlerReceiptSelectedModalForm,
+  } = useReceipts();
 
   useEffect(() => {
     setData(dataReceipts);
@@ -151,7 +154,7 @@ export const DataTableReceiptsUser = ({ dataReceipts }) => {
         </div>
       </div>
       {/*Modal showreceipt */}
-      {!visibleShowReceiptModal ||<ModalReceipt/> }
+      {!visibleShowReceiptModal || <ModalReceipt />}
       {/*Table */}
       <div className="overflow-x-auto">
         <table className="table-auto min-w-full border-collapse">
@@ -254,7 +257,7 @@ export const DataTableReceiptsUser = ({ dataReceipts }) => {
                           className="py-2 px-2 bg-primary/80 text-black hover:bg-primary rounded-lg transition-colors"
                           onClick={() => {
                             // Pasa los datos del usuario al hacer clic en el botón de edición
-                            handlerUserSelectedForm(row.original);
+                            handlerReceiptSelectedModalForm(row.original);
                           }}
                         >
                           <RiEdit2Line className="text-lg" />
