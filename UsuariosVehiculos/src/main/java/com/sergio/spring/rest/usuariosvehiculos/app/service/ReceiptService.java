@@ -1,5 +1,15 @@
 package com.sergio.spring.rest.usuariosvehiculos.app.service;
 
+import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import com.sergio.spring.rest.usuariosvehiculos.app.models.dto.entity.users.ReceiptDto;
 import com.sergio.spring.rest.usuariosvehiculos.app.models.dto.mapper.DtoMapperReceipt;
 import com.sergio.spring.rest.usuariosvehiculos.app.models.entities.Rate;
@@ -11,15 +21,6 @@ import com.sergio.spring.rest.usuariosvehiculos.app.repositorys.IRateRepository;
 import com.sergio.spring.rest.usuariosvehiculos.app.repositorys.IReceiptRepository;
 import com.sergio.spring.rest.usuariosvehiculos.app.repositorys.IUserRepository;
 import com.sergio.spring.rest.usuariosvehiculos.app.repositorys.IVehicleRepository;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
-import java.time.LocalDateTime;
-import java.time.temporal.ChronoUnit;
-import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 public class ReceiptService implements IReceiptService {
@@ -122,14 +123,14 @@ public class ReceiptService implements IReceiptService {
         receipt.setUser(userOptional.get());
         receipt.setVehicle(vehicleOptional.get());
         receipt.setRate(rateOptional.get());
-        receipt.setIssueDate(LocalDateTime.now());
+        receipt.setIssueDate(LocalDate.now());
         // Calcular dueDate segunRateTime
         // FECHA ACTUAL
-        LocalDateTime currentDateTime = LocalDateTime.now();
+        LocalDate currentDateTime = LocalDate.now();
         // VARIABLE
         String rateTime = rateOptional.get().getTime();
-        // CACLCULAR
-        LocalDateTime dueDate = calculateDueDate(rateTime, currentDateTime);
+        // CALCULAR
+        LocalDate dueDate = calculateDueDate(rateTime, currentDateTime);
         receipt.setDueDate(dueDate);
 
         receipt.setPaymentStatus(false);
@@ -146,6 +147,7 @@ public class ReceiptService implements IReceiptService {
         Receipt receiptOptional = null;
         if (o.isPresent()) {
             Receipt receiptDb = o.orElseThrow();
+
             receiptDb.setIssueDate(receiptRequest.getIssueDate());
             receiptDb.setDueDate(receiptRequest.getDueDate());
             receiptDb.setPaymentStatus(receiptRequest.isPaymentStatus());
@@ -162,7 +164,7 @@ public class ReceiptService implements IReceiptService {
         receiptRepository.deleteById(receiptId);
     }
 
-    private LocalDateTime calculateDueDate(String rateTime, LocalDateTime currentDate) {
+    private LocalDate calculateDueDate(String rateTime, LocalDate currentDate) {
         // casos segun rateTime y calculo
         rateTime = rateTime.replaceAll("\\s", "");
         return switch (rateTime.toUpperCase()) {

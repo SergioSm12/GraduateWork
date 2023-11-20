@@ -1,10 +1,15 @@
 package com.sergio.spring.rest.usuariosvehiculos.app.models.entities;
 
-import jakarta.persistence.*;
+import java.time.LocalDate;
+
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
-
-
-import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "receipts")
@@ -26,8 +31,8 @@ public class Receipt {
     @JoinColumn(name = "rate_id")
     private Rate rate;
 
-    private LocalDateTime issueDate;
-    private LocalDateTime dueDate;
+    private LocalDate issueDate;
+    private LocalDate dueDate;
     private boolean paymentStatus;
 
     public Long getId() {
@@ -54,7 +59,6 @@ public class Receipt {
         this.vehicle = vehicle;
     }
 
-
     public Rate getRate() {
         return rate;
     }
@@ -63,19 +67,19 @@ public class Receipt {
         this.rate = rate;
     }
 
-    public LocalDateTime getIssueDate() {
+    public LocalDate getIssueDate() {
         return issueDate;
     }
 
-    public void setIssueDate(LocalDateTime issueDate) {
+    public void setIssueDate(LocalDate issueDate) {
         this.issueDate = issueDate;
     }
 
-    public LocalDateTime getDueDate() {
+    public LocalDate getDueDate() {
         return dueDate;
     }
 
-    public void setDueDate(LocalDateTime dueDate) {
+    public void setDueDate(LocalDate dueDate) {
         this.dueDate = dueDate;
     }
 

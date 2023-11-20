@@ -1,6 +1,6 @@
 package com.sergio.spring.rest.usuariosvehiculos.app.models.request;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 import com.sergio.spring.rest.usuariosvehiculos.app.models.entities.Rate;
 
@@ -9,19 +9,19 @@ import jakarta.validation.constraints.NotNull;
 public class ReceiptRequest {
 
     @NotNull
-    private LocalDateTime issueDate;
+    private LocalDate issueDate;
     @NotNull
-    private LocalDateTime dueDate;
+    private LocalDate dueDate;
     @NotNull
     private boolean paymentStatus;
 
     private Rate rate;
 
-    public LocalDateTime getDueDate() {
+    public LocalDate getDueDate() {
         return dueDate;
     }
 
-    public void setDueDate(LocalDateTime dueDate) {
+    public void setDueDate(LocalDate dueDate) {
         this.dueDate = dueDate;
     }
 
@@ -33,11 +33,11 @@ public class ReceiptRequest {
         this.paymentStatus = paymentStatus;
     }
 
-    public LocalDateTime getIssueDate() {
+    public LocalDate getIssueDate() {
         return issueDate;
     }
 
-    public void setIssueDate(LocalDateTime issueDate) {
+    public void setIssueDate(LocalDate issueDate) {
         this.issueDate = issueDate;
     }
 
@@ -49,6 +49,4 @@ public class ReceiptRequest {
         this.rate = rate;
     }
 
-
-    
 }

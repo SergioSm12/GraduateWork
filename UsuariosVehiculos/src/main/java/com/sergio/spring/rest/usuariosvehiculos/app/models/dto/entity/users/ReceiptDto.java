@@ -1,9 +1,8 @@
 package com.sergio.spring.rest.usuariosvehiculos.app.models.dto.entity.users;
 
+import java.time.LocalDate;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-
-import java.time.LocalDateTime;
 
 public class ReceiptDto {
     private Long id;
@@ -11,17 +10,18 @@ public class ReceiptDto {
     private VehicleDto vehicle;
     @JsonProperty("rate")
     private RateDto rateDto;
-    private LocalDateTime issueDate;
-    private LocalDateTime dueDate;
+    private LocalDate issueDate;
+    private LocalDate dueDate;
     private boolean paymentStatus;
 
     public ReceiptDto() {
     }
 
-    public ReceiptDto(Long id, UserDto user, VehicleDto vehicle, RateDto rateDto, LocalDateTime issueDate, LocalDateTime dueDate, boolean paymentStatus) {
+    public ReceiptDto(Long id, UserDto user, VehicleDto vehicle, RateDto rateDto, LocalDate issueDate,
+            LocalDate dueDate, boolean paymentStatus) {
         this.id = id;
         this.user = user;
-        this.vehicle = vehicle ;
+        this.vehicle = vehicle;
         this.rateDto = rateDto;
         this.issueDate = issueDate;
         this.dueDate = dueDate;
@@ -60,19 +60,19 @@ public class ReceiptDto {
         this.rateDto = rateDto;
     }
 
-    public LocalDateTime getIssueDate() {
+    public LocalDate getIssueDate() {
         return issueDate;
     }
 
-    public void setIssueDate(LocalDateTime issueDate) {
+    public void setIssueDate(LocalDate issueDate) {
         this.issueDate = issueDate;
     }
 
-    public LocalDateTime getDueDate() {
+    public LocalDate getDueDate() {
         return dueDate;
     }
 
-    public void setDueDate(LocalDateTime dueDate) {
+    public void setDueDate(LocalDate dueDate) {
         this.dueDate = dueDate;
     }
 

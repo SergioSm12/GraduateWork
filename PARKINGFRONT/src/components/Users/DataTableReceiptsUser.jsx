@@ -208,9 +208,9 @@ export const DataTableReceiptsUser = ({ dataReceipts }) => {
                     {cell.column.id === "paymentStatus" && (
                       <div
                         className={classNames({
-                          "p-1 text-red-500/80 bg-secondary-100 rounded-lg text-center":
+                          "p-1 my-3 text-red-500/80 bg-secondary-100 rounded-lg text-center":
                             !row.original.paymentStatus,
-                          "p-1 text-green-500/80 bg-secondary-100 text-center rounded-lg":
+                          "p-1 my-3 text-green-500/80 bg-secondary-100 text-center rounded-lg":
                             row.original.paymentStatus,
                         })}
                       >
@@ -222,7 +222,7 @@ export const DataTableReceiptsUser = ({ dataReceipts }) => {
                       <div>
                         {format(
                           new Date(row.original.issueDate),
-                          "dd 'de' MMMM 'del' yyyy 'a las' HH:mm"
+                          "dd 'de' MMMM 'del' yyyy."
                         )}
                       </div>
                     )}
@@ -236,7 +236,7 @@ export const DataTableReceiptsUser = ({ dataReceipts }) => {
                       >
                         {format(
                           new Date(row.original.dueDate),
-                          "dd 'de' MMMM 'del' yyyy 'a las' HH:mm"
+                          "dd 'de' MMMM 'del' yyyy."
                         )}
                       </div>
                     )}

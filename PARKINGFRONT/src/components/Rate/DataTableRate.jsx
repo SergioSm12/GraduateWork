@@ -25,7 +25,7 @@ export const DataTableRate = () => {
         </thead>
         <tbody className="">
           {rates.map((rate) => (
-            <tr>
+            <tr key={rate.id}>
               <td className="border bg-secondary-900 p-2">{rate.time}</td>
               <td className="border bg-secondary-900 p-2">
                 {formatCurrency(rate.amount)}
