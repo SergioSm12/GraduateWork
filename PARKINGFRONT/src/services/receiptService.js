@@ -37,3 +37,11 @@ export const updateReceipt = async (
     throw error;
   }
 };
+
+export const changePaymentStatus = async (receiptId) => {
+  try {
+    await parkingApi.put(`${BASE_URL_RECEIPT}/change-payment/${receiptId}`);
+  } catch (error) {
+    throw error;
+  }
+};

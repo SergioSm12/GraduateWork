@@ -1,5 +1,6 @@
 import { useDispatch, useSelector } from "react-redux";
 import {
+  changePaymentStatus,
   createReceiptByUser,
   findReceiptsByUser,
   updateReceipt,
@@ -19,6 +20,7 @@ import {
   updateReceiptSlice,
 } from "../store/slices/receipt/receiptSlice";
 import Swal from "sweetalert2";
+import { useAuth } from "../auth/hooks/useAuth";
 
 export const useReceipts = () => {
   const {
@@ -30,6 +32,7 @@ export const useReceipts = () => {
     errorsReceipt,
   } = useSelector((state) => state.receipts);
   const dispatch = useDispatch();
+  const { login, handlerLogout } = useAuth();
 
   //Alertas
   const Toast = Swal.mixin({
@@ -62,11 +65,9 @@ export const useReceipts = () => {
         dispatch(addReceipt(response.data));
       } else {
         //actualizar receipt
-        console.log(receipt);
         response = await updateReceipt(receipt.id, receipt);
         dispatch(updateReceiptSlice(response.data));
       }
-
       Toast.fire({
         icon: "success",
         title: receipt.id === 0 ? "Recibo creado" : "Recibo actualizado",
@@ -77,11 +78,42 @@ export const useReceipts = () => {
         dispatch(loadingErrorReceipt(error.response.data));
       } else if (error.response?.status == 401) {
         //manejamos el cierre de sesion cuando tengamos autenticacion
-        // handlerLogout();
+        handlerLogout();
       } else {
         throw error;
       }
     }
+  };
+
+  //Cambiar estado de pago
+  const handlerChangePaymentStatus = (receiptId) => {
+    Swal.fire({
+      title: "¿ Desea cambiar el estado de pago ?",
+      text: "¡ El estado de pago sera cambiado !  ",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#1E293C",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Si, cambiar!",
+      cancelButtonText: "Cancelar",
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        try {
+          await changePaymentStatus(receiptId);
+
+          Toast.fire({
+            icon: "success",
+            title: "Estado de pago actualizado",
+          });
+        } catch (error) {
+          if (error.response?.status == 401) {
+            handlerLogout();
+          } else {
+            throw error;
+          }
+        }
+      }
+    });
   };
 
   //Form
@@ -115,6 +147,7 @@ export const useReceipts = () => {
     getReciptsByUser,
     receiptsByUser,
     handlerAddReceiptByUser,
+    handlerChangePaymentStatus,
     handlerReceiptSelectedModalForm,
     handlerOpenModalFormReceipt,
     handlerCloseModalFormReceipt,

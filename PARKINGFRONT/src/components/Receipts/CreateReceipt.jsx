@@ -86,6 +86,7 @@ export const CreateReceipt = () => {
     }
   };
 
+  //cambia la data del datePicker
   const handleIssueDateChange = (date) => {
     setIssueDate(date);
   };
@@ -94,6 +95,16 @@ export const CreateReceipt = () => {
     setDueDate(date);
   };
 
+  //cambia la data de paymentStatus
+  const onPaymentStatusChange = (e) => {
+    const { checked } = e.target;
+    setReceiptForm((prevState) => ({
+      ...prevState,
+      paymentStatus: checked,
+    }));
+  };
+
+  //Envia la data cuando se encia el formulario
   const onSubmit = (e) => {
     e.preventDefault();
     const updatedReceiptForm = {
@@ -134,18 +145,19 @@ export const CreateReceipt = () => {
         <></>
       )}
       <form onSubmit={onSubmit}>
-        <div className="relative mb-2">
+        <label className="ml-2 text-white">Vehiculo :</label>
+        <div className="relative my-2">
           <RiPoliceCarLine className="absolute top-1/2 -translate-y-1/2 left-2 text-primary " />
-          <div
-            className="py-3 pl-8 pr-4 bg-secondary-900 w-full outline-none rounded-lg focus:border focus:border-primary appearance-none"
-            id="vehicle"
-          >
+          <div className="py-3 pl-8 pr-4 bg-secondary-900 w-full outline-none rounded-lg focus:border focus:border-primary appearance-none">
             {receiptForm.id > 0
               ? `${vehicleFormEdit.plate} - ${vehicleFormEdit.vehicleType.name}`
               : `${vehicleForm.plate} - ${vehicleForm.vehicleType.name}`}
           </div>
         </div>
-        <div className="relative mb-2">
+        <label htmlFor="rate" className="ml-2 text-white">
+          Tarifa:
+        </label>
+        <div className="relative my-1">
           <RiTicket2Line className="absolute top-1/2 -translate-y-1/2 left-2 text-primary" />
           <select
             className="py-3 pl-8 pr-4 bg-secondary-900 w-full outline-none rounded-lg focus:border focus:border-primary appearance-none"
@@ -173,8 +185,12 @@ export const CreateReceipt = () => {
         {/*Filtrar campos en caso de que no sea para editar */}
         {receiptForm.id > 0 ? (
           <>
-            <div className="mb-2">
+            <label htmlFor="issueDate" className="ml-2 text-white">
+              Fecha de inicio:
+            </label>
+            <div className="my-2">
               <DatePicker
+                id="issueDate"
                 showIcon
                 selected={issueDate}
                 onChange={handleIssueDateChange}
@@ -184,8 +200,12 @@ export const CreateReceipt = () => {
                 icon={<RiCalendarCheckLine className="text-primary" />}
               />
             </div>
-            <div className="mb-2">
+            <label htmlFor="dueDate" className="ml-2 text-white">
+              Fecha de vencimiento:
+            </label>
+            <div className="my-2">
               <DatePicker
+                id="dueDate"
                 showIcon
                 selected={dueDate}
                 onChange={handleDueDateChange}
@@ -194,6 +214,23 @@ export const CreateReceipt = () => {
                 dateFormat={"dd-MM-yyyy"}
                 icon={<RiCalendarCloseLine className="text-primary" />}
               />
+            </div>
+            <hr className="m-4 border border-dashed border-gray-400/50" />
+            <div className="relative mb-2  ">
+              <label
+                htmlFor="paymentStatus"
+                className="flex items-center space-x-2"
+              >
+                <input
+                  type="checkbox"
+                  id="paymentStatus"
+                  name="paymentStatus"
+                  checked={receiptForm.paymentStatus || ""}
+                  onChange={(e) => onPaymentStatusChange(e)}
+                />
+                <span className="">Recibo pagado</span>
+              </label>
+              <hr className="m-4 border border-dashed border-gray-400/50" />
             </div>
           </>
         ) : (

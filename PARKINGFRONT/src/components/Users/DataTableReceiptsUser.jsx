@@ -9,6 +9,7 @@ import {
 import { rankItem } from "@tanstack/match-sorter-utils";
 import classNames from "classnames";
 import React, { useEffect, useState } from "react";
+import {useParams } from "react-router-dom";
 import {
   RiDeleteBin7Line,
   RiEdit2Line,
@@ -18,7 +19,6 @@ import {
   RiSortAsc,
   RiSortDesc,
 } from "react-icons/ri";
-import { NavLink } from "react-router-dom";
 import { format } from "date-fns";
 import { Paginator } from "../Paginator";
 import { useReceipts } from "../../hooks/useReceipts";
@@ -54,6 +54,7 @@ const DebuncedInput = ({ value: keyWord, onchange, ...props }) => {
 };
 
 export const DataTableReceiptsUser = ({ dataReceipts }) => {
+  const { id } = useParams();
   const [data, setData] = useState(dataReceipts);
   const [globalFilter, setGlobalFilter] = useState("");
   const [sorting, setSorting] = useState([]);
@@ -61,11 +62,15 @@ export const DataTableReceiptsUser = ({ dataReceipts }) => {
     handlerReceiptSelectedModalShow,
     visibleShowReceiptModal,
     handlerReceiptSelectedModalForm,
+    handlerChangePaymentStatus,
+    getReciptsByUser
   } = useReceipts();
 
   useEffect(() => {
     setData(dataReceipts);
   }, [dataReceipts]);
+
+ 
 
   const columns = [
     {
@@ -206,16 +211,20 @@ export const DataTableReceiptsUser = ({ dataReceipts }) => {
                       </div>
                     )}
                     {cell.column.id === "paymentStatus" && (
-                      <div
+                     <button
+                        type="button"
                         className={classNames({
-                          "p-1 my-3 text-red-500/80 bg-secondary-100 rounded-lg text-center":
+                          "p-1 my-3 text-red-500/80 bg-secondary-100 rounded-lg text-center w-full hover:border border-primary/80 transition-colors":
                             !row.original.paymentStatus,
-                          "p-1 my-3 text-green-500/80 bg-secondary-100 text-center rounded-lg":
+                          "p-1 my-3 text-green-500/80 bg-secondary-100 text-center rounded-lg w-full hover:border border-primary/80 transition-colors":
                             row.original.paymentStatus,
                         })}
+                        onClick={() => {
+                          handlerChangePaymentStatus(row.original.id);
+                        }}
                       >
                         {row.original.paymentStatus ? "Pagado" : "Pendiente"}
-                      </div>
+                      </button>
                     )}
 
                     {cell.column.id === "issueDate" && (

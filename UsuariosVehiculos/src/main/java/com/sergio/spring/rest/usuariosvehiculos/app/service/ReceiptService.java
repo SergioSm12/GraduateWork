@@ -158,6 +158,18 @@ public class ReceiptService implements IReceiptService {
         return Optional.ofNullable(DtoMapperReceipt.builder().setReceipt(receiptOptional).build());
     }
 
+    // Cambia estado de pago 
+    @Override
+    @Transactional
+    public void changePaymentStatus(Long receiptId) {
+        Optional<Receipt> receiptOptional = receiptRepository.findById(receiptId);
+        if (receiptOptional.isPresent()) {
+            Receipt receipt = receiptOptional.get();
+            receipt.setPaymentStatus(!receipt.isPaymentStatus());
+            receiptRepository.save(receipt);
+        }
+    }
+
     @Override
     @Transactional
     public void remove(Long receiptId) {

@@ -63,12 +63,11 @@ public class SpringSecurityConfig {
                 .requestMatchers(HttpMethod.DELETE, "/vehicle/{userId}/delete/{vehicleId}").permitAll()
                 .requestMatchers(HttpMethod.GET, "/vehicle/{userId}/activate-vehicle/{vehicleId}").permitAll()
 
-                //vehicle type 
+                // vehicle type
                 .requestMatchers(HttpMethod.GET, "/vehicleType").permitAll()
                 .requestMatchers(HttpMethod.POST, "/vehicleType").permitAll()
                 .requestMatchers(HttpMethod.PUT, "/vehicleType/{id}").permitAll()
                 .requestMatchers(HttpMethod.DELETE, "/vehicleType/{id}").permitAll()
-
 
                 .requestMatchers(HttpMethod.GET, "/rate").permitAll()
                 .requestMatchers(HttpMethod.GET, "/rate/{rateId}").permitAll()
@@ -80,6 +79,7 @@ public class SpringSecurityConfig {
                 .requestMatchers(HttpMethod.GET, "/receipt/unpaid").permitAll()
                 .requestMatchers(HttpMethod.GET, "/receipt/paid").permitAll()
                 .requestMatchers(HttpMethod.PUT, "/receipt/{receiptId}/update").permitAll()
+                .requestMatchers(HttpMethod.PUT, "/receipt/change-payment/{receiptId}").permitAll()
                 .requestMatchers(HttpMethod.DELETE, "/receipt/{receiptId}").permitAll()
 
                 // usuario

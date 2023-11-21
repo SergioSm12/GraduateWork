@@ -122,6 +122,18 @@ public class ReceiptController {
         return ResponseEntity.notFound().build();
     }
 
+    // admin changePaymentStatus cambia el estado de pago
+    @PutMapping("/change-payment/{receiptId}")
+    public ResponseEntity<?> changePaymentStatus(@PathVariable Long receiptId) {
+
+        Optional<ReceiptDto> receiptOptional = receiptService.findByIdReceipt(receiptId);
+        if (receiptOptional.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+        receiptService.changePaymentStatus(receiptId);
+        return ResponseEntity.ok().build();
+    }
+
     // Admin
     @DeleteMapping("/{receiptId}")
     public ResponseEntity<?> deleteReceipt(@PathVariable Long receiptId) {
