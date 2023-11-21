@@ -86,7 +86,7 @@ export const useReceipts = () => {
   };
 
   //Cambiar estado de pago
-  const handlerChangePaymentStatus = (receiptId) => {
+  const handlerChangePaymentStatus = async (receiptId,id) => {
     Swal.fire({
       title: "¿ Desea cambiar el estado de pago ?",
       text: "¡ El estado de pago sera cambiado !  ",
@@ -105,6 +105,8 @@ export const useReceipts = () => {
             icon: "success",
             title: "Estado de pago actualizado",
           });
+//Cargamos los recibos con el nuevo estado de pago
+          await getReciptsByUser(id);
         } catch (error) {
           if (error.response?.status == 401) {
             handlerLogout();

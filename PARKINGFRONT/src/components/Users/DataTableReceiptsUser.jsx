@@ -9,7 +9,7 @@ import {
 import { rankItem } from "@tanstack/match-sorter-utils";
 import classNames from "classnames";
 import React, { useEffect, useState } from "react";
-import {useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import {
   RiDeleteBin7Line,
   RiEdit2Line,
@@ -63,14 +63,12 @@ export const DataTableReceiptsUser = ({ dataReceipts }) => {
     visibleShowReceiptModal,
     handlerReceiptSelectedModalForm,
     handlerChangePaymentStatus,
-    getReciptsByUser
+    getReciptsByUser,
   } = useReceipts();
 
   useEffect(() => {
     setData(dataReceipts);
   }, [dataReceipts]);
-
- 
 
   const columns = [
     {
@@ -131,6 +129,10 @@ export const DataTableReceiptsUser = ({ dataReceipts }) => {
       firstIndex,
       lastIndex,
     };
+  };
+
+  const handlePaymentStatusChange = async (receiptId) => {
+    await handlerChangePaymentStatus(receiptId, id);
   };
 
   return (
@@ -211,7 +213,7 @@ export const DataTableReceiptsUser = ({ dataReceipts }) => {
                       </div>
                     )}
                     {cell.column.id === "paymentStatus" && (
-                     <button
+                      <button
                         type="button"
                         className={classNames({
                           "p-1 my-3 text-red-500/80 bg-secondary-100 rounded-lg text-center w-full hover:border border-primary/80 transition-colors":
@@ -220,7 +222,7 @@ export const DataTableReceiptsUser = ({ dataReceipts }) => {
                             row.original.paymentStatus,
                         })}
                         onClick={() => {
-                          handlerChangePaymentStatus(row.original.id);
+                          handlePaymentStatusChange(row.original.id);
                         }}
                       >
                         {row.original.paymentStatus ? "Pagado" : "Pendiente"}
