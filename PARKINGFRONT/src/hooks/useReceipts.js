@@ -2,6 +2,7 @@ import { useDispatch, useSelector } from "react-redux";
 import {
   changePaymentStatus,
   createReceiptByUser,
+  deleteReciptById,
   findReceiptsByUser,
   updateReceipt,
 } from "../services/receiptService";
@@ -18,6 +19,7 @@ import {
   onCloseModalFormReceipt,
   vehicle,
   updateReceiptSlice,
+  removeReceipt,
 } from "../store/slices/receipt/receiptSlice";
 import Swal from "sweetalert2";
 import { useAuth } from "../auth/hooks/useAuth";
@@ -86,7 +88,7 @@ export const useReceipts = () => {
   };
 
   //Cambiar estado de pago
-  const handlerChangePaymentStatus = async (receiptId,id) => {
+  const handlerChangePaymentStatus = async (receiptId, id) => {
     Swal.fire({
       title: "¿ Desea cambiar el estado de pago ?",
       text: "¡ El estado de pago sera cambiado !  ",
@@ -105,13 +107,44 @@ export const useReceipts = () => {
             icon: "success",
             title: "Estado de pago actualizado",
           });
-//Cargamos los recibos con el nuevo estado de pago
+          //Cargamos los recibos con el nuevo estado de pago
           await getReciptsByUser(id);
         } catch (error) {
           if (error.response?.status == 401) {
             handlerLogout();
           } else {
             throw error;
+          }
+        }
+      }
+    });
+  };
+
+  const handlerRemoveReceipt = (receiptId) => {
+    //validaciones para autorizacion
+
+    Swal.fire({
+      title: "Esta seguro que desea eliminar?",
+      text: "El recibo sera eliminado.",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#1E293C",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Si, eliminar!",
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        try {
+          await deleteReciptById(receiptId);
+          dispatch(removeReceipt(receiptId));
+
+          Swal.fire(
+            "Recibo eliminado!",
+            "El recibo ha sido eliminado con exito",
+            "success"
+          );
+        } catch (error) {
+          if (error.response?.status == 401) {
+            handlerLogout();
           }
         }
       }
@@ -149,6 +182,7 @@ export const useReceipts = () => {
     getReciptsByUser,
     receiptsByUser,
     handlerAddReceiptByUser,
+    handlerRemoveReceipt,
     handlerChangePaymentStatus,
     handlerReceiptSelectedModalForm,
     handlerOpenModalFormReceipt,

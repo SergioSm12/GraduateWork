@@ -38,6 +38,14 @@ export const updateReceipt = async (
   }
 };
 
+export const deleteReciptById = async (receiptId) => {
+  try {
+    await parkingApi.delete(`${BASE_URL_RECEIPT}/${receiptId}`);
+  } catch (error) {
+    throw error;
+  }
+};
+
 export const changePaymentStatus = async (receiptId) => {
   try {
     await parkingApi.put(`${BASE_URL_RECEIPT}/change-payment/${receiptId}`);

@@ -200,7 +200,7 @@ export const useUsers = () => {
 
     Swal.fire({
       title: "Esta seguro que desea eliminar?",
-      text: "El usuario sera eliminado junto con los recivos correspondientes a este usuario",
+      text: "El usuario sera eliminado junto con los recibos correspondientes a este usuario",
       icon: "warning",
       showCancelButton: true,
       confirmButtonColor: "#1E293C",

@@ -1,12 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useReceipts } from "../../hooks/useReceipts";
-import {
-  RiCloseCircleLine,
-  RiParkingBoxLine,
-  RiPoliceCarLine,
-  RiTicket2Line,
-} from "react-icons/ri";
-import { format } from "date-fns/esm";
+import { RiCloseCircleLine, RiTicket2Line } from "react-icons/ri";
+import { formatInTimeZone } from "date-fns-tz";
 export const ModalReceipt = () => {
   const { receiptSelected, handlerCloseModalShowReceipt, initialReceiptForm } =
     useReceipts();
@@ -16,7 +11,6 @@ export const ModalReceipt = () => {
     if (receiptSelected) {
       setReceiptShow({ ...receiptSelected });
     }
-  
   }, [receiptSelected]);
 
   const onCloseModal = () => {
@@ -66,7 +60,7 @@ export const ModalReceipt = () => {
                   </p>
                 </div>
                 <div>
-                <h5 className="text-gray-100 text-md mb-1">Placa: </h5>
+                  <h5 className="text-gray-100 text-md mb-1">Placa: </h5>
                   <p className="text-gray-500 text-sm">
                     {receiptShow.vehicle.plate}
                   </p>
@@ -100,8 +94,9 @@ export const ModalReceipt = () => {
                       Fecha de emisión:
                     </h5>
                     <p className="text-primary/80 bg-secondary-900 p-1 rounded-lg text-sm">
-                      {format(
-                        new Date(receiptShow.issueDate),
+                      {formatInTimeZone(
+                        receiptShow.issueDate,
+                        "America/Bogota",
                         "dd 'de' MMMM 'del' yyyy"
                       )}
                     </p>
@@ -111,8 +106,9 @@ export const ModalReceipt = () => {
                       Fecha de vencimiento:
                     </h5>
                     <p className="text-primary/80 bg-secondary-900 p-1 rounded-lg text-sm">
-                      {format(
-                        new Date(receiptShow.dueDate),
+                      {formatInTimeZone(
+                        receiptShow.dueDate,
+                        "America/Bogota",
                         "dd 'de' MMMM 'del' yyyy"
                       )}
                     </p>

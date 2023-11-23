@@ -87,6 +87,12 @@ export const receiptSlice = createSlice({
       state.visibleFormReceiptModal = false;
     },
 
+    removeReceipt: (state, action) => {
+      state.receiptsByUser = state.receiptsByUser.filter(
+        (receipt) => receipt.id !== action.payload
+      );
+    },
+
     loadingReceiptsByUser: (state, action) => {
       state.receiptsByUser = action.payload;
     },
@@ -134,6 +140,7 @@ export const {
   onReceiptShowModalSelected,
   onOpenModalShowReceipt,
   onCloseShowModalReceipt,
+  removeReceipt,
 
   loadingErrorReceipt,
 } = receiptSlice.actions;

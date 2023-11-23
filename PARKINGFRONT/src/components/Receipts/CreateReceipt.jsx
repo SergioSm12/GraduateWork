@@ -12,6 +12,9 @@ import { useRates } from "../../hooks/useRates";
 import { useParams } from "react-router-dom";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
+import { formatInTimeZone } from "date-fns-tz";
+import { parse } from "date-fns";
+import { es } from "date-fns/locale";
 
 const formatCurrency = (amount) => {
   return new Intl.NumberFormat("es-CO", {
@@ -29,7 +32,6 @@ export const CreateReceipt = () => {
     handlerAddReceiptByUser,
     initialReceiptForm,
     errorsReceipt,
-    getReciptsByUser,
   } = useReceipts();
   const { rates, getRates } = useRates();
 
@@ -44,6 +46,7 @@ export const CreateReceipt = () => {
   //DatePicker fechas
   const [issueDate, setIssueDate] = useState(new Date());
   const [dueDate, setDueDate] = useState(new Date());
+
   //Agrega el recibo si viene seleccionado
   useEffect(() => {
     setReceiptForm({
@@ -51,8 +54,31 @@ export const CreateReceipt = () => {
     });
     setSelectedRate(receiptSelected.rate);
     setVehicleFormEdit(receiptSelected.vehicle);
-    setIssueDate(new Date(receiptSelected.issueDate));
-    setDueDate(new Date(receiptSelected.dueDate));
+    if (receiptSelected.issueDate) {
+      const formattedIssueDate = formatInTimeZone(
+        receiptSelected.issueDate,
+        "America/Bogota",
+        "yyyy-MM-dd"
+      );
+
+      //parsear fecha formateada a timezone
+      const parsedIssueDate = parse(
+        formattedIssueDate,
+        "yyyy-MM-dd",
+        new Date()
+      );
+      setIssueDate(parsedIssueDate);
+    }
+    if (receiptSelected.dueDate) {
+      const formattedDueDate = formatInTimeZone(
+        receiptSelected.dueDate,
+        "America/Bogota",
+        "yyyy-MM-dd"
+      );
+      //Parsear fecha formatead timeZone
+      const parsedDueDate = parse(formattedDueDate, "yyyy-MM-dd", new Date());
+      setDueDate(parsedDueDate);
+    }
   }, [receiptSelected]);
 
   //Traer rates y llenar estado vehicle
@@ -195,6 +221,7 @@ export const CreateReceipt = () => {
                 showIcon
                 selected={issueDate}
                 onChange={handleIssueDateChange}
+                locale={es}
                 className="py-3 pl-8 pr-4 text-center bg-secondary-900 w-full outline-none rounded-lg focus:border focus:border-primary appearance-none"
                 timeInputLabel="Time:"
                 dateFormat={"dd-MM-yyyy"}
@@ -210,6 +237,7 @@ export const CreateReceipt = () => {
                 showIcon
                 selected={dueDate}
                 onChange={handleDueDateChange}
+                locale={es}
                 className="py-3 pl-8 pr-4 text-center bg-secondary-900 w-full outline-none rounded-lg focus:border focus:border-primary appearance-none"
                 timeInputLabel="Time:"
                 dateFormat={"dd-MM-yyyy"}

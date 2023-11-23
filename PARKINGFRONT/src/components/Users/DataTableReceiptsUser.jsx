@@ -19,10 +19,11 @@ import {
   RiSortAsc,
   RiSortDesc,
 } from "react-icons/ri";
-import { format } from "date-fns";
+import { format, formatInTimeZone } from "date-fns-tz";
 import { Paginator } from "../Paginator";
 import { useReceipts } from "../../hooks/useReceipts";
 import { ModalReceipt } from "../Receipts/ModalReceipt";
+import { es } from "date-fns/locale";
 
 //Componente con TanStackReacttable
 
@@ -63,7 +64,7 @@ export const DataTableReceiptsUser = ({ dataReceipts }) => {
     visibleShowReceiptModal,
     handlerReceiptSelectedModalForm,
     handlerChangePaymentStatus,
-    getReciptsByUser,
+    handlerRemoveReceipt,
   } = useReceipts();
 
   useEffect(() => {
@@ -213,27 +214,31 @@ export const DataTableReceiptsUser = ({ dataReceipts }) => {
                       </div>
                     )}
                     {cell.column.id === "paymentStatus" && (
-                      <button
-                        type="button"
-                        className={classNames({
-                          "p-1 my-3 text-red-500/80 bg-secondary-100 rounded-lg text-center w-full hover:border border-primary/80 transition-colors":
-                            !row.original.paymentStatus,
-                          "p-1 my-3 text-green-500/80 bg-secondary-100 text-center rounded-lg w-full hover:border border-primary/80 transition-colors":
-                            row.original.paymentStatus,
-                        })}
-                        onClick={() => {
-                          handlePaymentStatusChange(row.original.id);
-                        }}
-                      >
-                        {row.original.paymentStatus ? "Pagado" : "Pendiente"}
-                      </button>
+                      <div className="relative">
+                        <button
+                          type="button"
+                          className={classNames({
+                            "p-1 my-3 text-red-500/80 bg-secondary-100 rounded-lg text-center w-full hover:border border-primary/80 transition-colors":
+                              !row.original.paymentStatus,
+                            "p-1 my-3 text-green-500/80 bg-secondary-100 text-center rounded-lg w-full hover:border border-primary/80 transition-colors":
+                              row.original.paymentStatus,
+                          })}
+                          onClick={() => {
+                            handlePaymentStatusChange(row.original.id);
+                          }}
+                        >
+                          {row.original.paymentStatus ? "Pagado" : "Pendiente"}
+                        </button>
+                      </div>
                     )}
 
                     {cell.column.id === "issueDate" && (
                       <div>
-                        {format(
-                          new Date(row.original.issueDate),
-                          "dd 'de' MMMM 'del' yyyy."
+                        {formatInTimeZone(
+                          row.original.issueDate,
+                          "America/Bogota",
+                          "dd 'de' MMMM 'del' yyyy.",
+                          { locale: es }
                         )}
                       </div>
                     )}
@@ -245,9 +250,11 @@ export const DataTableReceiptsUser = ({ dataReceipts }) => {
                             new Date(row.original.dueDate) <= new Date(),
                         })}
                       >
-                        {format(
-                          new Date(row.original.dueDate),
-                          "dd 'de' MMMM 'del' yyyy."
+                        {formatInTimeZone(
+                          row.original.dueDate,
+                          "America/Bogota",
+                          "dd 'de' MMMM 'del' yyyy.",
+                          { locale: es }
                         )}
                       </div>
                     )}
@@ -263,6 +270,7 @@ export const DataTableReceiptsUser = ({ dataReceipts }) => {
                         >
                           <RiInformationLine className="text-lg" />
                         </button>
+
                         <button
                           type="button"
                           className="py-2 px-2 bg-primary/80 text-black hover:bg-primary rounded-lg transition-colors"
@@ -278,7 +286,7 @@ export const DataTableReceiptsUser = ({ dataReceipts }) => {
                           className="py-2 px-2 bg-secondary-100/50 hover:bg-secondary-100 text-red-500/70 hover:text-red-500
                  transition-colors rounded-lg  flex items-center "
                           onClick={() => {
-                            handlerRemoveUser(row.original.id);
+                            handlerRemoveReceipt(row.original.id);
                           }}
                         >
                           <RiDeleteBin7Line className="text-lg" />
