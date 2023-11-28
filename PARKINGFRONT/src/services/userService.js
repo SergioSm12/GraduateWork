@@ -59,6 +59,15 @@ export const findAllUsers = async () => {
   }
 };
 
+export const totalCountUsers = async () => {
+  try {
+    const response = await parkingApi.get(`${BASE_URL_USERS}/count-total`);
+    return response;
+  } catch (error) {
+    throw error;
+  }
+};
+
 export const findActiveUsers = async () => {
   try {
     const response = await parkingApi.get(`${BASE_URL_USERS}/active-users`);
@@ -77,7 +86,6 @@ export const findInactiveUsers = async () => {
   }
 };
 
-
 export const findUserById = async (id) => {
   try {
     const response = await parkingApi.get(`${BASE_URL_USERS}/${id}`);
@@ -94,7 +102,6 @@ export const activateUser = async (id) => {
     throw error;
   }
 };
-
 
 export const deactivateUser = async (id) => {
   try {

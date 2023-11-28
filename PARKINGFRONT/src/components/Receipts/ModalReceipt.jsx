@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useReceipts } from "../../hooks/useReceipts";
 import { RiCloseCircleLine, RiTicket2Line } from "react-icons/ri";
 import { formatInTimeZone } from "date-fns-tz";
+import { es } from "date-fns/locale";
 export const ModalReceipt = () => {
   const { receiptSelected, handlerCloseModalShowReceipt, initialReceiptForm } =
     useReceipts();
@@ -93,11 +94,12 @@ export const ModalReceipt = () => {
                     <h5 className="text-gray-100 text-md mb-1">
                       Fecha de emisión:
                     </h5>
-                    <p className="text-primary/80 bg-secondary-900 p-1 rounded-lg text-sm">
+                    <p className="text-primary/80 text-center bg-secondary-900 p-1 rounded-lg text-sm">
                       {formatInTimeZone(
                         receiptShow.issueDate,
                         "America/Bogota",
-                        "dd 'de' MMMM 'del' yyyy"
+                        "dd 'de' MMMM 'del' yyyy",
+                        { locale: es }
                       )}
                     </p>
                   </div>
@@ -105,11 +107,12 @@ export const ModalReceipt = () => {
                     <h5 className="text-gray-100 text-md mb-1">
                       Fecha de vencimiento:
                     </h5>
-                    <p className="text-primary/80 bg-secondary-900 p-1 rounded-lg text-sm">
+                    <p className="text-primary/80 text-center bg-secondary-900 p-1 rounded-lg text-sm">
                       {formatInTimeZone(
                         receiptShow.dueDate,
                         "America/Bogota",
-                        "dd 'de' MMMM 'del' yyyy"
+                        "dd 'de' MMMM 'del' yyyy",
+                        { locale: es }
                       )}
                     </p>
                   </div>

@@ -1,13 +1,11 @@
 package com.sergio.spring.rest.usuariosvehiculos.app.service;
 
-import com.sergio.spring.rest.usuariosvehiculos.app.models.dto.entity.users.UserDto;
-import com.sergio.spring.rest.usuariosvehiculos.app.models.dto.entity.users.VehicleDto;
-import com.sergio.spring.rest.usuariosvehiculos.app.models.dto.mapper.DtoMapperUser;
-import com.sergio.spring.rest.usuariosvehiculos.app.models.dto.mapper.DtoMapperVehicleDto;
-import com.sergio.spring.rest.usuariosvehiculos.app.models.entities.*;
-import com.sergio.spring.rest.usuariosvehiculos.app.models.interfaces.IUser;
-import com.sergio.spring.rest.usuariosvehiculos.app.models.request.UserRequest;
-import com.sergio.spring.rest.usuariosvehiculos.app.repositorys.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -15,11 +13,19 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
+import com.sergio.spring.rest.usuariosvehiculos.app.models.dto.entity.users.UserDto;
+import com.sergio.spring.rest.usuariosvehiculos.app.models.dto.entity.users.VehicleDto;
+import com.sergio.spring.rest.usuariosvehiculos.app.models.dto.mapper.DtoMapperUser;
+import com.sergio.spring.rest.usuariosvehiculos.app.models.dto.mapper.DtoMapperVehicleDto;
+import com.sergio.spring.rest.usuariosvehiculos.app.models.entities.Role;
+import com.sergio.spring.rest.usuariosvehiculos.app.models.entities.User;
+import com.sergio.spring.rest.usuariosvehiculos.app.models.entities.Vehicle;
+import com.sergio.spring.rest.usuariosvehiculos.app.models.entities.VehicleType;
+import com.sergio.spring.rest.usuariosvehiculos.app.models.interfaces.IUser;
+import com.sergio.spring.rest.usuariosvehiculos.app.models.request.UserRequest;
+import com.sergio.spring.rest.usuariosvehiculos.app.repositorys.IRoleRepository;
+import com.sergio.spring.rest.usuariosvehiculos.app.repositorys.IUserRepository;
+import com.sergio.spring.rest.usuariosvehiculos.app.repositorys.IVehicleRepository;
 
 @Service
 public class UserService implements IUserService {
@@ -46,9 +52,16 @@ public class UserService implements IUserService {
                 .stream()
                 .map(u -> DtoMapperUser.builder()
                         .setUser(u)
-                        .build()).collect(Collectors.toList());
+                        .build())
+                .collect(Collectors.toList());
     }
-
+    
+    //count users 
+    @Override
+    @Transactional(readOnly = true)
+    public long getTotalCountUsers() {
+        return userRepository.count();
+    }
 
     @Override
     @Transactional(readOnly = true)

@@ -54,7 +54,11 @@ const initialErrosReceipt = {
 export const receiptSlice = createSlice({
   name: "receipts",
   initialState: {
+    receipts: [],
     receiptsByUser: [],
+    totalUnpaidState: 0,
+    totalPaidState: 0,
+    totalState: 0,
     receiptSelected: initialReceiptForm,
     vehicleSelected: vehicle,
 
@@ -83,6 +87,14 @@ export const receiptSlice = createSlice({
         }
         return r;
       });
+      state.receipts = state.receipts.map((r) => {
+        if (r.id === action.payload.id) {
+          return {
+            ...action.payload,
+          };
+        }
+        return r;
+      });
       state.receiptSelected = initialReceiptForm;
       state.visibleFormReceiptModal = false;
     },
@@ -93,9 +105,24 @@ export const receiptSlice = createSlice({
       );
     },
 
+    loadingReceipts: (state, action) => {
+      state.receipts = action.payload;
+    },
+
     loadingReceiptsByUser: (state, action) => {
       state.receiptsByUser = action.payload;
     },
+
+    loadingUnpaidCount: (state, action) => {
+      state.totalUnpaidState = action.payload;
+    },
+    loadingPaidCount: (state, action) => {
+      state.totalPaidState = action.payload;
+    },
+    loadingTotalCount: (state, action) => {
+      state.totalState = action.payload;
+    },
+
     //form
     onReceiptSelectedForm: (state, action) => {
       state.receiptSelected = action.payload;
@@ -132,7 +159,11 @@ export const receiptSlice = createSlice({
 export const {
   addReceipt,
   updateReceiptSlice,
+  loadingReceipts,
   loadingReceiptsByUser,
+  loadingUnpaidCount,
+  loadingPaidCount,
+  loadingTotalCount,
   onReceiptSelectedForm,
   onOpenModalFormReceipt,
   onCloseModalFormReceipt,

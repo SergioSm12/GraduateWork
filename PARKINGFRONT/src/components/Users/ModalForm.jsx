@@ -1,5 +1,4 @@
 import React from "react";
-import { RiFileUserLine } from "react-icons/ri";
 import { CreateUser } from "./CreateUser";
 import { useUsers } from "../../hooks/useUsers";
 

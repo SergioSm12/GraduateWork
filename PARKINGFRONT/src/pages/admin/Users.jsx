@@ -12,6 +12,8 @@ export const Users = () => {
     activeUsers,
     inactiveUsers,
     getUsers,
+    getTotalCountUsers,
+    totalCountState,
     getActiveUsers,
     getInactiveUsers,
     visibleFormCreate,
@@ -21,6 +23,7 @@ export const Users = () => {
     getUsers();
     getActiveUsers();
     getInactiveUsers();
+    getTotalCountUsers();
   }, []);
 
   return (
@@ -47,7 +50,7 @@ export const Users = () => {
           <h1 className="text-3xl mb-6">Analitica</h1>
           <CardTicket
             ticket="users"
-            totalTickets={users.length}
+            totalTickets={totalCountState}
             text="Usuarios Totales"
             icon="user"
             textEnd="user"

@@ -35,8 +35,6 @@ export const CreateReceipt = () => {
   } = useReceipts();
   const { rates, getRates } = useRates();
 
-  const { id } = useParams();
-
   //estado para traer los datos del vehicle
   const [vehicleForm, setVehicleForm] = useState(vehicle);
   const [vehicleFormEdit, setVehicleFormEdit] = useState(vehicle);
@@ -46,6 +44,7 @@ export const CreateReceipt = () => {
   //DatePicker fechas
   const [issueDate, setIssueDate] = useState(new Date());
   const [dueDate, setDueDate] = useState(new Date());
+  const { id } = useParams();
 
   //Agrega el recibo si viene seleccionado
   useEffect(() => {
@@ -213,7 +212,7 @@ export const CreateReceipt = () => {
         {receiptForm.id > 0 ? (
           <>
             <label htmlFor="issueDate" className="ml-2 text-white">
-              Fecha de inicio:
+              Fecha válida desde el:
             </label>
             <div className="my-2">
               <DatePicker
@@ -224,12 +223,12 @@ export const CreateReceipt = () => {
                 locale={es}
                 className="py-3 pl-8 pr-4 text-center bg-secondary-900 w-full outline-none rounded-lg focus:border focus:border-primary appearance-none"
                 timeInputLabel="Time:"
-                dateFormat={"dd-MM-yyyy"}
+                dateFormat={"dd 'de' MMMM yyyy"}
                 icon={<RiCalendarCheckLine className="text-primary" />}
               />
             </div>
             <label htmlFor="dueDate" className="ml-2 text-white">
-              Fecha de vencimiento:
+              Fecha inválida desde:
             </label>
             <div className="my-2">
               <DatePicker
@@ -240,7 +239,7 @@ export const CreateReceipt = () => {
                 locale={es}
                 className="py-3 pl-8 pr-4 text-center bg-secondary-900 w-full outline-none rounded-lg focus:border focus:border-primary appearance-none"
                 timeInputLabel="Time:"
-                dateFormat={"dd-MM-yyyy"}
+                dateFormat={"dd 'de' MMMM yyyy"}
                 icon={<RiCalendarCloseLine className="text-primary" />}
               />
             </div>

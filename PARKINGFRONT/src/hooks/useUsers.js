@@ -9,6 +9,7 @@ import {
   findUserById,
   remove,
   save,
+  totalCountUsers,
   update,
 } from "../services/userService";
 import {
@@ -24,6 +25,7 @@ import {
   loadingUserById,
   loadingActiveUsers,
   loadingInactiveUsers,
+  loadingTotalCountUser,
 } from "../store/slices/user/usersSlice";
 import Swal from "sweetalert2";
 import { useAuth } from "../auth/hooks/useAuth";
@@ -33,6 +35,7 @@ export const useUsers = () => {
     users,
     activeUsers,
     inactiveUsers,
+    totalCountState,
     userSelected,
     errors,
     isLoadingUsers,
@@ -64,6 +67,19 @@ export const useUsers = () => {
     } catch (error) {
       if (error.response?.status == 401) {
         handlerLogout();
+      }
+    }
+  };
+
+  const getTotalCountUsers = async () => {
+    try {
+      const total = await totalCountUsers();
+      dispatch(loadingTotalCountUser(total.data));
+    } catch (error) {
+      if (error.response?.status == 401) {
+        handlerLogout();
+      } else {
+        throw error;
       }
     }
   };
@@ -263,6 +279,7 @@ export const useUsers = () => {
     handlerRemoveUser,
     handlerInitialErrors,
     getUsers,
+    getTotalCountUsers,
     getInactiveUsers,
     getActiveUsers,
     handlerUserSelectedForm,
@@ -270,5 +287,6 @@ export const useUsers = () => {
     handlerCloseFormCreate,
     getUserById,
     userByid,
+    totalCountState,
   };
 };

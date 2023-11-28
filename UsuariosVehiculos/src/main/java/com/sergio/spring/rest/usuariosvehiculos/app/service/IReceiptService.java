@@ -19,6 +19,12 @@ public interface IReceiptService {
 
     List<ReceiptDto> getUnpaidReceiptsByUser(User user);
 
+    long getTotalUnpaidReceipts();
+
+    long getTotalPaidReceipts();
+
+    long getTotalReceipts();
+
     Optional<ReceiptDto> findByIdReceipt(Long receiptId);
 
     ReceiptDto saveReceipt(Receipt receipt);

@@ -3,10 +3,15 @@ import {
   changePaymentStatus,
   createReceiptByUser,
   deleteReciptById,
+  findAllReceipts,
   findReceiptsByUser,
+  totalCountReceipts,
+  totalPaid,
+  totalUnpaid,
   updateReceipt,
 } from "../services/receiptService";
 import {
+  loadingReceipts,
   loadingReceiptsByUser,
   onCloseShowModalReceipt,
   onOpenModalShowReceipt,
@@ -20,13 +25,20 @@ import {
   vehicle,
   updateReceiptSlice,
   removeReceipt,
+  loadingUnpaidCount,
+  loadingPaidCount,
+  loadingTotalCount,
 } from "../store/slices/receipt/receiptSlice";
 import Swal from "sweetalert2";
 import { useAuth } from "../auth/hooks/useAuth";
 
 export const useReceipts = () => {
   const {
+    receipts,
     receiptsByUser,
+    totalUnpaidState,
+    totalPaidState,
+    totalState,
     visibleFormReceiptModal,
     visibleShowReceiptModal,
     receiptSelected,
@@ -49,12 +61,68 @@ export const useReceipts = () => {
     },
   });
 
+  const getReceipts = async () => {
+    try {
+      const result = await findAllReceipts();
+      dispatch(loadingReceipts(result.data));
+    } catch (error) {
+      if (error.response.status == 401) {
+        handlerLogout();
+      } else {
+        throw error;
+      }
+    }
+  };
+
   const getReciptsByUser = async (id) => {
     try {
       const result = await findReceiptsByUser(id);
       dispatch(loadingReceiptsByUser(result.data));
     } catch (error) {
-      throw error;
+      if (error.response.status == 401) {
+        handlerLogout();
+      } else {
+        throw error;
+      }
+    }
+  };
+
+  const getCountUnpaid = async () => {
+    try {
+      const total = await totalUnpaid();
+      dispatch(loadingUnpaidCount(total.data));
+    } catch (error) {
+      if (error.response.status == 401) {
+        handlerLogout();
+      } else {
+        throw error;
+      }
+    }
+  };
+
+  const getCountPaid = async () => {
+    try {
+      const total = await totalPaid();
+      dispatch(loadingPaidCount(total.data));
+    } catch (error) {
+      if (error.response.status == 401) {
+        handlerLogout();
+      } else {
+        throw error;
+      }
+    }
+  };
+
+  const getCountTotal = async () => {
+    try {
+      const total = await totalCountReceipts();
+      dispatch(loadingTotalCount(total.data));
+    } catch (error) {
+      if (error.response.status == 401) {
+        handlerLogout();
+      } else {
+        throw error;
+      }
     }
   };
 
@@ -88,7 +156,7 @@ export const useReceipts = () => {
   };
 
   //Cambiar estado de pago
-  const handlerChangePaymentStatus = async (receiptId, id) => {
+  const handlerChangePaymentStatus = async (receiptId, id = null) => {
     Swal.fire({
       title: "¿ Desea cambiar el estado de pago ?",
       text: "¡ El estado de pago sera cambiado !  ",
@@ -107,8 +175,13 @@ export const useReceipts = () => {
             icon: "success",
             title: "Estado de pago actualizado",
           });
+          await getReceipts();
+          await getCountPaid();
+          await getCountUnpaid();
           //Cargamos los recibos con el nuevo estado de pago
-          await getReciptsByUser(id);
+          if (id !== null) {
+            await getReciptsByUser(id);
+          }
         } catch (error) {
           if (error.response?.status == 401) {
             handlerLogout();
@@ -120,7 +193,7 @@ export const useReceipts = () => {
     });
   };
 
-  const handlerRemoveReceipt = (receiptId) => {
+  const handlerRemoveReceipt = async (receiptId, id = null) => {
     //validaciones para autorizacion
 
     Swal.fire({
@@ -137,11 +210,19 @@ export const useReceipts = () => {
           await deleteReciptById(receiptId);
           dispatch(removeReceipt(receiptId));
 
-          Swal.fire(
-            "Recibo eliminado!",
-            "El recibo ha sido eliminado con exito",
-            "success"
-          );
+          Toast.fire({
+            icon: "success",
+            title: "Recibo eliminado ",
+          });
+
+          await getReceipts();
+          await getCountPaid();
+          await getCountUnpaid();
+          await getCountTotal();
+
+          if (id !== null) {
+            await getReciptsByUser(id);
+          }
         } catch (error) {
           if (error.response?.status == 401) {
             handlerLogout();
@@ -180,7 +261,12 @@ export const useReceipts = () => {
 
   return {
     getReciptsByUser,
+    getReceipts,
+    getCountUnpaid,
+    getCountPaid,
+    getCountTotal,
     receiptsByUser,
+    receipts,
     handlerAddReceiptByUser,
     handlerRemoveReceipt,
     handlerChangePaymentStatus,
@@ -197,6 +283,9 @@ export const useReceipts = () => {
     receiptSelected,
     vehicleSelected,
     initialReceiptForm,
+    totalUnpaidState,
+    totalPaidState,
+    totalState,
 
     errorsReceipt,
   };

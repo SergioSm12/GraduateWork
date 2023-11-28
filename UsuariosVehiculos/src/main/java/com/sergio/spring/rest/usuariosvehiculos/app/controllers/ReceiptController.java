@@ -82,6 +82,25 @@ public class ReceiptController {
         return ResponseEntity.ok(unpaidReceipts);
     }
 
+    // Obtener total de recibos no pagos
+    @GetMapping("/count-unpaid")
+    public ResponseEntity<?> getCountUnpaidReceipts() {
+        Long totalUnpaidReceipts = receiptService.getTotalUnpaidReceipts();
+        return ResponseEntity.ok(totalUnpaidReceipts);
+    }
+
+    @GetMapping("/count-paid")
+    public ResponseEntity<?> getCountPaidReceipts() {
+        Long totalPaidReceipts = receiptService.getTotalPaidReceipts();
+        return ResponseEntity.ok(totalPaidReceipts);
+    }
+
+    @GetMapping("/count-total")
+    public ResponseEntity<?> getTotalReceipts() {
+        Long totalReceipts = receiptService.getTotalReceipts();
+        return ResponseEntity.ok(totalReceipts);
+    }
+
     // user create
     @PostMapping("/{userId}/create")
     public ResponseEntity<?> createReceiptByUser(@PathVariable Long userId, @Valid @RequestBody Receipt receipt,

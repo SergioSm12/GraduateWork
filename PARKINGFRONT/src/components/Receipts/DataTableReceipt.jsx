@@ -9,7 +9,6 @@ import {
 import { rankItem } from "@tanstack/match-sorter-utils";
 import classNames from "classnames";
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
 import {
   RiDeleteBin7Line,
   RiEdit2Line,
@@ -19,11 +18,12 @@ import {
   RiSortAsc,
   RiSortDesc,
 } from "react-icons/ri";
-import { format, formatInTimeZone } from "date-fns-tz";
+import {formatInTimeZone } from "date-fns-tz";
 import { Paginator } from "../Paginator";
 import { useReceipts } from "../../hooks/useReceipts";
 import { ModalReceipt } from "../Receipts/ModalReceipt";
 import { es } from "date-fns/locale";
+import { ModalFormReceipt } from "./ModalFormReceipt";
 
 //Componente con TanStackReacttable
 
@@ -34,7 +34,6 @@ const fuzzyFilter = (row, columnId, value, addMeta) => {
 
   return itemRank.passed;
 };
-
 
 const DebuncedInput = ({ value: keyWord, onchange, ...props }) => {
   const [value, setValue] = useState(keyWord);
@@ -56,14 +55,14 @@ const DebuncedInput = ({ value: keyWord, onchange, ...props }) => {
   );
 };
 
-export const DataTableReceiptsUser = ({ dataReceipts }) => { 
-  const { id } = useParams();
+export const DataTableReceipt = ({ dataReceipts }) => {
   const [data, setData] = useState(dataReceipts);
   const [globalFilter, setGlobalFilter] = useState("");
   const [sorting, setSorting] = useState([]);
   const {
     handlerReceiptSelectedModalShow,
     visibleShowReceiptModal,
+    visibleFormReceiptModal,
     handlerReceiptSelectedModalForm,
     handlerChangePaymentStatus,
     handlerRemoveReceipt,
@@ -82,6 +81,11 @@ export const DataTableReceiptsUser = ({ dataReceipts }) => {
     {
       accessorKey: "paymentStatus",
       header: () => <span>Estado de pago</span>,
+    },
+    {
+      accessorKey: "amount",
+      header: () => <span>Valor</span>,
+      enableSorting: false,
     },
     {
       accessorKey: "issueDate",
@@ -135,15 +139,20 @@ export const DataTableReceiptsUser = ({ dataReceipts }) => {
   };
 
   const handlePaymentStatusChange = async (receiptId) => {
-    await handlerChangePaymentStatus(receiptId, id);
+    await handlerChangePaymentStatus(receiptId);
   };
 
-  const handlerDeleteStatusReceipt = async (receiptId)=>{
-    await handlerRemoveReceipt(receiptId, id);
-  }
- 
+  const formatCurrency = (amount) => {
+    return new Intl.NumberFormat("es-CO", {
+      style: "currency",
+      currency: "COP",
+    }).format(amount);
+  };
+
   return (
     <>
+    {/*Modal para generar recibo */}
+    {!visibleFormReceiptModal || <ModalFormReceipt />}
       {/*input*/}
       <div className="mb-5">
         <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-y-4 ">
@@ -162,7 +171,7 @@ export const DataTableReceiptsUser = ({ dataReceipts }) => {
               //getUsers();
             }}
             className="bg-secondary-900 outline-none py-2 pr-4 pl-10 rounded-lg
-              placeholder:text-gray-500 w-full"
+                placeholder:text-gray-500 w-full"
             placeholder="Buscar..."
           />
         </div>
@@ -238,8 +247,14 @@ export const DataTableReceiptsUser = ({ dataReceipts }) => {
                       </div>
                     )}
 
+                    {cell.column.id === "amount" && (
+                      <div className="justify-center text-center">
+                        {formatCurrency(row.original.rate.amount)}
+                      </div>
+                    )}
+
                     {cell.column.id === "issueDate" && (
-                      <div>
+                      <div className="text-center">
                         {formatInTimeZone(
                           row.original.issueDate,
                           "America/Bogota",
@@ -252,8 +267,10 @@ export const DataTableReceiptsUser = ({ dataReceipts }) => {
                     {cell.column.id === "dueDate" && (
                       <div
                         className={classNames({
-                          "text-red-500/50":
+                          "text-red-500/50 text-center":
                             new Date(row.original.dueDate) <= new Date(),
+                          "text-center":
+                            new Date(row.original.dueDate) > new Date(),
                         })}
                       >
                         {formatInTimeZone(
@@ -266,7 +283,7 @@ export const DataTableReceiptsUser = ({ dataReceipts }) => {
                     )}
 
                     {cell.column.id === "actions" && (
-                      <div className="flex items-center gap-2">
+                      <div className="flex items-center justify-center gap-2">
                         <button
                           type="button"
                           className="py-2 px-2 bg-primary/80 text-black hover:bg-secondary-100 rounded-lg transition-colors"
@@ -290,9 +307,9 @@ export const DataTableReceiptsUser = ({ dataReceipts }) => {
                         <button
                           type="button"
                           className="py-2 px-2 bg-secondary-100/50 hover:bg-secondary-100 text-red-500/70 hover:text-red-500
-                 transition-colors rounded-lg  flex items-center "
+                   transition-colors rounded-lg  flex items-center "
                           onClick={() => {
-                            handlerDeleteStatusReceipt(row.original.id);
+                            handlerRemoveReceipt(row.original.id);
                           }}
                         >
                           <RiDeleteBin7Line className="text-lg" />

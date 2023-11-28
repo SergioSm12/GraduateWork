@@ -30,8 +30,9 @@ export const usersSlice = createSlice({
   name: "users",
   initialState: {
     users: [],
-    activeUsers:[],
-    inactiveUsers:[],
+    activeUsers: [],
+    inactiveUsers: [],
+    totalCountState: 0,
     paginator: {},
     userSelected: initialUserForm,
     userByid: initialUserForm,
@@ -71,16 +72,20 @@ export const usersSlice = createSlice({
       state.users = action.payload;
       state.isLoadingUsers = false;
     },
-    loadingActiveUsers:(state, action) =>{
+    loadingActiveUsers: (state, action) => {
       state.activeUsers = action.payload;
     },
 
-    loadingInactiveUsers:(state, action) =>{
+    loadingInactiveUsers: (state, action) => {
       state.inactiveUsers = action.payload;
     },
 
     loadingUserById: (state, action) => {
       state.userByid = action.payload;
+    },
+
+    loadingTotalCountUser: (state, action) => {
+      state.totalCountState = action.payload;
     },
 
     onUserSelectedForm: (state, action) => {
@@ -107,9 +112,10 @@ export const {
   loadingUsers,
   loadingActiveUsers,
   loadingInactiveUsers,
+  loadingTotalCountUser,
   onUserSelectedForm,
   onOpenFormCreate,
   onCloseFormCreate,
   loadingError,
-  loadingUserById
+  loadingUserById,
 } = usersSlice.actions;

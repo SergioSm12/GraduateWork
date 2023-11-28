@@ -40,7 +40,7 @@ public class ReceiptService implements IReceiptService {
     @Override
     @Transactional(readOnly = true)
     public List<ReceiptDto> receiptList() {
-        List<Receipt> receipts = (List<Receipt>) receiptRepository.findAll();
+        List<Receipt> receipts = (List<Receipt>) receiptRepository.findAllByOrderByIssueDateDesc();
         return receipts.stream().map(r -> DtoMapperReceipt.builder().setReceipt(r).build())
                 .collect(Collectors.toList());
     }
@@ -90,6 +90,27 @@ public class ReceiptService implements IReceiptService {
                 .stream()
                 .map(r -> DtoMapperReceipt.builder().setReceipt(r).build())
                 .collect(Collectors.toList());
+    }
+
+    // Servicio para contar recibos no pagos
+    @Override
+    @Transactional(readOnly = true)
+    public long getTotalUnpaidReceipts() {
+        return receiptRepository.countByPaymentStatusFalse();
+    }
+
+    // Servicio para contar recibos pagos
+    @Override
+    @Transactional(readOnly = true)
+    public long getTotalPaidReceipts() {
+        return receiptRepository.countByPaymentStatusTrue();
+    }
+
+    // Servicio para devolver el total de recibos:
+    @Override
+    @Transactional(readOnly = true)
+    public long getTotalReceipts() {
+        return receiptRepository.count();
     }
 
     // Receipt
@@ -158,7 +179,7 @@ public class ReceiptService implements IReceiptService {
         return Optional.ofNullable(DtoMapperReceipt.builder().setReceipt(receiptOptional).build());
     }
 
-    // Cambia estado de pago 
+    // Cambia estado de pago
     @Override
     @Transactional
     public void changePaymentStatus(Long receiptId) {

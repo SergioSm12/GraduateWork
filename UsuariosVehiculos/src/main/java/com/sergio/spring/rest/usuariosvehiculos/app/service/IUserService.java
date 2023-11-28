@@ -13,8 +13,10 @@ import java.util.Optional;
 
 public interface IUserService {
 
-    //Users
+    // Users
     List<UserDto> findAll();
+
+    long getTotalCountUsers();
 
     Page<UserDto> findAll(Pageable pageable);
 
@@ -36,7 +38,7 @@ public interface IUserService {
 
     void remove(Long id);
 
-    //Vehicles
+    // Vehicles
     List<VehicleDto> findVehiclesByUserId(Long userId);
 
     List<VehicleDto> findActiveVehiclesByUserId(Long userId);
@@ -54,7 +56,5 @@ public interface IUserService {
     void activateVehicleByUser(Long vehicleId);
 
     boolean existsVehicleWithPlateForUser(Long userId, String plate);
-
-
 
 }

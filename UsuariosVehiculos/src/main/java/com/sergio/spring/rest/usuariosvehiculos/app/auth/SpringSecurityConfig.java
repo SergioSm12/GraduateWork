@@ -44,6 +44,7 @@ public class SpringSecurityConfig {
         return http.authorizeHttpRequests(authRules -> authRules
                 // usuario
                 .requestMatchers(HttpMethod.GET, "/users").permitAll()
+                .requestMatchers(HttpMethod.GET, "/users/count-total").permitAll()
                 .requestMatchers(HttpMethod.GET, "/users/active-users").permitAll()
                 .requestMatchers(HttpMethod.GET, "/users/inactive-users").permitAll()
                 .requestMatchers(HttpMethod.GET, "/users/page/{page}").permitAll()
@@ -78,6 +79,9 @@ public class SpringSecurityConfig {
                 .requestMatchers(HttpMethod.GET, "/receipt").permitAll()
                 .requestMatchers(HttpMethod.GET, "/receipt/unpaid").permitAll()
                 .requestMatchers(HttpMethod.GET, "/receipt/paid").permitAll()
+                .requestMatchers(HttpMethod.GET, "/receipt/count-unpaid").permitAll()
+                .requestMatchers(HttpMethod.GET, "/receipt/count-paid").permitAll()
+                .requestMatchers(HttpMethod.GET, "/receipt/count-total").permitAll()
                 .requestMatchers(HttpMethod.PUT, "/receipt/{receiptId}/update").permitAll()
                 .requestMatchers(HttpMethod.PUT, "/receipt/change-payment/{receiptId}").permitAll()
                 .requestMatchers(HttpMethod.DELETE, "/receipt/{receiptId}").permitAll()
@@ -86,6 +90,13 @@ public class SpringSecurityConfig {
                 .requestMatchers(HttpMethod.GET, "/receipt/user/{userId}").permitAll()
                 .requestMatchers(HttpMethod.GET, "/receipt/user/{userId}/unpaid").permitAll()
                 .requestMatchers(HttpMethod.POST, "/receipt/{userId}/create").permitAll()
+
+                // visitor
+                .requestMatchers(HttpMethod.GET, "visitor-receipt").permitAll()
+                .requestMatchers(HttpMethod.POST, "visitor-receipt").permitAll()
+                .requestMatchers(HttpMethod.PUT, "visitor-receipt/{id}").permitAll()
+                .requestMatchers(HttpMethod.PUT, "visitor-receipt/change-payment/{visitorReceiptId}").permitAll()
+                .requestMatchers(HttpMethod.DELETE, "visitor-receipt/{visitorReceiptId}").permitAll()
 
                 .anyRequest().authenticated())
                 .addFilter(new JwtAuthenticationFilter(authenticationConfiguration.getAuthenticationManager()))
