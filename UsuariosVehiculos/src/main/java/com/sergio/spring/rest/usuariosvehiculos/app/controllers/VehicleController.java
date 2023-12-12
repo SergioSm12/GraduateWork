@@ -1,28 +1,33 @@
 package com.sergio.spring.rest.usuariosvehiculos.app.controllers;
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
 import com.sergio.spring.rest.usuariosvehiculos.app.Errors.ErrorResponse;
 import com.sergio.spring.rest.usuariosvehiculos.app.models.dto.entity.users.UserDto;
 import com.sergio.spring.rest.usuariosvehiculos.app.models.dto.entity.users.VehicleDto;
 import com.sergio.spring.rest.usuariosvehiculos.app.models.entities.User;
 import com.sergio.spring.rest.usuariosvehiculos.app.models.entities.Vehicle;
-
-import com.sergio.spring.rest.usuariosvehiculos.app.models.entities.VehicleType;
 import com.sergio.spring.rest.usuariosvehiculos.app.service.IUserService;
-import com.sergio.spring.rest.usuariosvehiculos.app.service.IVehicleTypeService;
 
 import jakarta.validation.Valid;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.*;
-
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
 
 @RestController
 @CrossOrigin(originPatterns = "*")

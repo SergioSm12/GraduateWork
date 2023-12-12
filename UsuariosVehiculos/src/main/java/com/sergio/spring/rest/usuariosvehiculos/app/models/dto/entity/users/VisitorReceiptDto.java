@@ -2,9 +2,12 @@ package com.sergio.spring.rest.usuariosvehiculos.app.models.dto.entity.users;
 
 import java.time.LocalDate;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 public class VisitorReceiptDto {
     private Long id;
     private String plate;
+    @JsonProperty("rate")
     private RateDto rateDto;
     private LocalDate issueDate;
     private LocalDate dueDate;

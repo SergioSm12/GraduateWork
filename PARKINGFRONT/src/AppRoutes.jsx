@@ -11,6 +11,7 @@ import { Home } from "./pages/admin/Home";
 import { UserRoutes } from "./routes/UserRoutes";
 import { Rates } from "./pages/admin/Rates";
 import { VehicleTypes } from "./pages/admin/VehicleTypes";
+import { RegisterVisitor } from "./pages/visitor/RegisterVisitor";
 
 export const AppRoutes = () => {
   const { login } = useAuth();
@@ -29,8 +30,8 @@ export const AppRoutes = () => {
         <Route path="/" element={<LayoutAdmin />}>
           <Route index element={<Home />} />
           <Route path="users/*" element={<UserRoutes />} />
-          <Route path= "rate" element={<Rates/>}/>
-          <Route path = "vehicleType" element={<VehicleTypes/>}/>
+          <Route path="rate" element={<Rates />} />
+          <Route path="vehicleType" element={<VehicleTypes />} />
         </Route>
       ) : (
         <>
@@ -38,6 +39,7 @@ export const AppRoutes = () => {
             <Route index element={<Login />} />
             <Route path="register" element={<Register />} />
             <Route path="forget-password" element={<ForgetPassword />} />
+            <Route path="register-visitor" element={<RegisterVisitor />} />
           </Route>
           <Route path="/*" element={<Navigate to={"/auth"} />} />
         </>

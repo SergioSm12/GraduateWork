@@ -110,6 +110,15 @@ export const Login = () => {
             Registrate
           </Link>
         </span>
+        <span className="flex items-center gap-2">
+          ¿Eres visitante?{" "}
+          <Link
+            className="text-primary hover:text-gray-100 transition-colors"
+            to={"/auth/register-visitor"}
+          >
+            Registra tu vehículo
+          </Link>
+        </span>
       </div>
     </div>
   );

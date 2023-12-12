@@ -179,13 +179,23 @@ export const Register = () => {
           </button>
         </div>
       </form>
-      <span className="flex items-center justify-center gap-2">
+      <span className="flex items-center justify-center gap-2 mb-2">
         ¿Ya tienes cuenta ?
         <Link
           to="/auth"
           className="text-primary hover:text-gray-100 transition-colors"
         >
           Ingresa
+        </Link>
+      </span>
+
+      <span className="flex items-center justify-center gap-2">
+        ¿Eres visitante?{" "}
+        <Link
+          className="text-primary hover:text-gray-100 transition-colors"
+          to="/auth/register-visitor"
+        >
+          Registra tu vehículo
         </Link>
       </span>
     </div>

@@ -71,40 +71,38 @@ export const Users = () => {
           </div>
         ) : (
           <Tab.Group>
-            <div className="bg-secondary-100  p-8 rounded-bl-lg rounded-br-lg ">
-              <Tab.List className="flex flex-col md:flex-row md:items-center md:justify-between gap-x-2 gap-y-6 bg-secondary-900/50  py-3 px-4 rounded-lg">
-                <div className="flex flex-col md:flex-row  md:items-center gap-2">
-                  <Tab
-                    className="py-2 px-4 rounded-lg hover:bg-secondary-900 hover:text-gray-100
+            <Tab.List className="flex flex-col md:flex-row md:items-center md:justify-between gap-x-2 gap-y-6 bg-secondary-900/50  py-3 px-4 rounded-lg">
+              <div className="flex flex-col md:flex-row  md:items-center gap-2">
+                <Tab
+                  className="py-2 px-4 rounded-lg hover:bg-secondary-900 hover:text-gray-100
                transition-colors outline-none ui-selected:bg-secondary-900 ui-selected:text-primary "
-                  >
-                    Activos
-                  </Tab>
-                  <Tab
-                    className="py-2 px-4 rounded-lg hover:bg-secondary-900 hover:text-gray-100
+                >
+                  Activos
+                </Tab>
+                <Tab
+                  className="py-2 px-4 rounded-lg hover:bg-secondary-900 hover:text-gray-100
                  transition-colors outline-none ui-selected:bg-secondary-900 ui-selected:text-primary "
-                  >
-                    Inactivos
-                  </Tab>
-                  <Tab
-                    className="py-2 px-4 rounded-lg hover:bg-secondary-900 hover:text-gray-100
+                >
+                  Inactivos
+                </Tab>
+                <Tab
+                  className="py-2 px-4 rounded-lg hover:bg-secondary-900 hover:text-gray-100
                  transition-colors outline-none ui-selected:bg-secondary-900 ui-selected:text-primary "
+                >
+                  Todos
+                </Tab>
+              </div>
+              <div className="flex justify-center">
+                {visibleFormCreate || (
+                  <button
+                    className="font-bold text-xs py-2 px-4 bg-primary/80 text-black hover:bg-primary rounded-lg transition-colors"
+                    onClick={handlerOpenFormCreate}
                   >
-                    Todos
-                  </Tab>
-                </div>
-                <div className="flex justify-center">
-                  {visibleFormCreate || (
-                    <button
-                      className="font-bold text-xs py-2 px-4 bg-primary/80 text-black hover:bg-primary rounded-lg transition-colors"
-                      onClick={handlerOpenFormCreate}
-                    >
-                      Agregar Usuario
-                    </button>
-                  )}
-                </div>
-              </Tab.List>
-            </div>
+                    Agregar Usuario
+                  </button>
+                )}
+              </div>
+            </Tab.List>
             <Tab.Panels className="mt-8">
               <Tab.Panel>
                 {activeUsers.length == 0 ? (
