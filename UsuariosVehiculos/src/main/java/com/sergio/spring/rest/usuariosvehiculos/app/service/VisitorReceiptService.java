@@ -89,7 +89,7 @@ public class VisitorReceiptService implements IVisitorReceiptService {
             } else {
                 visitorReceiptDb.setDueDate(visitorReceipt.getDueDate());
             }
-            visitorReceipt.setPaymentStatus(visitorReceipt.isPaymentStatus());
+            visitorReceiptDb.setPaymentStatus(visitorReceipt.isPaymentStatus());
             visitorReceiptDb.setRate(visitorReceipt.getRate());
             visitorReceiptOptional = visitorReceiptRepository.save(visitorReceiptDb);
         }

@@ -8,6 +8,7 @@ import { DataTableReceipt } from "../../components/Receipts/DataTableReceipt";
 import { Tab } from "@headlessui/react";
 import { useVisitorReceipt } from "../../hooks/useVisitorReceipt";
 import { DataTableVisitorReceipt } from "../../components/VisitorReceipt/DataTableVisitorReceipt";
+import { ModalFormVisitorReceipt } from "../../components/VisitorReceipt/ModalFormVisitorReceipt";
 
 export const Home = () => {
   const { login, handlerLogout } = useAuth();
@@ -21,7 +22,12 @@ export const Home = () => {
     totalState,
     receipts,
   } = useReceipts();
-  const { getVisitorReceipts, visitorReceipts } = useVisitorReceipt();
+  const {
+    getVisitorReceipts,
+    visitorReceipts,
+    handlerOpenModalFormVisitorReceipt,
+    visibleFormReceiptVisitorModal,
+  } = useVisitorReceipt();
   const { getTotalCountUsers, totalCountState } = useUsers();
 
   useEffect(() => {
@@ -34,6 +40,8 @@ export const Home = () => {
   }, []);
   return (
     <div>
+      {/*Modal para generar recibo */}
+      {!visibleFormReceiptVisitorModal || <ModalFormVisitorReceipt />}
       {/*Welcome */}
       <div className="flex items-center justify-between mb-10">
         <h1 className=" md:text-4xl text-white">
@@ -98,7 +106,12 @@ export const Home = () => {
                 </Tab>
               </div>
               <div className="flex justify-center">
-                <button className="font-bold text-xs py-2 px-4 bg-primary/80 text-black hover:bg-primary rounded-lg transition-colors">
+                <button
+                  className="font-bold text-xs py-2 px-4 bg-primary/80 text-black hover:bg-primary rounded-lg transition-colors"
+                  onClick={() => {
+                    handlerOpenModalFormVisitorReceipt();
+                  }}
+                >
                   Agregar recibo visitante
                 </button>
               </div>
@@ -108,7 +121,8 @@ export const Home = () => {
                 {receipts.length == 0 ? (
                   <div className=" flex justify-center">
                     <span className="flex items-center gap-2  bg-secondary-900 py-4 px-4 rounded-lg">
-                      <RiAlertLine className="text-red-600" /> No hay recibos registrados.
+                      <RiAlertLine className="text-red-600" /> No hay recibos
+                      registrados.
                     </span>
                   </div>
                 ) : (
@@ -119,7 +133,8 @@ export const Home = () => {
                 {visitorReceipts.length == 0 ? (
                   <div className=" flex justify-center">
                     <span className="flex items-center gap-2  bg-secondary-900 py-4 px-4 rounded-lg">
-                      <RiAlertLine className="text-red-600" /> No hay recibos registrados para los visitantes.
+                      <RiAlertLine className="text-red-600" /> No hay recibos
+                      registrados para los visitantes.
                     </span>
                   </div>
                 ) : (

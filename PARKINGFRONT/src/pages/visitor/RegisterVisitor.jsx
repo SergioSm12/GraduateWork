@@ -7,8 +7,11 @@ import { useRates } from "../../hooks/useRates";
 import { useVisitorReceipt } from "../../hooks/useVisitorReceipt";
 export const RegisterVisitor = () => {
   const { rates, getRates } = useRates();
-  const { initialVisitorReceipt, handlerAddReceiptVisitor } =
-    useVisitorReceipt();
+  const {
+    initialVisitorReceipt,
+    handlerAddReceiptVisitor,
+    errorsVisitorReceipt,
+  } = useVisitorReceipt();
 
   //Estado para manejar formulario
   const [visitorReceiptForm, setVisitorReceiptForm] = useState(
@@ -51,10 +54,12 @@ export const RegisterVisitor = () => {
 
   const onSubmit = (e) => {
     e.preventDefault();
-    handlerAddReceiptVisitor(visitorReceiptForm);
+
+    handlerAddReceiptVisitor(visitorReceiptForm,"/auth");
     setVisitorReceiptForm(initialVisitorReceipt);
     setSelectedRate(null);
   };
+
   return (
     <div className="bg-secondary-100 p-8 rounded-xl shadow-2xl w:auto lg:w-[450px]">
       <h1 className="text-3xl uppercase font-bold tracking-[5px] text-white mb-8">
@@ -77,7 +82,7 @@ export const RegisterVisitor = () => {
           />
         </div>
         <div className="relative mb-4">
-          <p className="text-red-500"></p>
+          <p className="text-red-500">{errorsVisitorReceipt.plate}</p>
         </div>
         <div className="relative my-4">
           <RiTicket2Line className="absolute top-1/2 -translate-y-1/2 left-2 text-primary" />
@@ -95,6 +100,13 @@ export const RegisterVisitor = () => {
               </option>
             ))}
           </select>
+        </div>
+        <div className="relative mb-2">
+          <p className="text-red-500">
+            {errorsVisitorReceipt?.rate == "Debe seleccionar una tarifa"
+              ? JSON.stringify(errorsVisitorReceipt?.rate)
+              : ""}
+          </p>
         </div>
 
         <div>

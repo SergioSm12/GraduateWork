@@ -1,8 +1,13 @@
 package com.sergio.spring.rest.usuariosvehiculos.app.models.dto.mapper;
 
+import java.util.List;
+
 import com.sergio.spring.rest.usuariosvehiculos.app.models.dto.entity.users.RateDto;
+import com.sergio.spring.rest.usuariosvehiculos.app.models.dto.entity.users.VehicleDto;
+import com.sergio.spring.rest.usuariosvehiculos.app.models.dto.entity.users.VehicleTypeDto;
 import com.sergio.spring.rest.usuariosvehiculos.app.models.dto.entity.users.VisitorReceiptDto;
 import com.sergio.spring.rest.usuariosvehiculos.app.models.entities.Rate;
+import com.sergio.spring.rest.usuariosvehiculos.app.models.entities.VehicleType;
 import com.sergio.spring.rest.usuariosvehiculos.app.models.entities.VisitorReceipt;
 
 public class DtoMapperVisitorReceipt {
@@ -32,6 +37,12 @@ public class DtoMapperVisitorReceipt {
         rateDto.setId(rate.getId());
         rateDto.setTime(rate.getTime());
         rateDto.setAmount(rate.getAmount());
+        // convertir vehicle type
+        VehicleType vehicleType = rate.getVehicleType();
+        VehicleTypeDto vehicleTypeDto = new VehicleTypeDto();
+        vehicleTypeDto.setId(vehicleType.getId());
+        vehicleTypeDto.setName(vehicleType.getName());
+        rateDto.setVehicleType(vehicleTypeDto);
 
         return new VisitorReceiptDto(this.visitorReceipt.getId(), this.visitorReceipt.getPlate(), rateDto,
                 this.visitorReceipt.getIssueDate(), this.visitorReceipt.getDueDate(),
