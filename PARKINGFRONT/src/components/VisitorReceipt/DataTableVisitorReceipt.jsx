@@ -8,7 +8,7 @@ import {
 } from "@tanstack/react-table";
 import { rankItem } from "@tanstack/match-sorter-utils";
 import classNames from "classnames";
-import React, { useEffect, useState } from "react";
+import  { useEffect, useState } from "react";
 import {
   RiDeleteBin7Line,
   RiEdit2Line,
@@ -20,7 +20,6 @@ import {
 } from "react-icons/ri";
 import { formatInTimeZone } from "date-fns-tz";
 import { Paginator } from "../Paginator";
-import { useReceipts } from "../../hooks/useReceipts";
 import { es } from "date-fns/locale";
 import { useVisitorReceipt } from "../../hooks/useVisitorReceipt";
 import { ModalReceiptVisitor } from "./ModalReceiptVisitor";
