@@ -49,6 +49,16 @@ export const update = async ({
   }
 };
 
+export const changePasswordUser = async ({ password, id }) => {
+  try {
+    return await parkingApi.patch(`${BASE_URL_USERS}/changePassword/${id}`, {
+      password,
+    });
+  } catch (error) {
+    throw error;
+  }
+};
+
 export const findAllUsers = async () => {
   try {
     const response = await parkingApi.get(BASE_URL_USERS);

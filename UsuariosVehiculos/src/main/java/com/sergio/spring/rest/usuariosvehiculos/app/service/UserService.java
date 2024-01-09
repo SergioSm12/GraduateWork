@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import com.sergio.spring.rest.usuariosvehiculos.app.models.request.UserChangePasswordRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -22,16 +23,19 @@ import com.sergio.spring.rest.usuariosvehiculos.app.models.entities.User;
 import com.sergio.spring.rest.usuariosvehiculos.app.models.entities.Vehicle;
 import com.sergio.spring.rest.usuariosvehiculos.app.models.entities.VehicleType;
 import com.sergio.spring.rest.usuariosvehiculos.app.models.interfaces.IUser;
+
 import com.sergio.spring.rest.usuariosvehiculos.app.models.request.UserRequest;
 import com.sergio.spring.rest.usuariosvehiculos.app.repositorys.IRoleRepository;
 import com.sergio.spring.rest.usuariosvehiculos.app.repositorys.IUserRepository;
 import com.sergio.spring.rest.usuariosvehiculos.app.repositorys.IVehicleRepository;
 
+import javax.swing.text.html.Option;
+
 @Service
 public class UserService implements IUserService {
     @Autowired
     private IUserRepository userRepository;
- 
+
     @Autowired
     private IRoleRepository roleRepository;
 
@@ -55,7 +59,7 @@ public class UserService implements IUserService {
                         .build())
                 .collect(Collectors.toList());
     }
-    
+
     //count users 
     @Override
     @Transactional(readOnly = true)
@@ -137,6 +141,18 @@ public class UserService implements IUserService {
             userOptional = userRepository.save(userDb);
         }
         return Optional.ofNullable(DtoMapperUser.builder().setUser(userOptional).build());
+    }
+
+    @Override
+    @Transactional
+    public void changePassword(UserChangePasswordRequest password, Long id) {
+        Optional<User> userOptional = userRepository.findById(id);
+        if (userOptional.isPresent()) {
+            User user = userOptional.get();
+            String passwordBCrypt = passwordEncoder.encode(password.getPassword());
+            user.setPassword(passwordBCrypt);
+            userRepository.save(user);
+        }
     }
 
     //activate Vehicle
@@ -289,7 +305,6 @@ public class UserService implements IUserService {
         return vehicleRepository.existsByUserIdAndPlate(userId, plate);
     }
 
-   
 
     //Create
 

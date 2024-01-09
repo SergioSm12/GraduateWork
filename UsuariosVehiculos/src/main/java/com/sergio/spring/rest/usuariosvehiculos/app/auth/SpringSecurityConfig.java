@@ -51,6 +51,7 @@ public class SpringSecurityConfig {
                 .requestMatchers(HttpMethod.GET, "/users/{id}").permitAll()
                 .requestMatchers(HttpMethod.POST, "/users").permitAll()
                 .requestMatchers(HttpMethod.PUT, "/users/{id}").permitAll()
+                        .requestMatchers(HttpMethod.PATCH, "/users/changePassword/{id}").permitAll()
                 .requestMatchers(HttpMethod.PUT, "/users/activate/{id}").permitAll()
                 .requestMatchers(HttpMethod.PUT, "/users/deactivate/{id}").permitAll()
                 .requestMatchers(HttpMethod.DELETE, "/users/{id}").permitAll()
@@ -112,7 +113,7 @@ public class SpringSecurityConfig {
     CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration config = new CorsConfiguration();
         config.setAllowedOrigins(Arrays.asList("http://localhost:5173"));
-        config.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE"));
+        config.setAllowedMethods(Arrays.asList("GET", "POST", "PUT","PATCH", "DELETE"));
         config.setAllowedHeaders(Arrays.asList("Authorization", "Content-Type"));
         config.setAllowCredentials(true);
 

@@ -2,6 +2,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import {
   activateUser,
+  changePasswordUser,
   deactivateUser,
   findActiveUsers,
   findAllUsers,
@@ -26,6 +27,7 @@ import {
   loadingActiveUsers,
   loadingInactiveUsers,
   loadingTotalCountUser,
+  loadingChangePasswordError,
 } from "../store/slices/user/usersSlice";
 import Swal from "sweetalert2";
 import { useAuth } from "../auth/hooks/useAuth";
@@ -38,6 +40,7 @@ export const useUsers = () => {
     totalCountState,
     userSelected,
     errors,
+    changePasswordErrors,
     isLoadingUsers,
     visibleFormCreate,
     userByid,
@@ -151,6 +154,27 @@ export const useUsers = () => {
     }
   };
 
+  const handlerChangePasswordUser = async (userPassword) => {
+    let response;
+    try {
+      response = await changePasswordUser(userPassword);
+      handlerCloseFormCreate();
+      Toast.fire({
+        icon: "success",
+        title: "Contraseña actualizada.",
+      });
+    } catch (error) {
+      if (error.response && error.response.status == 400) {
+        dispatch(loadingChangePasswordError(error.response.data));
+      } else if (error.response?.status == 401) {
+        //manejamos el cierre de sesion cuando tengamos autenticacion
+        handlerLogout();
+      } else {
+        throw error;
+      }
+    }
+  };
+
   const handlerActivateUser = (id) => {
     Swal.fire({
       title: "¿ Desea activar el usuario ?",
@@ -247,6 +271,9 @@ export const useUsers = () => {
   const handlerInitialErrors = () => {
     dispatch(loadingError({}));
   };
+  const handlerInitialErrorPassword = () => {
+    dispatch(loadingChangePasswordError({}));
+  };
 
   //selccionar user para update
   const handlerUserSelectedForm = (user) => {
@@ -272,12 +299,15 @@ export const useUsers = () => {
     userSelected,
     initialUserForm,
     errors,
+    changePasswordErrors,
     isLoadingUsers,
     handlerAddUser,
+    handlerChangePasswordUser,
     handlerActivateUser,
     handlerDeactivateUser,
     handlerRemoveUser,
     handlerInitialErrors,
+    handlerInitialErrorPassword,
     getUsers,
     getTotalCountUsers,
     getInactiveUsers,

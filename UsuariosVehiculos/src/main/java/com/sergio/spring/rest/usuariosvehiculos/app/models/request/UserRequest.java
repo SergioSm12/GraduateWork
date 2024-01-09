@@ -17,7 +17,7 @@ public class UserRequest implements IUser {
     private String phoneNumber;
     private boolean admin;
     private boolean guard;
-
+  
     public String getName() {
         return name;
     }

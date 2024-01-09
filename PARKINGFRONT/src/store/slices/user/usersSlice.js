@@ -18,12 +18,21 @@ export const initialUserForm = {
   vehicles: [],
 };
 
+export const initialChangePassword = {
+  id: 0,
+  password: "",
+};
+
 const initialErrors = {
   name: "",
   lastName: "",
   email: "",
   password: "",
   phoneNumber: "",
+};
+
+const changePasswordError = {
+  password: "",
 };
 
 export const usersSlice = createSlice({
@@ -38,6 +47,7 @@ export const usersSlice = createSlice({
     userByid: initialUserForm,
     visibleFormCreate: false,
     errors: initialErrors,
+    changePasswordErrors: changePasswordError,
     isLoadingUsers: true,
   },
   reducers: {
@@ -102,6 +112,9 @@ export const usersSlice = createSlice({
     loadingError: (state, action) => {
       state.errors = action.payload;
     },
+    loadingChangePasswordError:(state,action)=>{
+      state.changePasswordErrors=action.payload;
+    }
   },
 });
 
@@ -117,5 +130,6 @@ export const {
   onOpenFormCreate,
   onCloseFormCreate,
   loadingError,
+  loadingChangePasswordError,
   loadingUserById,
 } = usersSlice.actions;
