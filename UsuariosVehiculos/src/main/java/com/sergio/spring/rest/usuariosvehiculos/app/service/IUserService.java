@@ -41,23 +41,6 @@ public interface IUserService {
 
     void remove(Long id);
 
-    // Vehicles
-    List<VehicleDto> findVehiclesByUserId(Long userId);
 
-    List<VehicleDto> findActiveVehiclesByUserId(Long userId);
-
-    List<VehicleDto> findInactiveVehiclesByUserId(Long userId);
-
-    Optional<Vehicle> findVehicleByIdAndUserId(Long vehicleId, Long userId);
-
-    VehicleDto saveVehicle(Vehicle vehicle);
-
-    Optional<VehicleDto> updateVehicle(Long userId, Long vehicleId, Vehicle vehicle);
-
-    void removeVehicleByUser(Long vehicleId);
-
-    void activateVehicleByUser(Long vehicleId);
-
-    boolean existsVehicleWithPlateForUser(Long userId, String plate);
 
 }

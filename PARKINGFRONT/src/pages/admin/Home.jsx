@@ -9,6 +9,7 @@ import { Tab } from "@headlessui/react";
 import { useVisitorReceipt } from "../../hooks/useVisitorReceipt";
 import { DataTableVisitorReceipt } from "../../components/VisitorReceipt/DataTableVisitorReceipt";
 import { ModalFormVisitorReceipt } from "../../components/VisitorReceipt/ModalFormVisitorReceipt";
+import { Link } from "react-router-dom";
 
 export const Home = () => {
   const { login, handlerLogout } = useAuth();
@@ -22,11 +23,19 @@ export const Home = () => {
     totalState,
     receipts,
   } = useReceipts();
+
   const {
     getVisitorReceipts,
     visitorReceipts,
     handlerOpenModalFormVisitorReceipt,
     visibleFormReceiptVisitorModal,
+
+    getCountUnpaidVisitor,
+    getCountPaidVisitor,
+    getCountTotalVisitor,
+    totalUnpaidVisitorState,
+    totalPaidVistorState,
+    totalVisitorReceipt,
   } = useVisitorReceipt();
   const { getTotalCountUsers, totalCountState } = useUsers();
 
@@ -35,7 +44,10 @@ export const Home = () => {
     getCountPaid();
     getCountTotal();
     getTotalCountUsers();
-    getReceipts();
+    getCountUnpaidVisitor(),
+      getCountPaidVisitor(),
+      getCountTotalVisitor(),
+      getReceipts();
     getVisitorReceipts();
   }, []);
   return (
@@ -56,17 +68,23 @@ export const Home = () => {
         <CardTicket
           ticket="pending"
           totalTickets={totalUnpaidState}
-          text="Recibos Pendientes"
+          totalTicketsVisitor={totalUnpaidVisitorState}
+          text="Recibos pendientes usuarios."
+          textVisitor="Recibos pendientes visitantes."
         />
         <CardTicket
           ticket="payments"
           totalTickets={totalPaidState}
-          text="Recibos Pagos"
+          totalTicketsVisitor={totalPaidVistorState}
+          text="Recibos pagos usuarios."
+          textVisitor="Recibos pagos visitantes."
         />
         <CardTicket
           ticket="total"
           totalTickets={totalState}
-          text="Recibos totales"
+          totalTicketsVisitor={totalVisitorReceipt}
+          text="Recibos totales usuarios."
+          textVisitor="Recibos totales visitantes."
         />
         <CardTicket
           ticket="usersHome"
@@ -105,7 +123,13 @@ export const Home = () => {
                   Visitantes
                 </Tab>
               </div>
-              <div className="flex justify-center">
+              <div className="flex items-center justify-center gap-2">
+                <Link
+                  to="/users"
+                  className="font-bold text-xs py-2 px-4 bg-primary/80 text-black hover:bg-primary rounded-lg transition-colors"
+                >
+                  Agregar recibo usuario
+                </Link>
                 <button
                   className="font-bold text-xs py-2 px-4 bg-primary/80 text-black hover:bg-primary rounded-lg transition-colors"
                   onClick={() => {

@@ -52,10 +52,43 @@ export const changePaymentStatusVisitor = async (receiptId) => {
   }
 };
 
-export const deleteVisitorReceipt = async (visitorReceiptId)=>{
+export const deleteVisitorReceipt = async (visitorReceiptId) => {
   try {
     await parkingApi.delete(`${BASE_URL_VISITOR_RECEIPT}/${visitorReceiptId}`);
   } catch (error) {
     throw error;
   }
-}
+};
+
+export const totalUnpaidVisitor = async () => {
+  try {
+    const response = await parkingApi.get(
+      `${BASE_URL_VISITOR_RECEIPT}/count-unpaid`
+    );
+    return response;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const totalPaidVisitor = async () => {
+  try {
+    const response = await parkingApi.get(
+      `${BASE_URL_VISITOR_RECEIPT}/count-paid`
+    );
+    return response;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const totalCountReceiptsVisitor = async () => {
+  try {
+    const response = await parkingApi.get(
+      `${BASE_URL_VISITOR_RECEIPT}/count-total`
+    );
+    return response;
+  } catch (error) {
+    throw error;
+  }
+};

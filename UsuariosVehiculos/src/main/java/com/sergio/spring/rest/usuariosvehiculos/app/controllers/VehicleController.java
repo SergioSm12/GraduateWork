@@ -5,6 +5,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+import com.sergio.spring.rest.usuariosvehiculos.app.service.IUserService;
+import com.sergio.spring.rest.usuariosvehiculos.app.service.IVehicleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -25,7 +27,6 @@ import com.sergio.spring.rest.usuariosvehiculos.app.models.dto.entity.users.User
 import com.sergio.spring.rest.usuariosvehiculos.app.models.dto.entity.users.VehicleDto;
 import com.sergio.spring.rest.usuariosvehiculos.app.models.entities.User;
 import com.sergio.spring.rest.usuariosvehiculos.app.models.entities.Vehicle;
-import com.sergio.spring.rest.usuariosvehiculos.app.service.IUserService;
 
 import jakarta.validation.Valid;
 
@@ -34,9 +35,10 @@ import jakarta.validation.Valid;
 @RequestMapping("/vehicle")
 public class VehicleController {
     @Autowired
-    private IUserService userService;
+    private IVehicleService vehicleService;
 
-    
+    @Autowired
+    private IUserService userService;
 
     @GetMapping("/{userId}/list")
     public ResponseEntity<?> listVehiclesByUser(@PathVariable Long userId) {
@@ -44,19 +46,19 @@ public class VehicleController {
         if (userDtoOptional.isEmpty()) {
             return ResponseEntity.notFound().build();
         }
-        List<VehicleDto> vehicles = userService.findVehiclesByUserId(userId);
+        List<VehicleDto> vehicles = vehicleService.findVehiclesByUserId(userId);
         return ResponseEntity.ok(vehicles);
     }
 
     @GetMapping("/{userId}/active-vehicles")
     public ResponseEntity<List<VehicleDto>> listActiveVehiclesByUser(@PathVariable Long userId) {
-        List<VehicleDto> activeVehicles = userService.findActiveVehiclesByUserId(userId);
+        List<VehicleDto> activeVehicles = vehicleService.findActiveVehiclesByUserId(userId);
         return ResponseEntity.ok(activeVehicles);
     }
 
     @GetMapping("/{userId}/inactive-vehicles")
     public ResponseEntity<List<VehicleDto>> listInactiveVehiclesByUser(@PathVariable Long userId) {
-        List<VehicleDto> inactiveVehicles = userService.findInactiveVehiclesByUserId(userId);
+        List<VehicleDto> inactiveVehicles = vehicleService.findInactiveVehiclesByUserId(userId);
         return ResponseEntity.ok(inactiveVehicles);
     }
 
@@ -78,7 +80,7 @@ public class VehicleController {
         }
 
         //Validar si el usuario ya tiene un vehiculo con la misma placa
-        if (userService.existsVehicleWithPlateForUser(userId, vehicle.getPlate())) {
+        if (vehicleService.existsVehicleWithPlateForUser(userId, vehicle.getPlate())) {
             return validation("plate", "Ya tiene un vehiculo registrado con la misma placa");
         }
 
@@ -88,7 +90,7 @@ public class VehicleController {
         vehicle.setUser(user);
 
 
-        return ResponseEntity.status(HttpStatus.CREATED).body(userService.saveVehicle(vehicle));
+        return ResponseEntity.status(HttpStatus.CREATED).body(vehicleService.saveVehicle(vehicle));
 
     }
 
@@ -98,11 +100,11 @@ public class VehicleController {
             return validation(result);
         }
         //Validar si el usuario ya tiene un vehiculo con la misma placa
-        if (userService.existsVehicleWithPlateForUser(userId, vehicle.getPlate())) {
+        if (vehicleService.existsVehicleWithPlateForUser(userId, vehicle.getPlate())) {
             return validation("plate", "Ya tiene un vehiculo registrado con la misma placa");
         }
         vehicle.setPlate(vehicle.getPlate().toUpperCase());
-        Optional<VehicleDto> updateVehicleOptional = userService.updateVehicle(userId, vehicleId, vehicle);
+        Optional<VehicleDto> updateVehicleOptional = vehicleService.updateVehicle(userId, vehicleId, vehicle);
         if (updateVehicleOptional.isEmpty()) {
             return ResponseEntity.notFound().build();
         }
@@ -118,12 +120,12 @@ public class VehicleController {
             return ResponseEntity.notFound().build();
         }
 
-        Optional<Vehicle> vehicleOptional = userService.findVehicleByIdAndUserId(vehicleId, userId);
+        Optional<Vehicle> vehicleOptional = vehicleService.findVehicleByIdAndUserId(vehicleId, userId);
         if (vehicleOptional.isEmpty()) {
             return ResponseEntity.notFound().build();
         }
 
-        userService.removeVehicleByUser(vehicleId);
+        vehicleService.removeVehicleByUser(vehicleId);
         return ResponseEntity.noContent().build();
 
     }
@@ -134,12 +136,12 @@ public class VehicleController {
         if (userDtoOptional.isEmpty()) {
             return ResponseEntity.notFound().build();
         }
-        Optional<Vehicle> vehicleOptional = userService.findVehicleByIdAndUserId(vehicleId, userId);
+        Optional<Vehicle> vehicleOptional = vehicleService.findVehicleByIdAndUserId(vehicleId, userId);
         if (vehicleOptional.isEmpty()) {
             return ResponseEntity.notFound().build();
         }
 
-        userService.activateVehicleByUser(vehicleId);
+        vehicleService.activateVehicleByUser(vehicleId);
         return ResponseEntity.ok().build();
     }
 
@@ -156,7 +158,6 @@ public class VehicleController {
         error.put(fieldName, errorMessage);
         return ResponseEntity.badRequest().body(error);
     }
-    
 
 
 }

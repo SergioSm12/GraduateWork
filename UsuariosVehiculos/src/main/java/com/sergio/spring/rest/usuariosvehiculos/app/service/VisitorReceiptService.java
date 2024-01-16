@@ -1,20 +1,19 @@
 package com.sergio.spring.rest.usuariosvehiculos.app.service;
 
-import java.time.LocalDate;
-import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
 import com.sergio.spring.rest.usuariosvehiculos.app.models.dto.entity.users.VisitorReceiptDto;
 import com.sergio.spring.rest.usuariosvehiculos.app.models.dto.mapper.DtoMapperVisitorReceipt;
 import com.sergio.spring.rest.usuariosvehiculos.app.models.entities.Rate;
 import com.sergio.spring.rest.usuariosvehiculos.app.models.entities.VisitorReceipt;
 import com.sergio.spring.rest.usuariosvehiculos.app.repositorys.IRateRepository;
 import com.sergio.spring.rest.usuariosvehiculos.app.repositorys.IVisitorReceiptRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.time.LocalDate;
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class VisitorReceiptService implements IVisitorReceiptService {
@@ -115,5 +114,26 @@ public class VisitorReceiptService implements IVisitorReceiptService {
     @Transactional
     public void removeVisitorReceipt(Long visitorReceiptId) {
         visitorReceiptRepository.deleteById(visitorReceiptId);
+    }
+
+    //contar recibos no pagos
+    @Override
+    @Transactional(readOnly = true)
+    public long getTotalVisitorUnpaidReceipts() {
+        return visitorReceiptRepository.countByPaymentStatusFalse();
+    }
+
+    //contar recibos pagos
+    @Override
+    @Transactional(readOnly = true)
+    public long getTotalVisitorPaidReceipts() {
+        return visitorReceiptRepository.countByPaymentStatusTrue();
+    }
+
+    //devolver el total de recibos visitante
+    @Override
+    @Transactional(readOnly = true)
+    public long getTotalVisitorReceipt() {
+        return visitorReceiptRepository.count();
     }
 }

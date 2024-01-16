@@ -3,6 +3,9 @@ import {
   createVisitorReceipt,
   deleteVisitorReceipt,
   findAllVisitorReceipts,
+  totalCountReceiptsVisitor,
+  totalPaidVisitor,
+  totalUnpaidVisitor,
   updateVisitorReceipt,
 } from "../services/visitorReceiptService";
 import { useDispatch, useSelector } from "react-redux";
@@ -11,6 +14,9 @@ import {
   addVisitorReceipt,
   initialVisitorReceipt,
   loadingErrorVisitorReceipt,
+  loadingPaidCountVisitor,
+  loadingTotalCountVisitor,
+  loadingUnpaidCountVisitor,
   loadingVisitorReceipt,
   onCloseModalFormVisitorReceipt,
   onCloseModalShowReceiptVisitor,
@@ -30,6 +36,9 @@ export const useVisitorReceipt = () => {
     visibleFormReceiptVisitorModal,
     visitorReceiptSelected,
     errorsVisitorReceipt,
+    totalUnpaidVisitorState,
+    totalPaidVistorState,
+    totalVisitorReceipt,
   } = useSelector((state) => state.visitorReceipts);
   const dispatch = useDispatch();
   const { login, handlerLogout } = useAuth();
@@ -69,6 +78,7 @@ export const useVisitorReceipt = () => {
       if (visitorReceipt.id === 0) {
         response = await createVisitorReceipt(visitorReceipt);
         dispatch(addVisitorReceipt(response.data));
+        await getCountTotalVisitor();
       } else {
         //actualizar
         response = await updateVisitorReceipt(visitorReceipt);
@@ -88,6 +98,45 @@ export const useVisitorReceipt = () => {
         dispatch(loadingErrorVisitorReceipt(error.response.data));
       } else if (error.response?.status == 401) {
         //manejamos el cierre de sesion cuando tengamos autenticacion
+        handlerLogout();
+      } else {
+        throw error;
+      }
+    }
+  };
+
+  const getCountUnpaidVisitor = async () => {
+    try {
+      const total = await totalUnpaidVisitor();
+      dispatch(loadingUnpaidCountVisitor(total.data));
+    } catch (error) {
+      if (error.response.status == 401) {
+        handlerLogout();
+      } else {
+        throw error;
+      }
+    }
+  };
+
+  const getCountPaidVisitor = async () => {
+    try {
+      const total = await totalPaidVisitor();
+      dispatch(loadingPaidCountVisitor(total.data));
+    } catch (error) {
+      if (error.response.status == 401) {
+        handlerLogout();
+      } else {
+        throw error;
+      }
+    }
+  };
+
+  const getCountTotalVisitor = async () => {
+    try {
+      const total = await totalCountReceiptsVisitor();
+      dispatch(loadingTotalCountVisitor(total.data));
+    } catch (error) {
+      if (error.response.status == 401) {
         handlerLogout();
       } else {
         throw error;
@@ -115,8 +164,9 @@ export const useVisitorReceipt = () => {
             title: "Estado de pago actualizado",
           });
           await getVisitorReceipts();
-          //await getCountPaid();
-          //await getCountUnpaid();
+          await getCountPaidVisitor();
+          await getCountUnpaidVisitor();
+
           //Cargamos los recibos con el nuevo estado de pago
         } catch (error) {
           if (error.response?.status == 401) {
@@ -183,6 +233,9 @@ export const useVisitorReceipt = () => {
 
   return {
     getVisitorReceipts,
+    getCountUnpaidVisitor,
+    getCountPaidVisitor,
+    getCountTotalVisitor,
     visitorReceipts,
     initialVisitorReceipt,
     handlerAddReceiptVisitor,
@@ -200,5 +253,9 @@ export const useVisitorReceipt = () => {
     errorsVisitorReceipt,
 
     handlerRemoveVisitorReceipt,
+
+    totalUnpaidVisitorState,
+    totalPaidVistorState,
+    totalVisitorReceipt,
   };
 };

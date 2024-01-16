@@ -19,7 +19,8 @@ export const visitorReceiptSlice = createSlice({
   initialState: {
     visitorReceipts: [],
     totalUnpaidVisitorState: 0,
-    totalPaidVIstorState: 0,
+    totalPaidVistorState: 0,
+    totalVisitorReceipt: 0,
     visitorReceiptSelected: initialVisitorReceipt,
 
     visibleShowReceiptVisitorModal: false,
@@ -51,6 +52,17 @@ export const visitorReceiptSlice = createSlice({
 
     loadingVisitorReceipt: (state, action) => {
       state.visitorReceipts = action.payload;
+    },
+
+    //total receipts visitor
+    loadingUnpaidCountVisitor: (state, action) => {
+      state.totalUnpaidVisitorState = action.payload;
+    },
+    loadingPaidCountVisitor: (state, action) => {
+      state.totalPaidVistorState = action.payload;
+    },
+    loadingTotalCountVisitor: (state, action) => {
+      state.totalVisitorReceipt = action.payload;
     },
 
     //info
@@ -95,6 +107,11 @@ export const {
   addVisitorReceipt,
   updateVisitorReceiptSlice,
   removeVisitorReceipt,
+
+  loadingUnpaidCountVisitor,
+  loadingPaidCountVisitor,
+  loadingTotalCountVisitor,
+
   loadingErrorVisitorReceipt,
   onOpenModalShowReceiptVisitor,
   onCloseModalShowReceiptVisitor,

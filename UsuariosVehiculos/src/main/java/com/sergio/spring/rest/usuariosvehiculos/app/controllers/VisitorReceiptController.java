@@ -39,7 +39,7 @@ public class VisitorReceiptController {
 
     @PostMapping
     public ResponseEntity<?> createVisitorReceipt(@Valid @RequestBody VisitorReceipt visitorReceipt,
-            BindingResult result) {
+                                                  BindingResult result) {
         if (result.hasErrors()) {
             return validation(result);
         }
@@ -49,7 +49,7 @@ public class VisitorReceiptController {
 
     @PutMapping("/{id}")
     public ResponseEntity<?> updateVisitorReceipt(@Valid @RequestBody VisitorReceipt visitorReceipt,
-            BindingResult result, @PathVariable Long id) {
+                                                  BindingResult result, @PathVariable Long id) {
         if (result.hasErrors()) {
             return validation(result);
         }
@@ -83,6 +83,25 @@ public class VisitorReceiptController {
         }
 
         return ResponseEntity.notFound().build();
+    }
+
+    //obtener numero de recibos no pagos
+    @GetMapping("/count-unpaid")
+    public ResponseEntity<?> getCountUnpaidReceipts() {
+        Long totalUnpaidReceipts = visitorReceiptService.getTotalVisitorUnpaidReceipts();
+        return ResponseEntity.ok(totalUnpaidReceipts);
+    }
+
+    @GetMapping("/count-paid")
+    public ResponseEntity<?> getCountPaidReceipts() {
+        Long totalPaidReceipts = visitorReceiptService.getTotalVisitorPaidReceipts();
+        return ResponseEntity.ok(totalPaidReceipts);
+    }
+
+    @GetMapping("/count-total")
+    public ResponseEntity<?> getTotalReceipts() {
+        Long totalReceipts = visitorReceiptService.getTotalVisitorReceipt();
+        return ResponseEntity.ok(totalReceipts);
     }
 
     private ResponseEntity<?> validation(BindingResult result) {

@@ -42,64 +42,67 @@ public class SpringSecurityConfig {
     @Bean
     SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         return http.authorizeHttpRequests(authRules -> authRules
-                // usuario
-                .requestMatchers(HttpMethod.GET, "/users").permitAll()
-                .requestMatchers(HttpMethod.GET, "/users/count-total").permitAll()
-                .requestMatchers(HttpMethod.GET, "/users/active-users").permitAll()
-                .requestMatchers(HttpMethod.GET, "/users/inactive-users").permitAll()
-                .requestMatchers(HttpMethod.GET, "/users/page/{page}").permitAll()
-                .requestMatchers(HttpMethod.GET, "/users/{id}").permitAll()
-                .requestMatchers(HttpMethod.POST, "/users").permitAll()
-                .requestMatchers(HttpMethod.PUT, "/users/{id}").permitAll()
+                        // usuario
+                        .requestMatchers(HttpMethod.GET, "/users").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/users/count-total").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/users/active-users").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/users/inactive-users").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/users/page/{page}").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/users/{id}").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/users").permitAll()
+                        .requestMatchers(HttpMethod.PUT, "/users/{id}").permitAll()
                         .requestMatchers(HttpMethod.PATCH, "/users/changePassword/{id}").permitAll()
-                .requestMatchers(HttpMethod.PUT, "/users/activate/{id}").permitAll()
-                .requestMatchers(HttpMethod.PUT, "/users/deactivate/{id}").permitAll()
-                .requestMatchers(HttpMethod.DELETE, "/users/{id}").permitAll()
+                        .requestMatchers(HttpMethod.PUT, "/users/activate/{id}").permitAll()
+                        .requestMatchers(HttpMethod.PUT, "/users/deactivate/{id}").permitAll()
+                        .requestMatchers(HttpMethod.DELETE, "/users/{id}").permitAll()
 
-                // usuario
-                .requestMatchers(HttpMethod.POST, "/vehicle/{userId}/create").permitAll()
-                .requestMatchers(HttpMethod.GET, "/vehicle/{userId}/list").permitAll()
-                .requestMatchers(HttpMethod.GET, "/vehicle/{userId}/active-vehicles").permitAll()
-                .requestMatchers(HttpMethod.GET, "/vehicle/{userId}/inactive-vehicles").permitAll()
-                .requestMatchers(HttpMethod.PUT, "/vehicle/{userId}/update/{vehicleId}").permitAll()
-                .requestMatchers(HttpMethod.DELETE, "/vehicle/{userId}/delete/{vehicleId}").permitAll()
-                .requestMatchers(HttpMethod.GET, "/vehicle/{userId}/activate-vehicle/{vehicleId}").permitAll()
+                        // usuario
+                        .requestMatchers(HttpMethod.POST, "/vehicle/{userId}/create").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/vehicle/{userId}/list").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/vehicle/{userId}/active-vehicles").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/vehicle/{userId}/inactive-vehicles").permitAll()
+                        .requestMatchers(HttpMethod.PUT, "/vehicle/{userId}/update/{vehicleId}").permitAll()
+                        .requestMatchers(HttpMethod.DELETE, "/vehicle/{userId}/delete/{vehicleId}").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/vehicle/{userId}/activate-vehicle/{vehicleId}").permitAll()
 
-                // vehicle type
-                .requestMatchers(HttpMethod.GET, "/vehicleType").permitAll()
-                .requestMatchers(HttpMethod.POST, "/vehicleType").permitAll()
-                .requestMatchers(HttpMethod.PUT, "/vehicleType/{id}").permitAll()
-                .requestMatchers(HttpMethod.DELETE, "/vehicleType/{id}").permitAll()
+                        // vehicle type
+                        .requestMatchers(HttpMethod.GET, "/vehicleType").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/vehicleType").permitAll()
+                        .requestMatchers(HttpMethod.PUT, "/vehicleType/{id}").permitAll()
+                        .requestMatchers(HttpMethod.DELETE, "/vehicleType/{id}").permitAll()
 
-                .requestMatchers(HttpMethod.GET, "/rate").permitAll()
-                .requestMatchers(HttpMethod.GET, "/rate/{rateId}").permitAll()
-                .requestMatchers(HttpMethod.POST, "/rate").permitAll()
-                .requestMatchers(HttpMethod.PUT, "/rate/{rateId}").permitAll()
-                .requestMatchers(HttpMethod.DELETE, "/rate/{rateId}").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/rate").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/rate/{rateId}").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/rate").permitAll()
+                        .requestMatchers(HttpMethod.PUT, "/rate/{rateId}").permitAll()
+                        .requestMatchers(HttpMethod.DELETE, "/rate/{rateId}").permitAll()
 
-                .requestMatchers(HttpMethod.GET, "/receipt").permitAll()
-                .requestMatchers(HttpMethod.GET, "/receipt/unpaid").permitAll()
-                .requestMatchers(HttpMethod.GET, "/receipt/paid").permitAll()
-                .requestMatchers(HttpMethod.GET, "/receipt/count-unpaid").permitAll()
-                .requestMatchers(HttpMethod.GET, "/receipt/count-paid").permitAll()
-                .requestMatchers(HttpMethod.GET, "/receipt/count-total").permitAll()
-                .requestMatchers(HttpMethod.PUT, "/receipt/{receiptId}/update").permitAll()
-                .requestMatchers(HttpMethod.PUT, "/receipt/change-payment/{receiptId}").permitAll()
-                .requestMatchers(HttpMethod.DELETE, "/receipt/{receiptId}").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/receipt").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/receipt/unpaid").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/receipt/paid").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/receipt/count-unpaid").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/receipt/count-paid").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/receipt/count-total").permitAll()
+                        .requestMatchers(HttpMethod.PUT, "/receipt/{receiptId}/update").permitAll()
+                        .requestMatchers(HttpMethod.PUT, "/receipt/change-payment/{receiptId}").permitAll()
+                        .requestMatchers(HttpMethod.DELETE, "/receipt/{receiptId}").permitAll()
 
-                // usuario
-                .requestMatchers(HttpMethod.GET, "/receipt/user/{userId}").permitAll()
-                .requestMatchers(HttpMethod.GET, "/receipt/user/{userId}/unpaid").permitAll()
-                .requestMatchers(HttpMethod.POST, "/receipt/{userId}/create").permitAll()
+                        // usuario
+                        .requestMatchers(HttpMethod.GET, "/receipt/user/{userId}").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/receipt/user/{userId}/unpaid").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/receipt/{userId}/create").permitAll()
 
-                // visitor
-                .requestMatchers(HttpMethod.GET, "visitor-receipt").permitAll()
-                .requestMatchers(HttpMethod.POST, "visitor-receipt").permitAll()
-                .requestMatchers(HttpMethod.PUT, "visitor-receipt/{id}").permitAll()
-                .requestMatchers(HttpMethod.PUT, "visitor-receipt/change-payment/{visitorReceiptId}").permitAll()
-                .requestMatchers(HttpMethod.DELETE, "visitor-receipt/{visitorReceiptId}").permitAll()
+                        // visitor
+                        .requestMatchers(HttpMethod.GET, "visitor-receipt").permitAll()
+                        .requestMatchers(HttpMethod.GET, "visitor-receipt/count-total").permitAll()
+                        .requestMatchers(HttpMethod.GET, "visitor-receipt/count-unpaid").permitAll()
+                        .requestMatchers(HttpMethod.GET, "visitor-receipt/count-paid").permitAll()
+                        .requestMatchers(HttpMethod.POST, "visitor-receipt").permitAll()
+                        .requestMatchers(HttpMethod.PUT, "visitor-receipt/{id}").permitAll()
+                        .requestMatchers(HttpMethod.PUT, "visitor-receipt/change-payment/{visitorReceiptId}").permitAll()
+                        .requestMatchers(HttpMethod.DELETE, "visitor-receipt/{visitorReceiptId}").permitAll()
 
-                .anyRequest().authenticated())
+                        .anyRequest().authenticated())
                 .addFilter(new JwtAuthenticationFilter(authenticationConfiguration.getAuthenticationManager()))
                 .addFilter(new JwtValidationFilter(authenticationConfiguration.getAuthenticationManager()))
                 .csrf(config -> config.disable())
@@ -113,7 +116,7 @@ public class SpringSecurityConfig {
     CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration config = new CorsConfiguration();
         config.setAllowedOrigins(Arrays.asList("http://localhost:5173"));
-        config.setAllowedMethods(Arrays.asList("GET", "POST", "PUT","PATCH", "DELETE"));
+        config.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "PATCH", "DELETE"));
         config.setAllowedHeaders(Arrays.asList("Authorization", "Content-Type"));
         config.setAllowCredentials(true);
 

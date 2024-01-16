@@ -113,6 +113,8 @@ export const receiptSlice = createSlice({
       state.receiptsByUser = action.payload;
     },
 
+    //Total receipts users 
+
     loadingUnpaidCount: (state, action) => {
       state.totalUnpaidState = action.payload;
     },

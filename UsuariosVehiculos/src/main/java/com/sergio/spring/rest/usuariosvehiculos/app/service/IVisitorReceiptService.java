@@ -5,6 +5,7 @@ import java.util.Optional;
 
 import com.sergio.spring.rest.usuariosvehiculos.app.models.dto.entity.users.VisitorReceiptDto;
 import com.sergio.spring.rest.usuariosvehiculos.app.models.entities.VisitorReceipt;
+import org.springframework.transaction.annotation.Transactional;
 
 public interface IVisitorReceiptService {
     List<VisitorReceiptDto> visitorReceiptList();
@@ -18,4 +19,14 @@ public interface IVisitorReceiptService {
     void changePaymentStatus(Long visitorReceiptId);
 
     void removeVisitorReceipt(Long visitorReceiptId);
+
+    //contar recibos no pagos
+
+    long getTotalVisitorUnpaidReceipts();
+
+    //contar recibos pagos
+    long getTotalVisitorPaidReceipts();
+
+    //devolver el total de recibos visitante
+    long getTotalVisitorReceipt();
 }

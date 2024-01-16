@@ -4,7 +4,7 @@ import jakarta.validation.constraints.NotBlank;
 
 public class UserChangePasswordRequest {
     @NotBlank(message = "El campo contraseña no puede estar vacío.")
-    private String passwo
+    private String password;
 
     public String getPassword() {
         return password;

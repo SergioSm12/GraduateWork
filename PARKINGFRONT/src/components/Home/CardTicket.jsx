@@ -12,7 +12,7 @@ import "@szhsin/react-menu/dist/transitions/slide.css";
 import { Menu, MenuItem, MenuButton } from "@szhsin/react-menu";
 
 export const CardTicket = (props) => {
-  const { ticket, totalTickets, text, icon, textEnd } = props;
+  const { ticket, totalTickets, text, icon, textVisitor, totalTicketsVisitor } = props;
   let status = "";
   let textColor = "";
   let background = "";
@@ -20,30 +20,30 @@ export const CardTicket = (props) => {
   switch (ticket) {
     case "pending":
       status = "bg-red-500/10 text-red-500";
-      textColor = "text-red-500";
+      textColor = "text-xs text-center text-red-500";
       background = "bg-secondary-100";
       break;
 
     case "payments":
       status = "bg-green-500/10 text-green-500";
-      textColor = "text-green-500";
+      textColor = "text-xs text-center text-green-500";
       background = "bg-secondary-100";
       break;
 
     case "total":
       status = "bg-blue-500/10 text-blue-500";
-      textColor = "text-blue-500";
+      textColor = "text-xs text-center text-blue-500";
       background = "bg-secondary-100";
       break;
 
     case "usersHome":
       status = "bg-yellow-500/10 text-yellow-500";
-      textColor = "text-yellow-500";
+      textColor = "text-xs text-center text-yellow-500";
       background = "bg-secondary-100";
       break;
     case "users":
       status = "bg-yellow-500/10 text-yellow-500";
-      textColor = "text-yellow-500";
+      textColor = "text-xs text-center text-yellow-500";
       background = "bg-secondary-900";
       break;
 
@@ -101,19 +101,33 @@ export const CardTicket = (props) => {
         </div>
       </div>
       {/*Number of tickets */}
-      <div>
-        <h1 className="text-4xl text-white font-bold mb-4">{totalTickets} </h1>
-        <p className={textColor}>{text}</p>
+      <div className="flex  items-center justify-between">
+        <div className="flex flex-col gap-3 p-2 bg-secondary-900/90 rounded-lg mr-2">
+          <h1 className="text-4xl text-center text-white font-bold ">
+            {totalTickets}{" "}
+          </h1>
+          <p className={textColor}>{text}</p>
+        </div>
+        {icon == "user" ? (
+          <></>
+        ) : (
+          <div className="flex flex-col gap-3 p-2 bg-secondary-900/90 rounded-lg">
+            <h1 className="text-4xl text-center text-white font-bold ">
+              {totalTicketsVisitor}{" "}
+            </h1>
+            <p className={textColor}>{textVisitor}</p>
+          </div>
+        )}
       </div>
       <hr className="border border-dashed border-gray-500/50 my-4"></hr>
       <div>
-        {textEnd == "user" || icon=="user" ? (
-         <Link to="/users" className="text-primary" > Usuarios parqueadero  </Link>
+        {icon == "user" ? (
+          <Link to="/users" className="text-primary hover:underline">
+            {" "}
+            Usuarios parqueadero{" "}
+          </Link>
         ) : (
-          <Link
-            to="/"
-            className="flex items-center gap-2 text-primary hover:underline"
-          ><RiAddLine/>Añadir recibo</Link>
+          <p className="flex items-center gap-2 text-primary">Total :</p>
         )}
       </div>
     </div>
