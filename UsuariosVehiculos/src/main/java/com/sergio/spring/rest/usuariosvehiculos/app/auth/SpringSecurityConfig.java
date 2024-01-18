@@ -92,6 +92,11 @@ public class SpringSecurityConfig {
                         .requestMatchers(HttpMethod.GET, "/receipt/user/{userId}/unpaid").permitAll()
                         .requestMatchers(HttpMethod.POST, "/receipt/{userId}/create").permitAll()
 
+                        //QRCode
+                        .requestMatchers(HttpMethod.GET, "/qrcode/{id}").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/qrcode/visitor/{id}").permitAll()
+
+
                         // visitor
                         .requestMatchers(HttpMethod.GET, "visitor-receipt").permitAll()
                         .requestMatchers(HttpMethod.GET, "visitor-receipt/count-total").permitAll()

@@ -1,19 +1,20 @@
 package com.sergio.spring.rest.usuariosvehiculos.app.service;
 
+import java.time.LocalDate;
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import com.sergio.spring.rest.usuariosvehiculos.app.models.dto.entity.users.VisitorReceiptDto;
 import com.sergio.spring.rest.usuariosvehiculos.app.models.dto.mapper.DtoMapperVisitorReceipt;
 import com.sergio.spring.rest.usuariosvehiculos.app.models.entities.Rate;
 import com.sergio.spring.rest.usuariosvehiculos.app.models.entities.VisitorReceipt;
 import com.sergio.spring.rest.usuariosvehiculos.app.repositorys.IRateRepository;
 import com.sergio.spring.rest.usuariosvehiculos.app.repositorys.IVisitorReceiptRepository;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
-import java.time.LocalDate;
-import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 public class VisitorReceiptService implements IVisitorReceiptService {
@@ -37,6 +38,12 @@ public class VisitorReceiptService implements IVisitorReceiptService {
     public Optional<VisitorReceiptDto> findByIdVisitorReceipt(Long visitorReceiptId) {
         return visitorReceiptRepository.findById(visitorReceiptId)
                 .map(vr -> DtoMapperVisitorReceipt.builder().setVisitorReceipt(vr).build());
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public Optional<VisitorReceipt> findByIdVisitorReceiptDetails(Long visitorReceiptId) {
+        return visitorReceiptRepository.findByIdWithDetails(visitorReceiptId);
     }
 
     @Override

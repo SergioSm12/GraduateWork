@@ -1,14 +1,14 @@
 package com.sergio.spring.rest.usuariosvehiculos.app.repositorys;
 
-import com.sergio.spring.rest.usuariosvehiculos.app.models.entities.User;
+import java.util.List;
+import java.util.Optional;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 
-
-import java.util.List;
-import java.util.Optional;
+import com.sergio.spring.rest.usuariosvehiculos.app.models.entities.User;
 
 public interface IUserRepository extends CrudRepository<User, Long> {
 

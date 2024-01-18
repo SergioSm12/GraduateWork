@@ -1,9 +1,17 @@
 package com.sergio.spring.rest.usuariosvehiculos.app.models.dto.mapper;
 
-import com.sergio.spring.rest.usuariosvehiculos.app.models.dto.entity.users.*;
-import com.sergio.spring.rest.usuariosvehiculos.app.models.entities.*;
-
 import java.util.List;
+
+import com.sergio.spring.rest.usuariosvehiculos.app.models.dto.entity.users.RateDto;
+import com.sergio.spring.rest.usuariosvehiculos.app.models.dto.entity.users.ReceiptDto;
+import com.sergio.spring.rest.usuariosvehiculos.app.models.dto.entity.users.UserDto;
+import com.sergio.spring.rest.usuariosvehiculos.app.models.dto.entity.users.VehicleDto;
+import com.sergio.spring.rest.usuariosvehiculos.app.models.dto.entity.users.VehicleTypeDto;
+import com.sergio.spring.rest.usuariosvehiculos.app.models.entities.Rate;
+import com.sergio.spring.rest.usuariosvehiculos.app.models.entities.Receipt;
+import com.sergio.spring.rest.usuariosvehiculos.app.models.entities.User;
+import com.sergio.spring.rest.usuariosvehiculos.app.models.entities.Vehicle;
+import com.sergio.spring.rest.usuariosvehiculos.app.models.entities.VehicleType;
 
 
 public class DtoMapperReceipt {

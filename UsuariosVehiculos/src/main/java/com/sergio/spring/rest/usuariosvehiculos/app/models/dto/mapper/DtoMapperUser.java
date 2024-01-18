@@ -1,12 +1,12 @@
 package com.sergio.spring.rest.usuariosvehiculos.app.models.dto.mapper;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 import com.sergio.spring.rest.usuariosvehiculos.app.models.dto.entity.users.UserDto;
 import com.sergio.spring.rest.usuariosvehiculos.app.models.dto.entity.users.VehicleDto;
 import com.sergio.spring.rest.usuariosvehiculos.app.models.dto.entity.users.VehicleTypeDto;
 import com.sergio.spring.rest.usuariosvehiculos.app.models.entities.User;
-
-import java.util.List;
-import java.util.stream.Collectors;
 
 //Clase para mapear entity con dto usando patron Builder
 public class DtoMapperUser {

@@ -1,16 +1,15 @@
 package com.sergio.spring.rest.usuariosvehiculos.app.service;
 
-import com.sergio.spring.rest.usuariosvehiculos.app.models.dto.entity.users.UserDto;
-import com.sergio.spring.rest.usuariosvehiculos.app.models.dto.entity.users.VehicleDto;
-import com.sergio.spring.rest.usuariosvehiculos.app.models.entities.User;
-import com.sergio.spring.rest.usuariosvehiculos.app.models.entities.Vehicle;
-import com.sergio.spring.rest.usuariosvehiculos.app.models.request.UserChangePasswordRequest;
-import com.sergio.spring.rest.usuariosvehiculos.app.models.request.UserRequest;
+import java.util.List;
+import java.util.Optional;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
-import java.util.List;
-import java.util.Optional;
+import com.sergio.spring.rest.usuariosvehiculos.app.models.dto.entity.users.UserDto;
+import com.sergio.spring.rest.usuariosvehiculos.app.models.entities.User;
+import com.sergio.spring.rest.usuariosvehiculos.app.models.request.UserChangePasswordRequest;
+import com.sergio.spring.rest.usuariosvehiculos.app.models.request.UserRequest;
 
 public interface IUserService {
 

@@ -3,14 +3,18 @@ package com.sergio.spring.rest.usuariosvehiculos.app.service;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.transaction.annotation.Transactional;
+
 import com.sergio.spring.rest.usuariosvehiculos.app.models.dto.entity.users.VisitorReceiptDto;
 import com.sergio.spring.rest.usuariosvehiculos.app.models.entities.VisitorReceipt;
-import org.springframework.transaction.annotation.Transactional;
 
 public interface IVisitorReceiptService {
     List<VisitorReceiptDto> visitorReceiptList();
 
     Optional<VisitorReceiptDto> findByIdVisitorReceipt(Long visitorReceiptId);
+
+    @Transactional(readOnly = true)
+    Optional<VisitorReceipt> findByIdVisitorReceiptDetails(Long visitorReceiptId);
 
     VisitorReceiptDto saveVisitorReceipt(VisitorReceipt visitorReceipt);
 

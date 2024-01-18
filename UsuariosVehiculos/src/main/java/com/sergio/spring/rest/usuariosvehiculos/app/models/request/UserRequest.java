@@ -1,6 +1,7 @@
 package com.sergio.spring.rest.usuariosvehiculos.app.models.request;
 
 import com.sergio.spring.rest.usuariosvehiculos.app.models.interfaces.IUser;
+
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 

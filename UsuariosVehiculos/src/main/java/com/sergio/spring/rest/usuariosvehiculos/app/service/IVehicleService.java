@@ -1,10 +1,10 @@
 package com.sergio.spring.rest.usuariosvehiculos.app.service;
 
-import com.sergio.spring.rest.usuariosvehiculos.app.models.dto.entity.users.VehicleDto;
-import com.sergio.spring.rest.usuariosvehiculos.app.models.entities.Vehicle;
-
 import java.util.List;
 import java.util.Optional;
+
+import com.sergio.spring.rest.usuariosvehiculos.app.models.dto.entity.users.VehicleDto;
+import com.sergio.spring.rest.usuariosvehiculos.app.models.entities.Vehicle;
 
 public interface IVehicleService {
     // Vehicles

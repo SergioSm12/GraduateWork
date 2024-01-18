@@ -104,7 +104,7 @@ public class ReceiptController {
     // user create
     @PostMapping("/{userId}/create")
     public ResponseEntity<?> createReceiptByUser(@PathVariable Long userId, @Valid @RequestBody Receipt receipt,
-            BindingResult result) {
+                                                 BindingResult result) {
         if (result.hasErrors()) {
             return validation(result);
         }
@@ -130,7 +130,7 @@ public class ReceiptController {
     // Admin update
     @PutMapping("/{receiptId}/update")
     public ResponseEntity<?> updateReceipt(@Valid @RequestBody ReceiptRequest receipt, BindingResult result,
-            @PathVariable Long receiptId) {
+                                           @PathVariable Long receiptId) {
         if (result.hasErrors()) {
             return validation(result);
         }
@@ -163,6 +163,7 @@ public class ReceiptController {
         }
         return ResponseEntity.notFound().build();
     }
+
 
     private ResponseEntity<?> validation(BindingResult result) {
         Map<String, String> errors = new HashMap<>();

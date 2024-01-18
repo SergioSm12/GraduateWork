@@ -1,18 +1,23 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import {
-  RiBillLine,
-  RiMore2Line,
-  RiTeamLine,
-  RiFileInfoLine,
-  RiAddLine,
-} from "react-icons/ri";
+import { RiBillLine, RiMore2Line, RiTeamLine } from "react-icons/ri";
 import "@szhsin/react-menu/dist/index.css";
 import "@szhsin/react-menu/dist/transitions/slide.css";
 import { Menu, MenuItem, MenuButton } from "@szhsin/react-menu";
 
+const formatNumber = (num) => {
+  if (num >= 1000 && num < 1000000) {
+    return (num / 1000).toFixed(1) + "k";
+  } else if (num >= 1000000) {
+    return (num / 1000000).toFixed(1) + "M";
+  } else {
+    return num.toString();
+  }
+};
+
 export const CardTicket = (props) => {
-  const { ticket, totalTickets, text, icon, textVisitor, totalTicketsVisitor } = props;
+  const { ticket, totalTickets, text, icon, textVisitor, totalTicketsVisitor } =
+    props;
   let status = "";
   let textColor = "";
   let background = "";
@@ -104,7 +109,7 @@ export const CardTicket = (props) => {
       <div className="flex  items-center justify-between">
         <div className="flex flex-col gap-3 p-2 bg-secondary-900/90 rounded-lg mr-2">
           <h1 className="text-4xl text-center text-white font-bold ">
-            {totalTickets}{" "}
+            {formatNumber(totalTickets)}
           </h1>
           <p className={textColor}>{text}</p>
         </div>
@@ -113,7 +118,7 @@ export const CardTicket = (props) => {
         ) : (
           <div className="flex flex-col gap-3 p-2 bg-secondary-900/90 rounded-lg">
             <h1 className="text-4xl text-center text-white font-bold ">
-              {totalTicketsVisitor}{" "}
+              {formatNumber(totalTicketsVisitor)}
             </h1>
             <p className={textColor}>{textVisitor}</p>
           </div>
@@ -127,7 +132,7 @@ export const CardTicket = (props) => {
             Usuarios parqueadero{" "}
           </Link>
         ) : (
-          <p className="flex items-center gap-2 text-primary">Total :</p>
+          <p className="flex items-center gap-2 text-primary">Total : <p className="bg-secondary-900 px-2 py-0.5 rounded-lg text-white font-bold">{ formatNumber(totalTickets + totalTicketsVisitor)}</p></p>
         )}
       </div>
     </div>

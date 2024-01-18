@@ -27,6 +27,9 @@ public interface IReceiptService {
 
     Optional<ReceiptDto> findByIdReceipt(Long receiptId);
 
+    //Consulta optimizada qr
+    Optional<Receipt> findByIdReceiptWithDetails(Long receiptId);
+
     ReceiptDto saveReceipt(Receipt receipt);
 
     Optional<ReceiptDto> updateReceipt(ReceiptRequest receipt, Long receiptId);

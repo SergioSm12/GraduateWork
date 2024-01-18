@@ -51,6 +51,13 @@ public class ReceiptService implements IReceiptService {
         return receiptRepository.findById(receiptId).map(r -> DtoMapperReceipt.builder().setReceipt(r).build());
     }
 
+    //servicio optimisado qr
+    @Override
+    @Transactional(readOnly = true)
+    public Optional<Receipt> findByIdReceiptWithDetails(Long receiptId){
+        return  receiptRepository.findByIdWithDetails(receiptId);
+    }
+
     @Override
     @Transactional(readOnly = true)
     public List<ReceiptDto> getUnpaidReceipts() {
