@@ -20,9 +20,11 @@ import {
   loadingVisitorReceipt,
   onCloseModalFormVisitorReceipt,
   onCloseModalShowReceiptVisitor,
+  onCloseQRModalVisitorReceipt,
   onOpenModalFormCreateVisitorReceipt,
   onOpenModalFormVisitorReceipt,
   onOpenModalShowReceiptVisitor,
+  onOpenQRModalVisitorReceipt,
   removeVisitorReceipt,
   updateVisitorReceiptSlice,
 } from "../store/slices/receipt/visitorReceiptSlice";
@@ -39,6 +41,8 @@ export const useVisitorReceipt = () => {
     totalUnpaidVisitorState,
     totalPaidVistorState,
     totalVisitorReceipt,
+    idQRReceiptVisitor,
+    visibleQRModalReceiptVisitor,
   } = useSelector((state) => state.visitorReceipts);
   const dispatch = useDispatch();
   const { login, handlerLogout } = useAuth();
@@ -231,6 +235,14 @@ export const useVisitorReceipt = () => {
     dispatch(onCloseModalFormVisitorReceipt());
   };
 
+  //QR Modal
+  const handlerOpenModalQRVisitorReceipt = (idVisitorReceipt) => {
+    dispatch(onOpenQRModalVisitorReceipt(idVisitorReceipt));
+  };
+  const handlerCloseModalQRVisitorReceipt = () => {
+    dispatch(onCloseQRModalVisitorReceipt());
+  };
+
   return {
     getVisitorReceipts,
     getCountUnpaidVisitor,
@@ -240,6 +252,9 @@ export const useVisitorReceipt = () => {
     initialVisitorReceipt,
     handlerAddReceiptVisitor,
     handlerChangePaymentStatusVisitor,
+
+    handlerOpenModalQRVisitorReceipt,
+    handlerCloseModalQRVisitorReceipt,
 
     visibleShowReceiptVisitorModal,
     visitorReceiptSelected,
@@ -257,5 +272,8 @@ export const useVisitorReceipt = () => {
     totalUnpaidVisitorState,
     totalPaidVistorState,
     totalVisitorReceipt,
+
+    idQRReceiptVisitor,
+    visibleQRModalReceiptVisitor,
   };
 };

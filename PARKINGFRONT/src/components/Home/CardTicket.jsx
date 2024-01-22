@@ -132,7 +132,7 @@ export const CardTicket = (props) => {
             Usuarios parqueadero{" "}
           </Link>
         ) : (
-          <p className="flex items-center gap-2 text-primary">Total : <p className="bg-secondary-900 px-2 py-0.5 rounded-lg text-white font-bold">{ formatNumber(totalTickets + totalTicketsVisitor)}</p></p>
+          <p className="flex items-center gap-2 text-primary">Total : <span className="bg-secondary-900 px-2 py-0.5 rounded-lg text-white font-bold">{ formatNumber(totalTickets + totalTicketsVisitor)}</span></p>
         )}
       </div>
     </div>

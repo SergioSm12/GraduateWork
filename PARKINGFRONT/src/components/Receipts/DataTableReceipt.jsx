@@ -14,16 +14,18 @@ import {
   RiEdit2Line,
   RiInformationLine,
   RiLineHeight,
+  RiQrCodeLine,
   RiSearch2Line,
   RiSortAsc,
   RiSortDesc,
 } from "react-icons/ri";
-import {formatInTimeZone } from "date-fns-tz";
+import { formatInTimeZone } from "date-fns-tz";
 import { Paginator } from "../Paginator";
 import { useReceipts } from "../../hooks/useReceipts";
 import { ModalReceipt } from "../Receipts/ModalReceipt";
 import { es } from "date-fns/locale";
 import { ModalFormReceipt } from "./ModalFormReceipt";
+import { QRCode } from "../QR/QRCode";
 
 //Componente con TanStackReacttable
 
@@ -63,6 +65,8 @@ export const DataTableReceipt = ({ dataReceipts }) => {
     handlerReceiptSelectedModalShow,
     visibleShowReceiptModal,
     visibleFormReceiptModal,
+    visibleQRModalReceipt,
+    handlerOpenModalQRReceipt,
     handlerReceiptSelectedModalForm,
     handlerChangePaymentStatus,
     handlerRemoveReceipt,
@@ -151,8 +155,8 @@ export const DataTableReceipt = ({ dataReceipts }) => {
 
   return (
     <>
-    {/*Modal para generar recibo */}
-    {!visibleFormReceiptModal || <ModalFormReceipt />}
+      {/*Modal para generar recibo */}
+      {!visibleFormReceiptModal || <ModalFormReceipt />}
       {/*input*/}
       <div className="mb-5">
         <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-y-4 ">
@@ -178,6 +182,8 @@ export const DataTableReceipt = ({ dataReceipts }) => {
       </div>
       {/*Modal showreceipt */}
       {!visibleShowReceiptModal || <ModalReceipt />}
+      {/*Modal QR */}
+      {!visibleQRModalReceipt || <QRCode />}
       {/*Table */}
       <div className="overflow-x-auto">
         <table className="table-auto min-w-full border-collapse">
@@ -284,6 +290,14 @@ export const DataTableReceipt = ({ dataReceipts }) => {
 
                     {cell.column.id === "actions" && (
                       <div className="flex items-center justify-center gap-2">
+                        <button
+                          type="button"
+                          className="py-2 px-2 bg-primary/80 text-black hover:bg-secondary-100 rounded-lg transition-colors"
+                          onClick={() => handlerOpenModalQRReceipt(row.original.id)}
+                        >
+                          <RiQrCodeLine className="text-lg" />
+                        </button>
+
                         <button
                           type="button"
                           className="py-2 px-2 bg-primary/80 text-black hover:bg-secondary-100 rounded-lg transition-colors"

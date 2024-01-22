@@ -6,6 +6,7 @@ import { rateSlice } from "./slices/rate/rateSlice";
 import { receiptSlice } from "./slices/receipt/receiptSlice";
 import { vehicleTypeSlice } from "./slices/vehicle/vehicleTypeSlice";
 import { visitorReceiptSlice } from "./slices/receipt/visitorReceiptSlice";
+import { qrCodeSlice } from "./slices/receipt/qrCodeSlice";
 
 export const store = configureStore({
   reducer: {
@@ -16,5 +17,6 @@ export const store = configureStore({
     auth: authSlice.reducer,
     receipts: receiptSlice.reducer,
     visitorReceipts: visitorReceiptSlice.reducer,
+    qrCode: qrCodeSlice.reducer
   },
 });

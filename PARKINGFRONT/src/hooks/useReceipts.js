@@ -28,6 +28,8 @@ import {
   loadingUnpaidCount,
   loadingPaidCount,
   loadingTotalCount,
+  onOpenQRModalReceipt,
+  onCloseQRModalReceipt,
 } from "../store/slices/receipt/receiptSlice";
 import Swal from "sweetalert2";
 import { useAuth } from "../auth/hooks/useAuth";
@@ -41,9 +43,11 @@ export const useReceipts = () => {
     totalState,
     visibleFormReceiptModal,
     visibleShowReceiptModal,
+    visibleQRModalReceipt,
     receiptSelected,
     vehicleSelected,
     errorsReceipt,
+    idQRReceipt
   } = useSelector((state) => state.receipts);
   const dispatch = useDispatch();
   const { login, handlerLogout } = useAuth();
@@ -259,6 +263,14 @@ export const useReceipts = () => {
     dispatch(onCloseShowModalReceipt());
   };
 
+  //QRModal
+  const handlerOpenModalQRReceipt = (idReceipt) => {
+    dispatch(onOpenQRModalReceipt(idReceipt));
+  };
+  const handlerCloseModalQRReceipt = () => {
+    dispatch(onCloseQRModalReceipt());
+  };
+
   return {
     getReciptsByUser,
     getReceipts,
@@ -273,7 +285,10 @@ export const useReceipts = () => {
     handlerReceiptSelectedModalForm,
     handlerOpenModalFormReceipt,
     handlerCloseModalFormReceipt,
+    handlerOpenModalQRReceipt,
+    handlerCloseModalQRReceipt,
     visibleFormReceiptModal,
+    visibleQRModalReceipt,
     vehicle,
 
     handlerOpenModalShowReceipt,
@@ -286,6 +301,7 @@ export const useReceipts = () => {
     totalUnpaidState,
     totalPaidState,
     totalState,
+    idQRReceipt,
 
     errorsReceipt,
   };

@@ -61,9 +61,11 @@ export const receiptSlice = createSlice({
     totalState: 0,
     receiptSelected: initialReceiptForm,
     vehicleSelected: vehicle,
+    idQRReceipt: null,
 
     visibleShowReceiptModal: false,
     visibleFormReceiptModal: false,
+    visibleQRModalReceipt: false,
     errorsReceipt: initialErrosReceipt,
   },
   reducers: {
@@ -113,7 +115,7 @@ export const receiptSlice = createSlice({
       state.receiptsByUser = action.payload;
     },
 
-    //Total receipts users 
+    //Total receipts users
 
     loadingUnpaidCount: (state, action) => {
       state.totalUnpaidState = action.payload;
@@ -152,6 +154,18 @@ export const receiptSlice = createSlice({
       state.receiptSelected = action.payload;
       state.visibleShowReceiptModal = true;
     },
+
+    //QRCode
+    onOpenQRModalReceipt: (state, action) => {
+      state.visibleQRModalReceipt = true;
+      state.idQRReceipt = action.payload;
+    },
+
+    onCloseQRModalReceipt: (state) => {
+      state.visibleQRModalReceipt = false;
+      state.idQRReceipt = null;
+    },
+
     loadingErrorReceipt: (state, action) => {
       state.errorsReceipt = action.payload;
     },
@@ -169,6 +183,9 @@ export const {
   onReceiptSelectedForm,
   onOpenModalFormReceipt,
   onCloseModalFormReceipt,
+
+  onOpenQRModalReceipt,
+  onCloseQRModalReceipt,
 
   onReceiptShowModalSelected,
   onOpenModalShowReceipt,

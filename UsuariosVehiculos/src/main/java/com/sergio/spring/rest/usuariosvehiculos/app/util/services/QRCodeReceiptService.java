@@ -48,7 +48,7 @@ public class QRCodeReceiptService implements IQRCodeReceiptService {
         );
         BitMatrix bitMatrix = qrCodeWriter.encode(formattedText,
                 BarcodeFormat.QR_CODE, 350, 350);
-        MatrixToImageConfig config = new MatrixToImageConfig(0xFFFED12C, // yellow foreground
+        MatrixToImageConfig config = new MatrixToImageConfig(0xFFFFFFFF, // yellow foreground
                 0xFF0F172A // blue dark  background
         );
 
@@ -84,7 +84,7 @@ public class QRCodeReceiptService implements IQRCodeReceiptService {
         );
         BitMatrix bitMatrix = qrCodeWriter.encode(formattedText,
                 BarcodeFormat.QR_CODE, 350, 350);
-        MatrixToImageConfig config = new MatrixToImageConfig(0xFFFED12C, // yellow foreground
+        MatrixToImageConfig config = new MatrixToImageConfig(0xFFFFFFFF, // yellow foreground
                 0xFF0F172A // blue dark  background
         );
 

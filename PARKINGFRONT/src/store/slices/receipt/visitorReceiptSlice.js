@@ -22,9 +22,11 @@ export const visitorReceiptSlice = createSlice({
     totalPaidVistorState: 0,
     totalVisitorReceipt: 0,
     visitorReceiptSelected: initialVisitorReceipt,
+    idQRReceiptVisitor: null,
 
     visibleShowReceiptVisitorModal: false,
     visibleFormReceiptVisitorModal: false,
+    visibleQRModalReceiptVisitor: false,
     errorsVisitorReceipt: initialErrorsVisitorReceipt,
   },
   reducers: {
@@ -89,6 +91,17 @@ export const visitorReceiptSlice = createSlice({
       state.visitorReceiptSelected = initialVisitorReceipt;
     },
 
+    //QR Code
+    onOpenQRModalVisitorReceipt: (state, action) => {
+      state.visibleQRModalReceiptVisitor = true;
+      state.idQRReceiptVisitor = action.payload;
+    },
+
+    onCloseQRModalVisitorReceipt: (state) => {
+      state.visibleQRModalReceiptVisitor = false;
+      state.idQRReceiptVisitor = null;
+    },
+
     //eliminar del state
     removeVisitorReceipt: (state, action) => {
       state.visitorReceipts = state.visitorReceipts.filter(
@@ -111,6 +124,9 @@ export const {
   loadingUnpaidCountVisitor,
   loadingPaidCountVisitor,
   loadingTotalCountVisitor,
+
+  onOpenQRModalVisitorReceipt,
+  onCloseQRModalVisitorReceipt,
 
   loadingErrorVisitorReceipt,
   onOpenModalShowReceiptVisitor,

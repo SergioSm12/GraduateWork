@@ -15,15 +15,17 @@ import {
   RiEdit2Line,
   RiInformationLine,
   RiLineHeight,
+  RiQrCodeLine,
   RiSearch2Line,
   RiSortAsc,
   RiSortDesc,
 } from "react-icons/ri";
-import { format, formatInTimeZone } from "date-fns-tz";
+import { formatInTimeZone } from "date-fns-tz";
 import { Paginator } from "../Paginator";
 import { useReceipts } from "../../hooks/useReceipts";
 import { ModalReceipt } from "../Receipts/ModalReceipt";
 import { es } from "date-fns/locale";
+import { QRCode } from "../QR/QRCode";
 
 //Componente con TanStackReacttable
 
@@ -34,7 +36,6 @@ const fuzzyFilter = (row, columnId, value, addMeta) => {
 
   return itemRank.passed;
 };
-
 
 const DebuncedInput = ({ value: keyWord, onchange, ...props }) => {
   const [value, setValue] = useState(keyWord);
@@ -56,7 +57,7 @@ const DebuncedInput = ({ value: keyWord, onchange, ...props }) => {
   );
 };
 
-export const DataTableReceiptsUser = ({ dataReceipts }) => { 
+export const DataTableReceiptsUser = ({ dataReceipts }) => {
   const { id } = useParams();
   const [data, setData] = useState(dataReceipts);
   const [globalFilter, setGlobalFilter] = useState("");
@@ -64,9 +65,11 @@ export const DataTableReceiptsUser = ({ dataReceipts }) => {
   const {
     handlerReceiptSelectedModalShow,
     visibleShowReceiptModal,
+    visibleQRModalReceipt,
     handlerReceiptSelectedModalForm,
     handlerChangePaymentStatus,
     handlerRemoveReceipt,
+    handlerOpenModalQRReceipt
   } = useReceipts();
 
   useEffect(() => {
@@ -138,10 +141,10 @@ export const DataTableReceiptsUser = ({ dataReceipts }) => {
     await handlerChangePaymentStatus(receiptId, id);
   };
 
-  const handlerDeleteStatusReceipt = async (receiptId)=>{
+  const handlerDeleteStatusReceipt = async (receiptId) => {
     await handlerRemoveReceipt(receiptId, id);
-  }
- 
+  };
+
   return (
     <>
       {/*input*/}
@@ -169,6 +172,8 @@ export const DataTableReceiptsUser = ({ dataReceipts }) => {
       </div>
       {/*Modal showreceipt */}
       {!visibleShowReceiptModal || <ModalReceipt />}
+      {/*Modal QR */}
+      {!visibleQRModalReceipt || <QRCode />}
       {/*Table */}
       <div className="overflow-x-auto">
         <table className="table-auto min-w-full border-collapse">
@@ -267,6 +272,16 @@ export const DataTableReceiptsUser = ({ dataReceipts }) => {
 
                     {cell.column.id === "actions" && (
                       <div className="flex items-center gap-2">
+                        <button
+                          type="button"
+                          className="py-2 px-2 bg-primary/80 text-black hover:bg-secondary-100 rounded-lg transition-colors"
+                          onClick={() =>
+                            handlerOpenModalQRReceipt(row.original.id)
+                          }
+                        >
+                          <RiQrCodeLine className="text-lg" />
+                        </button>
+
                         <button
                           type="button"
                           className="py-2 px-2 bg-primary/80 text-black hover:bg-secondary-100 rounded-lg transition-colors"

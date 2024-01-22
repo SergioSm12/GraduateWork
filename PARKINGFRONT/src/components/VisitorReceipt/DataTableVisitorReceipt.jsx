@@ -14,6 +14,7 @@ import {
   RiEdit2Line,
   RiInformationLine,
   RiLineHeight,
+  RiQrCodeLine,
   RiSearch2Line,
   RiSortAsc,
   RiSortDesc,
@@ -23,6 +24,7 @@ import { Paginator } from "../Paginator";
 import { es } from "date-fns/locale";
 import { useVisitorReceipt } from "../../hooks/useVisitorReceipt";
 import { ModalReceiptVisitor } from "./ModalReceiptVisitor";
+import { QRCode } from "../QR/QRCode";
 
 //Componente con TanStackReacttable
 
@@ -63,6 +65,8 @@ export const DataTableVisitorReceipt = ({ dataReceipts }) => {
     visibleShowReceiptVisitorModal,
     handlerReceiptVisitorSelectedModalShow,
     handlerChangePaymentStatusVisitor,
+    visibleQRModalReceiptVisitor,
+    handlerOpenModalQRVisitorReceipt,
 
     handlerVisitorReceiptSelectedModalForm,
     handlerRemoveVisitorReceipt
@@ -176,6 +180,8 @@ export const DataTableVisitorReceipt = ({ dataReceipts }) => {
       </div>
       {/*Modal showreceipt */}
       {!visibleShowReceiptVisitorModal || <ModalReceiptVisitor />}
+      {/*Modal QR */}
+      {!visibleQRModalReceiptVisitor || <QRCode />}
       {/*Table */}
       <div className="overflow-x-auto">
         <table className="table-auto min-w-full border-collapse">
@@ -282,6 +288,15 @@ export const DataTableVisitorReceipt = ({ dataReceipts }) => {
 
                     {cell.column.id === "actions" && (
                       <div className="flex items-center justify-center gap-2">
+                        <button
+                          type="button"
+                          className="py-2 px-2 bg-primary/80 text-black hover:bg-secondary-100 rounded-lg transition-colors"
+                          onClick={() => handlerOpenModalQRVisitorReceipt(row.original.id)}
+                        >
+                          <RiQrCodeLine className="text-lg" />
+                        </button>
+                        
+                        
                         <button
                           type="button"
                           className="py-2 px-2 bg-primary/80 text-black hover:bg-secondary-100 rounded-lg transition-colors"
