@@ -223,7 +223,7 @@ export const CreateReceipt = () => {
                 locale={es}
                 className="py-3 pl-8 pr-4 text-center bg-secondary-900 w-full outline-none rounded-lg focus:border focus:border-primary appearance-none"
                 timeInputLabel="Time:"
-                dateFormat={"dd 'de' MMMM yyyy"}
+                dateFormat={"dd 'de' MMMM yyyy '7:00'"}
                 icon={<RiCalendarCheckLine className="text-primary" />}
               />
             </div>
@@ -239,7 +239,7 @@ export const CreateReceipt = () => {
                 locale={es}
                 className="py-3 pl-8 pr-4 text-center bg-secondary-900 w-full outline-none rounded-lg focus:border focus:border-primary appearance-none"
                 timeInputLabel="Time:"
-                dateFormat={"dd 'de' MMMM yyyy"}
+                dateFormat={"dd 'de' MMMM yyyy '22:00'"}
                 icon={<RiCalendarCloseLine className="text-primary" />}
               />
             </div>

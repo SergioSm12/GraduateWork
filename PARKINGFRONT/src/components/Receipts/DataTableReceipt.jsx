@@ -264,7 +264,7 @@ export const DataTableReceipt = ({ dataReceipts }) => {
                         {formatInTimeZone(
                           row.original.issueDate,
                           "America/Bogota",
-                          "dd 'de' MMMM 'del' yyyy.",
+                          "dd 'de' MMMM 'del' yyyy 'a las' HH:mm",
                           { locale: es }
                         )}
                       </div>
@@ -282,7 +282,7 @@ export const DataTableReceipt = ({ dataReceipts }) => {
                         {formatInTimeZone(
                           row.original.dueDate,
                           "America/Bogota",
-                          "dd 'de' MMMM 'del' yyyy.",
+                          "dd 'de' MMMM 'del' yyyy 'a las' HH:mm",
                           { locale: es }
                         )}
                       </div>

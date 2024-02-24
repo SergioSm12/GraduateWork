@@ -20,6 +20,7 @@ export const ShowUser = () => {
     getUserById(id);
   }, [, id]);
 
+
   return (
     <div>
       <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-y-4 mb-10">

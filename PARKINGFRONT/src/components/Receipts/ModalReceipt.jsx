@@ -94,11 +94,11 @@ export const ModalReceipt = () => {
                     <h5 className="text-gray-100 text-md mb-1">
                       Fecha de emisión:
                     </h5>
-                    <p className="text-primary/80 text-center bg-secondary-900 p-1 rounded-lg text-sm">
+                    <p className="text-primary/80 text-center bg-secondary-900 p-1 rounded-lg text-sm mr-1">
                       {formatInTimeZone(
                         receiptShow.issueDate,
                         "America/Bogota",
-                        "dd 'de' MMMM 'del' yyyy",
+                        "dd 'de' MMMM 'del' yyyy 'a las' HH:mm",
                         { locale: es }
                       )}
                     </p>
@@ -111,7 +111,7 @@ export const ModalReceipt = () => {
                       {formatInTimeZone(
                         receiptShow.dueDate,
                         "America/Bogota",
-                        "dd 'de' MMMM 'del' yyyy",
+                        "dd 'de' MMMM 'del' yyyy 'a las' HH:mm",
                         { locale: es }
                       )}
                     </p>

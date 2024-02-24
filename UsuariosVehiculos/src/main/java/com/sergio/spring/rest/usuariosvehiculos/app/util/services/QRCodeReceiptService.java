@@ -26,7 +26,7 @@ public class QRCodeReceiptService implements IQRCodeReceiptService {
         QRCodeWriter qrCodeWriter = new QRCodeWriter();
 
         //format date
-        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("dd 'de' MMMM 'del' yyyy");
+        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("dd 'de' MMMM 'del' yyyy 'a las' HH:mm");
         String formattedText = String.format(
                 "Número de Factura: %s\n" +
                         "Estado de Pago: %s\n" +
@@ -62,7 +62,7 @@ public class QRCodeReceiptService implements IQRCodeReceiptService {
         QRCodeWriter qrCodeWriter = new QRCodeWriter();
 
         //format date
-        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("dd 'de' MMMM 'del' yyyy");
+        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("dd 'de' MMMM 'del' yyyy 'a las' HH:mm");
         String formattedText = String.format(
                 "Número de Factura: %s\n" +
                         "Estado de Pago: %s\n" +

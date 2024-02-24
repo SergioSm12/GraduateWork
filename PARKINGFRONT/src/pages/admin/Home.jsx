@@ -99,13 +99,32 @@ export const Home = () => {
       {/*Date Table */}
 
       <div className="bg-secondary-100 p-8 rounded-xl">
-        {receipts.length === 0 ? (
-          <div className=" flex justify-center">
-            <span className="flex items-center gap-2  bg-secondary-900 py-4 px-4 rounded-lg">
-              <RiAlertLine className="text-red-600" /> No hay recibos
-              registrados
-            </span>
-          </div>
+        {receipts.length === 0 && visitorReceipts.length === 0 ? (
+          <>
+            <div className="flex items-center justify-center gap-2">
+              <Link
+                to="/users"
+                className="font-bold text-xs py-2 px-4 bg-primary/80 text-black hover:bg-primary rounded-lg transition-colors"
+              >
+                Agregar recibo usuario
+              </Link>
+              <button
+                className="font-bold text-xs py-2 px-4 bg-primary/80 text-black hover:bg-primary rounded-lg transition-colors"
+                onClick={() => {
+                  handlerOpenModalFormVisitorReceipt();
+                }}
+              >
+                Agregar recibo visitante
+              </button>
+            </div>
+
+            <div className=" flex justify-center mt-2">
+              <span className="flex items-center gap-2  bg-secondary-900 py-4 px-4 rounded-lg">
+                <RiAlertLine className="text-red-600" /> No hay recibos
+                registrados
+              </span>
+            </div>
+          </>
         ) : (
           <Tab.Group>
             <Tab.List className="flex flex-col md:flex-row md:items-center md:justify-between gap-x-2 gap-y-6 bg-secondary-900/50 py-3 px-4 rounded-lg mb-8">

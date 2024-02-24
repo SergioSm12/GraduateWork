@@ -1,6 +1,8 @@
 package com.sergio.spring.rest.usuariosvehiculos.app.service;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.Optional;
@@ -54,8 +56,8 @@ public class ReceiptService implements IReceiptService {
     //servicio optimisado qr
     @Override
     @Transactional(readOnly = true)
-    public Optional<Receipt> findByIdReceiptWithDetails(Long receiptId){
-        return  receiptRepository.findByIdWithDetails(receiptId);
+    public Optional<Receipt> findByIdReceiptWithDetails(Long receiptId) {
+        return receiptRepository.findByIdWithDetails(receiptId);
     }
 
     @Override
@@ -151,14 +153,14 @@ public class ReceiptService implements IReceiptService {
         receipt.setUser(userOptional.get());
         receipt.setVehicle(vehicleOptional.get());
         receipt.setRate(rateOptional.get());
-        receipt.setIssueDate(LocalDate.now());
+        receipt.setIssueDate(LocalDateTime.now());
         // Calcular dueDate segunRateTime
         // FECHA ACTUAL
-        LocalDate currentDateTime = LocalDate.now();
+        LocalDateTime currentDateTime = LocalDateTime.now();
         // VARIABLE
         String rateTime = rateOptional.get().getTime();
         // CALCULAR
-        LocalDate dueDate = calculateDueDate(rateTime, currentDateTime);
+        LocalDateTime dueDate = calculateDueDate(rateTime, currentDateTime);
         receipt.setDueDate(dueDate);
 
         receipt.setPaymentStatus(false);
@@ -176,8 +178,19 @@ public class ReceiptService implements IReceiptService {
         if (o.isPresent()) {
             Receipt receiptDb = o.orElseThrow();
 
-            receiptDb.setIssueDate(receiptRequest.getIssueDate());
-            receiptDb.setDueDate(receiptRequest.getDueDate());
+            //Establecer IssueDate
+            LocalDate issueLocalDate = receiptRequest.getIssueDate().toLocalDate();
+            LocalTime startTime = LocalTime.of(7, 0);
+            LocalDateTime issueDateTime = LocalDateTime.of(issueLocalDate, startTime);
+            receiptDb.setIssueDate(issueDateTime);
+
+
+            LocalDate localDateDue = receiptRequest.getDueDate().toLocalDate();
+            LocalTime endTime = LocalTime.of(22, 0);
+            LocalDateTime dueDateTime = LocalDateTime.of(localDateDue, endTime);
+            receiptDb.setDueDate(dueDateTime);
+
+
             receiptDb.setPaymentStatus(receiptRequest.isPaymentStatus());
             receiptDb.setRate(receiptRequest.getRate());
 
@@ -204,19 +217,17 @@ public class ReceiptService implements IReceiptService {
         receiptRepository.deleteById(receiptId);
     }
 
-    private LocalDate calculateDueDate(String rateTime, LocalDate currentDate) {
+    private LocalDateTime calculateDueDate(String rateTime, LocalDateTime currentDateTime) {
         // casos segun rateTime y calculo
         rateTime = rateTime.replaceAll("\\s", "");
+        LocalTime limitTime = LocalTime.of(22, 0); //definir hora limite
         return switch (rateTime.toUpperCase()) {
             case "DIAMOTO", "MOTODIA", "DIACARRO", "CARRODIA", "DIABICICLETA", "BICICLETADIA" ->
-                currentDate.plusDays(1);
-            case "SEMANAMOTO", "MOTOSEMANA", "SEMANACARRO", "CARROSEMANA", "SEMANABICICLETA", "BICICLETASEMANA" ->
-                currentDate.plusWeeks(1);
-            case "QUINCENAMOTO", "MOTOQUINCENA", "QUINCENACARRO", "CARROQUINCENA", "QUINCENABICICLETA",
-                    "BICICLETAQUINCENA" ->
-                currentDate.plus(2, ChronoUnit.WEEKS);
+                    currentDateTime.isBefore(currentDateTime.toLocalDate().atTime(limitTime)) ?
+                            currentDateTime.withHour(limitTime.getHour()).withMinute(limitTime.getMinute())
+                            : currentDateTime.plusDays(1).withHour(limitTime.getHour()).withMinute(limitTime.getMinute());
             case "MESMOTO", "MOTOMES", "MESCARRO", "CARROMES", "MESBICICLETA", "BICICLETAMES" ->
-                currentDate.plusMonths(1);
+                    currentDateTime.plusMonths(1).withHour(limitTime.getHour()).withMinute(limitTime.getMinute());
             default -> null;
         };
     }

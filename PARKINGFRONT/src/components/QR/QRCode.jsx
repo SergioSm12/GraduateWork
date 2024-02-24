@@ -7,7 +7,6 @@ import {
 } from "react-icons/ri";
 import { useReceipts } from "../../hooks/useReceipts";
 import { useQRCode } from "../../hooks/useQRCode";
-import { id } from "date-fns/esm/locale";
 import { useState } from "react";
 import { useVisitorReceipt } from "../../hooks/useVisitorReceipt";
 
@@ -26,10 +25,8 @@ export const QRCode = () => {
       setLoading(true);
       if (idQRReceiptVisitor) {
         await getQRCodeVisitors(idQRReceiptVisitor);
-        qrCodeImage = null;
       } else {
         await getQRCodeUsers(idQRReceipt);
-        qrCodeImageVisitor=null;
       }
     } finally {
       setLoading(false);

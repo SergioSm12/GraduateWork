@@ -69,7 +69,7 @@ export const DataTableReceiptsUser = ({ dataReceipts }) => {
     handlerReceiptSelectedModalForm,
     handlerChangePaymentStatus,
     handlerRemoveReceipt,
-    handlerOpenModalQRReceipt
+    handlerOpenModalQRReceipt,
   } = useReceipts();
 
   useEffect(() => {
@@ -244,11 +244,11 @@ export const DataTableReceiptsUser = ({ dataReceipts }) => {
                     )}
 
                     {cell.column.id === "issueDate" && (
-                      <div>
+                      <div className="text-center">
                         {formatInTimeZone(
                           row.original.issueDate,
                           "America/Bogota",
-                          "dd 'de' MMMM 'del' yyyy.",
+                          "dd 'de' MMMM 'del' yyyy 'a las' HH:mm",
                           { locale: es }
                         )}
                       </div>
@@ -257,6 +257,7 @@ export const DataTableReceiptsUser = ({ dataReceipts }) => {
                     {cell.column.id === "dueDate" && (
                       <div
                         className={classNames({
+                          "text-center": true,
                           "text-red-500/50":
                             new Date(row.original.dueDate) <= new Date(),
                         })}
@@ -264,7 +265,7 @@ export const DataTableReceiptsUser = ({ dataReceipts }) => {
                         {formatInTimeZone(
                           row.original.dueDate,
                           "America/Bogota",
-                          "dd 'de' MMMM 'del' yyyy.",
+                          "dd 'de' MMMM 'del' yyyy 'a las' HH:mm",
                           { locale: es }
                         )}
                       </div>
