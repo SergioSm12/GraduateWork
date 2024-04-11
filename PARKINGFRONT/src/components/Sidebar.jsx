@@ -7,7 +7,6 @@ import {
   RiGroupLine,
   RiCalendarTodoLine,
   RiLogoutCircleLine,
-  RiArrowRightSLine,
   RiMenu3Line,
   RiCloseLine,
   RiRoadsterFill
@@ -25,7 +24,7 @@ export const Sidebar = () => {
      top-0 bg-secondary-100 p-4 flex flex-col justify-between z-50 ${showMenu ? "left-0": "-left-full"} transition-all `}>
       <div>
         <h1 className="text-center text-2xl font-bold text-white mb-10">
-          Parqueadero<span className="text-primary text-4xl">.</span>
+          Parqueadero USTA<span className="text-primary text-4xl">.</span>
         </h1>
         <ul>
           <li>

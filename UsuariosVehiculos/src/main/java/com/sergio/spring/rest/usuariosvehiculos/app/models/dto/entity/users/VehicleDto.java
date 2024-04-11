@@ -1,9 +1,13 @@
 package com.sergio.spring.rest.usuariosvehiculos.app.models.dto.entity.users;
 
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 public class VehicleDto {
     private Long id;
     private String plate;
+
+    @JsonProperty("user")
     private UserDto userDto;
     private VehicleTypeDto vehicleType;
     private Boolean active;
@@ -11,11 +15,12 @@ public class VehicleDto {
     public VehicleDto() {
     }
 
-    public VehicleDto(Long id, String plate, VehicleTypeDto vehicleType, boolean active) {
+    public VehicleDto(Long id, String plate, UserDto userDto, VehicleTypeDto vehicleType, boolean active) {
         this.id = id;
         this.plate = plate;
         this.vehicleType = vehicleType;
         this.active = active;
+        this.userDto = userDto;
     }
 
     public Long getId() {

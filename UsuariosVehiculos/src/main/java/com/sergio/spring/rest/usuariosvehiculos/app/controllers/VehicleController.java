@@ -40,6 +40,16 @@ public class VehicleController {
     @Autowired
     private IUserService userService;
 
+    @GetMapping("/list")
+    public ResponseEntity<?> listVehicles() {
+        return ResponseEntity.ok(vehicleService.findVehicles());
+    }
+
+    @GetMapping("/count-total")
+    public ResponseEntity<?> getTotalRegisteredReceipts() {
+        return ResponseEntity.ok(vehicleService.getTotalRegisteredReceipt());
+    }
+
     @GetMapping("/{userId}/list")
     public ResponseEntity<?> listVehiclesByUser(@PathVariable Long userId) {
         Optional<UserDto> userDtoOptional = userService.findById(userId);
@@ -98,10 +108,6 @@ public class VehicleController {
     public ResponseEntity<?> updateVehicleByUser(@PathVariable Long userId, @PathVariable Long vehicleId, @Valid @RequestBody Vehicle vehicle, BindingResult result) {
         if (result.hasErrors()) {
             return validation(result);
-        }
-        //Validar si el usuario ya tiene un vehiculo con la misma placa
-        if (vehicleService.existsVehicleWithPlateForUser(userId, vehicle.getPlate())) {
-            return validation("plate", "Ya tiene un vehiculo registrado con la misma placa");
         }
         vehicle.setPlate(vehicle.getPlate().toUpperCase());
         Optional<VehicleDto> updateVehicleOptional = vehicleService.updateVehicle(userId, vehicleId, vehicle);

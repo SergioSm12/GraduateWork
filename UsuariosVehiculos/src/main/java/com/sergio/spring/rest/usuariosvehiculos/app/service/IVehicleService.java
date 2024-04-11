@@ -8,6 +8,10 @@ import com.sergio.spring.rest.usuariosvehiculos.app.models.entities.Vehicle;
 
 public interface IVehicleService {
     // Vehicles
+
+    List<VehicleDto> findVehicles();
+
+    long getTotalRegisteredReceipt();
     List<VehicleDto> findVehiclesByUserId(Long userId);
 
     List<VehicleDto> findActiveVehiclesByUserId(Long userId);

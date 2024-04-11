@@ -41,16 +41,21 @@ export const CreateReceipt = () => {
   //Estado para guardar lso datos del recibo
   const [receiptForm, setReceiptForm] = useState(initialReceiptForm);
   const [selectedRate, setSelectedRate] = useState(null);
+
   //DatePicker fechas
   const [issueDate, setIssueDate] = useState(new Date());
   const [dueDate, setDueDate] = useState(new Date());
   const { id } = useParams();
+
+  //filtrar tarifas
+  const [filteredRates, setFilteredRates] = useState();
 
   //Agrega el recibo si viene seleccionado
   useEffect(() => {
     setReceiptForm({
       ...receiptSelected,
     });
+
     setSelectedRate(receiptSelected.rate);
     setVehicleFormEdit(receiptSelected.vehicle);
     if (receiptSelected.issueDate) {
@@ -90,6 +95,26 @@ export const CreateReceipt = () => {
   const onCloseForm = () => {
     handlerCloseModalFormReceipt();
   };
+
+  useEffect(() => {
+    if (
+      rates.length > 0 &&
+      (vehicleForm.vehicleType.name || vehicleFormEdit.vehicleType.name)
+    ) {
+      //Filtrar tarifas
+      const filteredRates = rates.filter((rate) => {
+        const vehicleTypeName =
+          vehicleForm.vehicleType.name || vehicleFormEdit.vehicleType.name;
+        if (vehicleTypeName === "CARRO") {
+          return rate.time.includes("CARRO");
+        } else if (vehicleTypeName === "MOTO") {
+          return rate.time.includes("MOTO");
+        }
+        return false;
+      });
+      setFilteredRates(filteredRates);
+    }
+  }, [rates, vehicleFormEdit.vehicleType.name]);
 
   //Monitorea el cambio en los inputs y los agreaga al state receiptform
   const onInputChange = ({ target }) => {
@@ -193,11 +218,12 @@ export const CreateReceipt = () => {
             onChange={onInputChange}
           >
             <option defaultValue="">seleccione la tarifa</option>
-            {rates.map((rate) => (
-              <option key={rate.id} value={rate.id}>
-                {rate.time} - {formatCurrency(rate.amount)}
-              </option>
-            ))}
+            {filteredRates &&
+              filteredRates.map((rate) => (
+                <option key={rate.id} value={rate.id}>
+                  {rate.time} - {formatCurrency(rate.amount)}
+                </option>
+              ))}
           </select>
         </div>
         <div className="relative mb-2">

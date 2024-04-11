@@ -95,12 +95,6 @@ export const Login = () => {
         </div>
       </form>
       <div className="flex flex-col items-center gap-4">
-        <Link
-          to="/auth/forget-password"
-          className="hover:text-primary transition-colors"
-        >
-          ¿Olvidaste tu constraseña?
-        </Link>
         <span className="flex items-center gap-2">
           ¿No tienes cuenta ?
           <Link

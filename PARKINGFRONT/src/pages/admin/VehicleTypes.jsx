@@ -4,11 +4,16 @@ import { Link } from "react-router-dom";
 import { useVehicleType } from "../../hooks/useVehicleType";
 import { DataTableVehicleType } from "../../components/VehiclesType/DataTableVehicleType";
 import { CreateVehicleType } from "../../components/VehiclesType/CreateVehicleType";
+import { useVehicle } from "../../hooks/useVehicle";
 
 export const VehicleTypes = () => {
-  const { vehicleTypes, getVehicleTypes,vehicleTypeSelected  } = useVehicleType();
+  const { getTotalRegisteredVehiclesCount, totalRegisteredVehicles } =
+    useVehicle();
+  const { vehicleTypes, getVehicleTypes, vehicleTypeSelected } =
+    useVehicleType();
   useEffect(() => {
     getVehicleTypes();
+    getTotalRegisteredVehiclesCount();
   }, []);
   return (
     <>
@@ -23,9 +28,9 @@ export const VehicleTypes = () => {
           <span>Centro de administración de tipo de vehículos.</span>
         </div>
       </div>
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-4">
         {/*Card create vehicle Type */}
-        <div className="bg-secondary-100 p-8 rounded-lg">
+        <div className="bg-secondary-100 flex justify-center  p-8 rounded-lg">
           <div>
             <CreateVehicleType vehicleTypeSelected={vehicleTypeSelected} />
           </div>
@@ -52,6 +57,14 @@ export const VehicleTypes = () => {
               </div>
             )}
           </div>
+        </div>
+      </div>
+      <div className="bg-secondary-100 rounded-lg p-8">
+        <div className="bg-secondary-900  text-center p-2 rounded-lg">
+          <h3>
+            Total de vehiculos registrados:{" "}
+            <span className="text-primary font-bold">{totalRegisteredVehicles}</span>
+          </h3>
         </div>
       </div>
     </>

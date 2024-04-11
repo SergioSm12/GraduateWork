@@ -27,6 +27,7 @@ export const ListVehicles = () => {
     getVehiclesInactive(userId);
     getVehicles(userId);
   }, []);
+
   return (
     <>
       {!visibleFormReceiptModal || <ModalFormReceipt />}

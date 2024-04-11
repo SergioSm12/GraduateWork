@@ -33,7 +33,7 @@ export const CreateVehicleType = ({ vehicleTypeSelected }) => {
     setFormVehicleType(vehicleTypeForm);
   };
   return (
-    <div className="bg-secondary-900 p-8 rounded-xl shadow-2xl w-auto lg:w-[450px]">
+    <div className="bg-secondary-900  p-8 rounded-xl shadow-2xl w-auto lg:w-[420px]">
       <div className="flex items-start justify-between">
         <h1 className=" text-2xl uppercase font-bold tracking-[5px] text-white mb-8">
           {formVehicleType.id > 0 ? "Editar" : "Crear"}{" "}

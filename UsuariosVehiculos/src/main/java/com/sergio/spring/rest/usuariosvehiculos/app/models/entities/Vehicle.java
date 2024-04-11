@@ -34,7 +34,7 @@ public class Vehicle {
     private VehicleType vehicleType;
 
     @Column(name = "active")
-    private Boolean active;
+    private boolean active;
 
     public Long getId() {
         return id;
@@ -68,7 +68,7 @@ public class Vehicle {
         this.vehicleType = vehicleType;
     }
 
-    public Boolean isActive() {
+    public boolean isActive() {
         return active;
     }
 

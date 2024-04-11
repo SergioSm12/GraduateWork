@@ -1,11 +1,13 @@
 import { useDispatch, useSelector } from "react-redux";
 import {
   activateVehicle,
+  findAllVehicles,
   findAllVehiclesActiveByUser,
   findAllVehiclesByUser,
   findInactiveVehiclesByUser,
   removeVehicle,
   saveVehicle,
+  totalRegisteredVehiclesCount,
   updateVehicle,
 } from "../services/vehicleService";
 import {
@@ -19,6 +21,8 @@ import {
   updateVehicleSlice,
   loadingVehiclesActive,
   loadingVehiclesInactive,
+  loadingRegisteredVehicles,
+  loadingVehiclesAll,
 } from "../store/slices/vehicle/vehicleSlice";
 import Swal from "sweetalert2";
 import { useNavigate } from "react-router-dom";
@@ -32,7 +36,9 @@ export const useVehicle = () => {
     vehiclesInactive,
     vehicleSelected,
     errorsVehicle,
+    totalRegisteredVehicles,
     visibleFormVehicle,
+    vehiclesAll,
   } = useSelector((state) => state.vehicles);
   const { vehicleTypes } = useSelector((state) => state.vehicleType);
   const dispatch = useDispatch();
@@ -50,6 +56,19 @@ export const useVehicle = () => {
     },
   });
 
+  const getTotalRegisteredVehiclesCount = async () => {
+    try {
+      const total = await totalRegisteredVehiclesCount();
+      dispatch(loadingRegisteredVehicles(total.data));
+    } catch (error) {
+      if (error.response?.status == 401) {
+        handlerLogout();
+      } else {
+        throw error;
+      }
+    }
+  };
+
   const getVehicles = async (id) => {
     try {
       const result = await findAllVehiclesByUser(id);
@@ -63,6 +82,15 @@ export const useVehicle = () => {
     try {
       const result = await findAllVehiclesActiveByUser(id);
       dispatch(loadingVehiclesActive(result.data));
+    } catch (error) {
+      throw error;
+    }
+  };
+
+  const getVehiclesAll = async () => {
+    try {
+      const result = await findAllVehicles();
+      dispatch(loadingVehiclesAll(result.data));
     } catch (error) {
       throw error;
     }
@@ -196,6 +224,7 @@ export const useVehicle = () => {
   };
 
   return {
+    vehiclesAll,
     vehicles,
     vehiclesActive,
     vehiclesInactive,
@@ -207,6 +236,8 @@ export const useVehicle = () => {
     handlerActivateVehicle,
     handlerInitialErrorsVehicle,
     getVehicles,
+    getVehiclesAll,
+    getTotalRegisteredVehiclesCount,
     getVehiclesActive,
     getVehiclesInactive,
     getVehicleTypes,
@@ -215,5 +246,6 @@ export const useVehicle = () => {
     handlerCloseFormVehicle,
     initialVehicleForm,
     vehicleTypes,
+    totalRegisteredVehicles,
   };
 };

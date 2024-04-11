@@ -48,7 +48,9 @@ public class DtoMapperReceipt {
                                     vehicle.getVehicleType().getName()
                             );
 
-                            return  new VehicleDto(vehicle.getId(), vehicle.getPlate(), vehicleTypeDto, vehicle.isActive());
+
+
+                            return  new VehicleDto(vehicle.getId(), vehicle.getPlate(),null, vehicleTypeDto, vehicle.isActive());
                         }
                 ).toList();
 

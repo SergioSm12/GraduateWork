@@ -22,6 +22,8 @@ export const vehicleSlice = createSlice({
   name: "vehicles",
   initialState: {
     vehicles: [],
+    vehiclesAll: [],
+    totalRegisteredVehicles: 0,
     vehiclesActive: [],
     vehiclesInactive: [],
     vehicleSelected: initialVehicleForm,
@@ -61,6 +63,12 @@ export const vehicleSlice = createSlice({
     loadingVehiclesInactive: (state, action) => {
       state.vehiclesInactive = action.payload;
     },
+    loadingVehiclesAll: (state, action) => {
+      state.vehiclesAll = action.payload;
+    },
+    loadingRegisteredVehicles: (state, action) => {
+      state.totalRegisteredVehicles = action.payload;
+    },
     onVehicleSelectedForm: (state, action) => {
       state.vehicleSelected = action.payload;
       state.visibleFormVehicle = true;
@@ -82,8 +90,10 @@ export const {
   addVehicle,
   updateVehicleSlice,
   loadingVehicles,
+  loadingVehiclesAll,
   loadingVehiclesActive,
   loadingVehiclesInactive,
+  loadingRegisteredVehicles,
   onVehicleSelectedForm,
   onOpenFormVehicle,
   onCloseFormVehicle,

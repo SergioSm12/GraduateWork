@@ -2,9 +2,27 @@ import parkingApi from "../apis/parkingApi";
 
 const BASE_URL_VEHICLES = "/vehicle";
 
+export const totalRegisteredVehiclesCount = async () => {
+  try {
+    const response = await parkingApi.get(`${BASE_URL_VEHICLES}/count-total`);
+    return response;
+  } catch (error) {
+    throw error;
+  }
+};
+
 export const findAllVehiclesByUser = async (id) => {
   try {
     const response = await parkingApi.get(`${BASE_URL_VEHICLES}/${id}/list`);
+    return response;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const findAllVehicles = async () => {
+  try {
+    const response = await parkingApi.get(`${BASE_URL_VEHICLES}/list`);
     return response;
   } catch (error) {
     throw error;
@@ -32,7 +50,6 @@ export const findInactiveVehiclesByUser = async (id) => {
     throw error;
   }
 };
-
 
 export const saveVehicle = async (userId, { plate, vehicleType }) => {
   try {

@@ -27,6 +27,22 @@ public class VehicleService implements IVehicleService {
     @Autowired
     private IVehicleRepository vehicleRepository;
 
+    //Listar vehiculos
+    @Override
+    @Transactional(readOnly = true)
+    public List<VehicleDto> findVehicles() {
+        List<Vehicle> vehicles = (List<Vehicle>) vehicleRepository.findAll();
+        return vehicles.stream().map(v ->  DtoMapperVehicleDto.builder().setVehicle(v).build()).collect(Collectors.toList());
+
+    }
+
+    //Contar vehiculos registrados
+    @Override
+    @Transactional(readOnly = true)
+    public long getTotalRegisteredReceipt() {
+        return vehicleRepository.count();
+    }
+
     //Listar vehiculos por usuario
     @Override
     @Transactional(readOnly = true)
