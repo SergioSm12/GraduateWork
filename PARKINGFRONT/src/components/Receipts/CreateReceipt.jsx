@@ -164,8 +164,11 @@ export const CreateReceipt = () => {
       issueDate: issueDate,
       dueDate: dueDate,
     };
-
-    handlerAddReceiptByUser(id, updatedReceiptForm);
+    if (id == undefined) {
+      handlerAddReceiptByUser(vehicleForm.user.id, updatedReceiptForm,"/");
+    } else {
+      handlerAddReceiptByUser(id, updatedReceiptForm);
+    }
   };
 
   return (

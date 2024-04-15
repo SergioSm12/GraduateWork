@@ -33,6 +33,7 @@ import {
 } from "../store/slices/receipt/receiptSlice";
 import Swal from "sweetalert2";
 import { useAuth } from "../auth/hooks/useAuth";
+import { Navigate, useNavigate } from "react-router-dom";
 
 export const useReceipts = () => {
   const {
@@ -47,9 +48,10 @@ export const useReceipts = () => {
     receiptSelected,
     vehicleSelected,
     errorsReceipt,
-    idQRReceipt
+    idQRReceipt,
   } = useSelector((state) => state.receipts);
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const { login, handlerLogout } = useAuth();
 
   //Alertas
@@ -131,12 +133,15 @@ export const useReceipts = () => {
   };
 
   //crear Receipt by user
-  const handlerAddReceiptByUser = async (userId, receipt) => {
+  const handlerAddReceiptByUser = async (userId, receipt, redirectTo) => {
     let response;
     try {
       if (receipt.id === 0) {
         response = await createReceiptByUser(userId, receipt);
         dispatch(addReceipt(response.data));
+        if (redirectTo) {
+          navigate(redirectTo);
+        }
       } else {
         //actualizar receipt
         response = await updateReceipt(receipt.id, receipt);

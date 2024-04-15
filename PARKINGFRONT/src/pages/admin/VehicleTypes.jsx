@@ -5,16 +5,24 @@ import { useVehicleType } from "../../hooks/useVehicleType";
 import { DataTableVehicleType } from "../../components/VehiclesType/DataTableVehicleType";
 import { CreateVehicleType } from "../../components/VehiclesType/CreateVehicleType";
 import { useVehicle } from "../../hooks/useVehicle";
+import { AllVehicles } from "../../components/Vehicles/AllVehiclesList";
 
 export const VehicleTypes = () => {
-  const { getTotalRegisteredVehiclesCount, totalRegisteredVehicles } =
-    useVehicle();
+  const {
+    getTotalRegisteredVehiclesCount,
+    totalRegisteredVehicles,
+    getVehiclesAll,
+    vehiclesAll,
+  } = useVehicle();
+
   const { vehicleTypes, getVehicleTypes, vehicleTypeSelected } =
     useVehicleType();
   useEffect(() => {
+    getVehiclesAll();
     getVehicleTypes();
     getTotalRegisteredVehiclesCount();
   }, []);
+
   return (
     <>
       {/*Title */}
@@ -60,11 +68,16 @@ export const VehicleTypes = () => {
         </div>
       </div>
       <div className="bg-secondary-100 rounded-lg p-8">
-        <div className="bg-secondary-900  text-center p-2 rounded-lg">
+        <div className="bg-secondary-900  text-center p-2 rounded-lg mb-3">
           <h3>
             Total de vehiculos registrados:{" "}
-            <span className="text-primary font-bold">{totalRegisteredVehicles}</span>
+            <span className="text-primary font-bold">
+              {totalRegisteredVehicles}
+            </span>
           </h3>
+        </div>
+        <div>
+          <AllVehicles dataVehicles={vehiclesAll} />
         </div>
       </div>
     </>

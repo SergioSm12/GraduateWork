@@ -9,6 +9,7 @@ export const vehicle = {
   id: 0,
   plate: "",
   vehicleType: vehicleType,
+  user:null
 };
 
 export const role = {
