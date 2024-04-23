@@ -99,6 +99,7 @@ public class SpringSecurityConfig {
                         //QRCode
                         .requestMatchers(HttpMethod.GET, "/qrcode/{id}").permitAll()
                         .requestMatchers(HttpMethod.GET, "/qrcode/visitor/{id}").permitAll()
+                        .requestMatchers(HttpMethod.GET,"/qrcode/nightly-receipt/{id}").permitAll()
 
 
                         // visitor
@@ -110,6 +111,11 @@ public class SpringSecurityConfig {
                         .requestMatchers(HttpMethod.PUT, "visitor-receipt/{id}").permitAll()
                         .requestMatchers(HttpMethod.PUT, "visitor-receipt/change-payment/{visitorReceiptId}").permitAll()
                         .requestMatchers(HttpMethod.DELETE, "visitor-receipt/{visitorReceiptId}").permitAll()
+
+                        //Nightly Receipt
+                        .requestMatchers(HttpMethod.GET, "nightly-receipt").permitAll()
+                        .requestMatchers(HttpMethod.GET, "nightly-receipt/user/{userId}").permitAll()
+                        .requestMatchers(HttpMethod.POST, "nightly-receipt/{userId}/create").permitAll()
 
                         .anyRequest().authenticated())
                 .addFilter(new JwtAuthenticationFilter(authenticationConfiguration.getAuthenticationManager()))

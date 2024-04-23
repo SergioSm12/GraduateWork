@@ -5,6 +5,7 @@ export const findAllVisitorReceipts = async () => {
   try {
     const response = await parkingApi.get(BASE_URL_VISITOR_RECEIPT);
     return response;
+  
   } catch (error) {
     throw error;
   }

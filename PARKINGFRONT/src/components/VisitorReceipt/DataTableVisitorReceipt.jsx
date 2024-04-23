@@ -8,7 +8,7 @@ import {
 } from "@tanstack/react-table";
 import { rankItem } from "@tanstack/match-sorter-utils";
 import classNames from "classnames";
-import  { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import {
   RiDeleteBin7Line,
   RiEdit2Line,
@@ -69,7 +69,7 @@ export const DataTableVisitorReceipt = ({ dataReceipts }) => {
     handlerOpenModalQRVisitorReceipt,
 
     handlerVisitorReceiptSelectedModalForm,
-    handlerRemoveVisitorReceipt
+    handlerRemoveVisitorReceipt,
   } = useVisitorReceipt();
 
   useEffect(() => {
@@ -155,7 +155,6 @@ export const DataTableVisitorReceipt = ({ dataReceipts }) => {
 
   return (
     <>
-
       {/*input*/}
       <div className="mb-5">
         <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-y-4 ">
@@ -259,10 +258,11 @@ export const DataTableVisitorReceipt = ({ dataReceipts }) => {
 
                     {cell.column.id === "issueDate" && (
                       <div className="text-center">
+                      
                         {formatInTimeZone(
                           row.original.issueDate,
                           "America/Bogota",
-                          "dd 'de' MMMM 'del' yyyy.",
+                          "dd 'de' MMMM 'del' yyyy 'a las' HH:mm",
                           { locale: es }
                         )}
                       </div>
@@ -280,7 +280,7 @@ export const DataTableVisitorReceipt = ({ dataReceipts }) => {
                         {formatInTimeZone(
                           row.original.dueDate,
                           "America/Bogota",
-                          "dd 'de' MMMM 'del' yyyy.",
+                          "dd 'de' MMMM 'del' yyyy 'a las' HH:mm",
                           { locale: es }
                         )}
                       </div>
@@ -291,12 +291,13 @@ export const DataTableVisitorReceipt = ({ dataReceipts }) => {
                         <button
                           type="button"
                           className="py-2 px-2 bg-primary/80 text-black hover:bg-secondary-100 rounded-lg transition-colors"
-                          onClick={() => handlerOpenModalQRVisitorReceipt(row.original.id)}
+                          onClick={() =>
+                            handlerOpenModalQRVisitorReceipt(row.original.id)
+                          }
                         >
                           <RiQrCodeLine className="text-lg" />
                         </button>
-                        
-                        
+
                         <button
                           type="button"
                           className="py-2 px-2 bg-primary/80 text-black hover:bg-secondary-100 rounded-lg transition-colors"
@@ -314,7 +315,9 @@ export const DataTableVisitorReceipt = ({ dataReceipts }) => {
                           className="py-2 px-2 bg-primary/80 text-black hover:bg-primary rounded-lg transition-colors"
                           onClick={() => {
                             // Pasa los datos del usuario al hacer clic en el botón de edición
-                            handlerVisitorReceiptSelectedModalForm(row.original);
+                            handlerVisitorReceiptSelectedModalForm(
+                              row.original
+                            );
                           }}
                         >
                           <RiEdit2Line className="text-lg" />

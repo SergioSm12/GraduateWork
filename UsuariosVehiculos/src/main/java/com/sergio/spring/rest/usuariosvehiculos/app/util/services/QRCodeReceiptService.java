@@ -3,6 +3,7 @@ package com.sergio.spring.rest.usuariosvehiculos.app.util.services;
 import java.awt.image.BufferedImage;
 import java.time.format.DateTimeFormatter;
 
+import com.sergio.spring.rest.usuariosvehiculos.app.models.entities.NightlyReceipt;
 import org.springframework.stereotype.Service;
 
 import com.google.zxing.BarcodeFormat;
@@ -80,6 +81,42 @@ public class QRCodeReceiptService implements IQRCodeReceiptService {
                 receipt.getDueDate().format(dateTimeFormatter),
                 receipt.getRate().getAmount(),
                 "Visitante"
+
+        );
+        BitMatrix bitMatrix = qrCodeWriter.encode(formattedText,
+                BarcodeFormat.QR_CODE, 350, 350);
+        MatrixToImageConfig config = new MatrixToImageConfig(0xFFFFFFFF, // yellow foreground
+                0xFF0F172A // blue dark  background
+        );
+
+        return MatrixToImageWriter.toBufferedImage(bitMatrix, config);
+    }
+
+    @Override
+    public BufferedImage generateQRCodeNightlyReceipt(NightlyReceipt nightlyReceipt) throws WriterException {
+
+
+        QRCodeWriter qrCodeWriter = new QRCodeWriter();
+
+        //format date
+        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("dd 'de' MMMM 'del' yyyy 'a las' HH:mm");
+        String formattedText = String.format(
+                "Número de Factura: %s\n" +
+                        "Estado de Pago: %s\n" +
+                        "Placa: %s\n" +
+                        "vehiculo: %s\n" +
+                        "Fecha de Emisión: %s\n" +
+                        "Fecha de Vencimiento: %s\n" +
+                        "valor: %s\n" +
+                        "Usuario: %s",
+                nightlyReceipt.getId(),
+                nightlyReceipt.isPaymentStatus() ? "Pagada" : "Pendiente",
+                nightlyReceipt.getVehicle().getPlate(),
+                nightlyReceipt.getVehicle().getVehicleType().getName(),
+                nightlyReceipt.getInitialTime().format(dateTimeFormatter),
+                nightlyReceipt.getDepartureTime().format(dateTimeFormatter),
+                nightlyReceipt.getAmount(),
+                nightlyReceipt.getUser().getName()
 
         );
         BitMatrix bitMatrix = qrCodeWriter.encode(formattedText,

@@ -7,6 +7,8 @@ import java.util.Optional;
 
 import javax.imageio.ImageIO;
 
+import com.sergio.spring.rest.usuariosvehiculos.app.models.entities.NightlyReceipt;
+import com.sergio.spring.rest.usuariosvehiculos.app.service.INightlyReceiptService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -32,6 +34,9 @@ public class QRCodeController {
 
     @Autowired
     private IReceiptService receiptService;
+
+    @Autowired
+    private INightlyReceiptService nightlyReceiptService;
 
     @Autowired
     IVisitorReceiptService visitorReceiptService;
@@ -78,6 +83,36 @@ public class QRCodeController {
         VisitorReceipt receipt = receiptO.get();
 
         BufferedImage image = qrCodeReceiptService.generateQRCodeReceiptVisitor(receipt);
+
+        //convert image to bytes
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        ImageIO.write(image, "png", baos);
+        byte[] imageData = baos.toByteArray();
+
+        //headers response
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.IMAGE_PNG);
+        headers.setContentLength(imageData.length);
+        //si se desea que apenas se realice la petision se descarge.
+        //headers.setContentDispositionFormData("attachment", "qrcode.png");
+
+        return new ResponseEntity<>(imageData, headers, HttpStatus.OK);
+
+
+    }
+
+    @GetMapping("/nightly-receipt/{id}")
+    public ResponseEntity<byte[]> generateQRCodeNightlyReceipt(@PathVariable Long id) throws WriterException, IOException {
+
+
+        Optional<NightlyReceipt> receiptO = nightlyReceiptService.findByIdReceiptWithDetails(id);
+        if (receiptO.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+
+        NightlyReceipt nightlyReceipt = receiptO.get();
+
+        BufferedImage image = qrCodeReceiptService.generateQRCodeNightlyReceipt(nightlyReceipt);
 
         //convert image to bytes
         ByteArrayOutputStream baos = new ByteArrayOutputStream();

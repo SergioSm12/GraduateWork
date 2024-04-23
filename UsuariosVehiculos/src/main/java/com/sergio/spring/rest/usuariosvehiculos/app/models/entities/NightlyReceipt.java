@@ -15,19 +15,32 @@ public class NightlyReceipt {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long Id;
 
-    @NotBlank(message = "El campo placa no puede estar vacio")
-    @Size(min = 5, max = 6, message = "La placa debe tener entre 5 y 6 caracteres")
-    @Pattern(regexp = "^[A-Za-z]{1,3}\\d{1,3}[A-Za-z]?\\d?$", message = "El formato de la placa no es válido")
-    private String plate;
+    @ManyToOne
+    @JoinColumn(name = "usuario_id")
+    private User user;
+
+    @NotNull(message = "No hay un vehiculo seleccionado")
+    @ManyToOne
+    @JoinColumn(name = "vehicle_id")
+    private Vehicle vehicle;
 
     @NotNull(message = "Debe seleccionar una tarifa")
     @ManyToOne
     @JoinColumn(name = "rate_id")
-    private  Rate rate;
+    private Rate rate;
 
     private LocalDateTime initialTime;
     private LocalDateTime departureTime;
     private boolean paymentStatus;
+    private double amount;
+
+    public double getAmount() {
+        return amount;
+    }
+
+    public void setAmount(double amount) {
+        this.amount = amount;
+    }
 
     public Long getId() {
         return Id;
@@ -35,14 +48,6 @@ public class NightlyReceipt {
 
     public void setId(Long id) {
         Id = id;
-    }
-
-    public String getPlate() {
-        return plate;
-    }
-
-    public void setPlate(String plate) {
-        this.plate = plate;
     }
 
     public Rate getRate() {
@@ -75,5 +80,21 @@ public class NightlyReceipt {
 
     public void setPaymentStatus(boolean paymentStatus) {
         this.paymentStatus = paymentStatus;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    public Vehicle getVehicle() {
+        return vehicle;
+    }
+
+    public void setVehicle(Vehicle vehicle) {
+        this.vehicle = vehicle;
     }
 }

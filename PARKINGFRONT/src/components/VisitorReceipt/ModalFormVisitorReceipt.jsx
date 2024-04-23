@@ -10,7 +10,7 @@ import {
 } from "react-icons/ri";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-import { formatInTimeZone } from "date-fns-tz";
+import { formatInTimeZone, utcToZonedTime, format } from "date-fns-tz";
 import { parse } from "date-fns";
 import { es } from "date-fns/locale";
 
@@ -43,13 +43,13 @@ export const ModalFormVisitorReceipt = () => {
       const formattedIssueDate = formatInTimeZone(
         visitorReceiptSelected.issueDate,
         "America/Bogota",
-        "yyyy-MM-dd"
+        "yyyy-MM-dd HH:mm"
       );
 
       //parsear fecha formateada a timezone
       const parsedIssueDate = parse(
         formattedIssueDate,
-        "yyyy-MM-dd",
+        "yyyy-MM-dd HH:mm",
         new Date()
       );
       setIssueDate(parsedIssueDate);
@@ -59,10 +59,12 @@ export const ModalFormVisitorReceipt = () => {
       const formattedDueDate = formatInTimeZone(
         visitorReceiptSelected.dueDate,
         "America/Bogota",
-        "yyyy-MM-dd"
+        "yyyy-MM-dd HH:mm"
       );
+
+     
       //Parsear fecha formatead timeZone
-      const parsedDueDate = parse(formattedDueDate, "yyyy-MM-dd", new Date());
+      const parsedDueDate = parse(formattedDueDate, "yyyy-MM-dd HH:mm", new Date());
       setDueDate(parsedDueDate);
     }
   }, [visitorReceiptSelected]);
@@ -134,6 +136,8 @@ export const ModalFormVisitorReceipt = () => {
   //Envia la data cuando se encia el formulario
   const onSubmit = (e) => {
     e.preventDefault();
+    setIssueDate(issueDate.setHours(issueDate.getHours() - 5))
+    setDueDate(dueDate.setHours(dueDate.getHours()-5));
     const updatedVisitorReceiptForm = {
       ...visitorReceiptForm,
       issueDate: issueDate,
@@ -222,8 +226,9 @@ export const ModalFormVisitorReceipt = () => {
                       onChange={handleIssueDateChange}
                       locale={es}
                       className="py-3 pl-8 pr-4 text-center bg-secondary-900 w-full outline-none rounded-lg focus:border focus:border-primary appearance-none"
-                      timeInputLabel="Time:"
-                      dateFormat={"dd 'de' MMMM yyyy"}
+                      timeInputLabel="Hora:"
+                      dateFormat={"dd 'de' MMMM yyyy h:mm: aa"}
+                      showTimeInput
                       icon={<RiCalendarCheckLine className="text-primary" />}
                     />
                   </div>
@@ -238,8 +243,9 @@ export const ModalFormVisitorReceipt = () => {
                       onChange={handleDueDateChange}
                       locale={es}
                       className="py-3 pl-8 pr-4 text-center bg-secondary-900 w-full outline-none rounded-lg focus:border focus:border-primary appearance-none"
-                      timeInputLabel="Time:"
-                      dateFormat={"dd 'de' MMMM yyyy"}
+                      timeInputLabel="Hora :"
+                      dateFormat={"dd 'de' MMMM yyyy h:mm: aa"}
+                      showTimeInput
                       icon={<RiCalendarCloseLine className="text-primary" />}
                     />
                   </div>

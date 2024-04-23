@@ -85,6 +85,7 @@ export const useVisitorReceipt = () => {
         await getCountTotalVisitor();
       } else {
         //actualizar
+        
         response = await updateVisitorReceipt(visitorReceipt);
         dispatch(updateVisitorReceiptSlice(response.data));
       }
@@ -223,6 +224,7 @@ export const useVisitorReceipt = () => {
 
   //edit
   const handlerVisitorReceiptSelectedModalForm = (visitorReceipt) => {
+   
     dispatch(onOpenModalFormVisitorReceipt({ ...visitorReceipt }));
   };
 

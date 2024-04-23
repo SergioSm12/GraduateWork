@@ -1,6 +1,7 @@
 package com.sergio.spring.rest.usuariosvehiculos.app.service;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -59,10 +60,9 @@ public class VisitorReceiptService implements IVisitorReceiptService {
         visitorReceipt.setPlate(plateUpper);
 
         visitorReceipt.setRate(rateOptional.get());
+        visitorReceipt.setIssueDate(LocalDateTime.now());
 
-        visitorReceipt.setIssueDate(LocalDate.now());
-
-        LocalDate dueDate = LocalDate.now().plusDays(1);
+        LocalDateTime dueDate = LocalDateTime.now().withHour(22).withMinute(0).withSecond(0).withNano(0);
         visitorReceipt.setDueDate(dueDate);
 
         visitorReceipt.setPaymentStatus(false);
@@ -71,6 +71,7 @@ public class VisitorReceiptService implements IVisitorReceiptService {
         return DtoMapperVisitorReceipt.builder().setVisitorReceipt(savedVisitorReceipt).build();
 
     }
+
 
     @Override
     @Transactional
@@ -81,20 +82,10 @@ public class VisitorReceiptService implements IVisitorReceiptService {
             VisitorReceipt visitorReceiptDb = vr.orElseThrow();
             String plateUpper = visitorReceipt.getPlate().toUpperCase();
             visitorReceiptDb.setPlate(plateUpper);
-
-            if (visitorReceipt.getIssueDate() == null) {
-                LocalDate updateIssueDate = LocalDate.now();
-                visitorReceiptDb.setIssueDate(updateIssueDate);
-            } else {
-                visitorReceiptDb.setIssueDate(visitorReceipt.getIssueDate());
-            }
-
-            if (visitorReceipt.getDueDate() == null) {
-                LocalDate updatdeDueDate = LocalDate.now().plusDays(1);
-                visitorReceiptDb.setDueDate(updatdeDueDate);
-            } else {
-                visitorReceiptDb.setDueDate(visitorReceipt.getDueDate());
-            }
+            System.out.println(visitorReceipt.getIssueDate());
+            visitorReceiptDb.setIssueDate(visitorReceipt.getIssueDate());
+            System.out.println(visitorReceipt.getDueDate());
+            visitorReceiptDb.setDueDate(visitorReceipt.getDueDate());
             visitorReceiptDb.setPaymentStatus(visitorReceipt.isPaymentStatus());
             visitorReceiptDb.setRate(visitorReceipt.getRate());
             visitorReceiptOptional = visitorReceiptRepository.save(visitorReceiptDb);
