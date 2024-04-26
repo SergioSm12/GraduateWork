@@ -47,6 +47,25 @@ public class NightlyReceiptService implements INightlyReceiptService {
         return nightlyReceiptRepository.findById(nightlyReceiptId).map(nr -> DtoMapperNightlyReceipt.builder().setNightlyReceipt(nr).build());
     }
 
+    @Override
+    @Transactional(readOnly = true)
+    public long getTotalUnpaidNightlyReceipts() {
+        return nightlyReceiptRepository.countByPaymentStatusFalse();
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public long getTotalPaidNightlyReceipts() {
+        return nightlyReceiptRepository.countByPaymentStatusTrue();
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public long getTotalNightlyReceipts() {
+        return nightlyReceiptRepository.count();
+    }
+
+
     // Obtener recibos por usuario
     @Override
     @Transactional(readOnly = true)
@@ -119,7 +138,22 @@ public class NightlyReceiptService implements INightlyReceiptService {
     }
 
 
+    @Override
+    @Transactional
+    public void changePaymentStatus(Long receiptId) {
+        Optional<NightlyReceipt> nightlyReceiptOptional = nightlyReceiptRepository.findById(receiptId);
+        if (nightlyReceiptOptional.isPresent()) {
+            NightlyReceipt nightlyReceipt = nightlyReceiptOptional.get();
+            nightlyReceipt.setPaymentStatus(!nightlyReceipt.isPaymentStatus());
+            nightlyReceiptRepository.save(nightlyReceipt);
+        }
+    }
 
+    @Override
+    @Transactional
+    public void remove(Long nightlyReceiptId) {
+        nightlyReceiptRepository.deleteById(nightlyReceiptId);
+    }
 
     public double calculateAmount(LocalDateTime initialTime, LocalDateTime departureTime, String rateTime, double rateAmount) {
         //calcular las horas

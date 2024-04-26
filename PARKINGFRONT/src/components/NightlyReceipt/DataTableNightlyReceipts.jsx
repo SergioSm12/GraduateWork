@@ -1,3 +1,6 @@
+import { rankItem } from "@tanstack/match-sorter-utils";
+import React, { useEffect, useState } from "react";
+import { useNightlyReceipts } from "../../hooks/useNightlyReceipts";
 import {
   flexRender,
   getCoreRowModel,
@@ -6,9 +9,6 @@ import {
   getFilteredRowModel,
   getSortedRowModel,
 } from "@tanstack/react-table";
-import { rankItem } from "@tanstack/match-sorter-utils";
-import classNames from "classnames";
-import React, { useEffect, useState } from "react";
 import {
   RiDeleteBin7Line,
   RiEdit2Line,
@@ -20,14 +20,11 @@ import {
   RiSortDesc,
 } from "react-icons/ri";
 import { formatInTimeZone } from "date-fns-tz";
-import { Paginator } from "../Paginator";
-import { useReceipts } from "../../hooks/useReceipts";
-import { ModalReceipt } from "../Receipts/ModalReceipt";
 import { es } from "date-fns/locale";
-import { ModalFormReceipt } from "./ModalFormReceipt";
+import { Paginator } from "../Paginator";
+import classNames from "classnames";
 import { QRCode } from "../QR/QRCode";
-
-//Componente con TanStackReacttable
+import { ModalReceipt } from "../Receipts/ModalReceipt";
 
 const fuzzyFilter = (row, columnId, value, addMeta) => {
   const itemRank = rankItem(row.original.vehicle.plate, value);
@@ -36,7 +33,6 @@ const fuzzyFilter = (row, columnId, value, addMeta) => {
 
   return itemRank.passed;
 };
-
 const DebuncedInput = ({ value: keyWord, onchange, ...props }) => {
   const [value, setValue] = useState(keyWord);
 
@@ -57,20 +53,18 @@ const DebuncedInput = ({ value: keyWord, onchange, ...props }) => {
   );
 };
 
-export const DataTableReceipt = ({ dataReceipts }) => {
+export const DataTableNightlyReceipts = ({ dataReceipts }) => {
   const [data, setData] = useState(dataReceipts);
   const [globalFilter, setGlobalFilter] = useState("");
   const [sorting, setSorting] = useState([]);
   const {
-    handlerReceiptSelectedModalShow,
-    visibleShowReceiptModal,
-    visibleFormReceiptModal,
-    visibleQRModalReceipt,
-    handlerOpenModalQRReceipt,
-    handlerReceiptSelectedModalForm,
     handlerChangePaymentStatus,
-    handlerRemoveReceipt,
-  } = useReceipts();
+    visibleQRModalNightlyReceipt,
+    handlerOpenModalQRNightlyReceipt,
+    handlerNightlyReceiptSelectedModalShow,
+    visibleShowNightlyReceiptModal,
+    handlerRemoveNightlyReceipt,
+  } = useNightlyReceipts();
 
   useEffect(() => {
     setData(dataReceipts);
@@ -92,11 +86,11 @@ export const DataTableReceipt = ({ dataReceipts }) => {
       enableSorting: false,
     },
     {
-      accessorKey: "issueDate",
+      accessorKey: "initialTime",
       header: () => <span>Fecha de emision</span>,
     },
     {
-      accessorKey: "dueDate",
+      accessorKey: "departureTime",
       header: () => <span>Fecha de vencimiento</span>,
     },
 
@@ -152,11 +146,8 @@ export const DataTableReceipt = ({ dataReceipts }) => {
       currency: "COP",
     }).format(amount);
   };
-
   return (
     <>
-      {/*Modal para generar recibo */}
-      {!visibleFormReceiptModal || <ModalFormReceipt />}
       {/*input*/}
       <div className="mb-5">
         <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-y-4 ">
@@ -172,7 +163,6 @@ export const DataTableReceipt = ({ dataReceipts }) => {
             value={globalFilter ?? ""}
             onchange={(value) => {
               setGlobalFilter(String(value));
-              //getUsers();
             }}
             className="bg-secondary-900 outline-none py-2 pr-4 pl-10 rounded-lg
                 placeholder:text-gray-500 w-full"
@@ -180,10 +170,10 @@ export const DataTableReceipt = ({ dataReceipts }) => {
           />
         </div>
       </div>
-      {/*Modal showreceipt */}
-      {!visibleShowReceiptModal || <ModalReceipt receiptType={"normal"}/>}
+      {/*Modal info */}
+      {!visibleShowNightlyReceiptModal || <ModalReceipt />}
       {/*Modal QR */}
-      {!visibleQRModalReceipt || <QRCode />}
+      {!visibleQRModalNightlyReceipt || <QRCode />}
       {/*Table */}
       <div className="overflow-x-auto">
         <table className="table-auto min-w-full border-collapse">
@@ -255,15 +245,15 @@ export const DataTableReceipt = ({ dataReceipts }) => {
 
                     {cell.column.id === "amount" && (
                       <div className="justify-center text-center">
-                        {formatCurrency(row.original.rate.amount)}
+                        {formatCurrency(row.original.amount)}
                       </div>
                     )}
 
-                    {cell.column.id === "issueDate" && (
+                    {cell.column.id === "initialTime" && (
                       <div className="text-center">
-                        {row.original.issueDate
+                        {row.original.initialTime
                           ? formatInTimeZone(
-                              row.original.issueDate,
+                              row.original.initialTime,
                               "America/Bogota",
                               "dd 'de' MMMM 'del' yyyy 'a las' HH:mm",
                               { locale: es }
@@ -272,18 +262,18 @@ export const DataTableReceipt = ({ dataReceipts }) => {
                       </div>
                     )}
 
-                    {cell.column.id === "dueDate" && (
+                    {cell.column.id === "departureTime" && (
                       <div
                         className={classNames({
                           "text-red-500/50 text-center":
-                            new Date(row.original.dueDate) <= new Date(),
+                            new Date(row.original.departureTime) <= new Date(),
                           "text-center":
-                            new Date(row.original.dueDate) > new Date(),
+                            new Date(row.original.departureTime) > new Date(),
                         })}
                       >
-                        {row.original.dueDate
+                        {row.original.departureTime
                           ? formatInTimeZone(
-                              row.original.dueDate,
+                              row.original.departureTime,
                               "America/Bogota",
                               "dd 'de' MMMM 'del' yyyy 'a las' HH:mm",
                               { locale: es }
@@ -298,7 +288,7 @@ export const DataTableReceipt = ({ dataReceipts }) => {
                           type="button"
                           className="py-2 px-2 bg-primary/80 text-black hover:bg-secondary-100 rounded-lg transition-colors"
                           onClick={() =>
-                            handlerOpenModalQRReceipt(row.original.id)
+                            handlerOpenModalQRNightlyReceipt(row.original.id)
                           }
                         >
                           <RiQrCodeLine className="text-lg" />
@@ -308,7 +298,9 @@ export const DataTableReceipt = ({ dataReceipts }) => {
                           type="button"
                           className="py-2 px-2 bg-primary/80 text-black hover:bg-secondary-100 rounded-lg transition-colors"
                           onClick={() => {
-                            handlerReceiptSelectedModalShow(row.original);
+                            handlerNightlyReceiptSelectedModalShow(
+                              row.original
+                            );
                           }}
                         >
                           <RiInformationLine className="text-lg" />
@@ -329,7 +321,7 @@ export const DataTableReceipt = ({ dataReceipts }) => {
                           className="py-2 px-2 bg-secondary-100/50 hover:bg-secondary-100 text-red-500/70 hover:text-red-500
                    transition-colors rounded-lg  flex items-center "
                           onClick={() => {
-                            handlerRemoveReceipt(row.original.id);
+                            handlerRemoveNightlyReceipt(row.original.id);
                           }}
                         >
                           <RiDeleteBin7Line className="text-lg" />

@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { CardTicket } from "../../components/Home/CardTicket";
-import { RiAlertLine, RiPoliceCarLine } from "react-icons/ri";
+import { RiAlertLine, RiMoonLine, RiPoliceCarLine, RiSunLine, RiUserShared2Line } from "react-icons/ri";
 import { useAuth } from "../../auth/hooks/useAuth";
 import { useReceipts } from "../../hooks/useReceipts";
 import { useUsers } from "../../hooks/useUsers";
@@ -10,6 +10,8 @@ import { useVisitorReceipt } from "../../hooks/useVisitorReceipt";
 import { DataTableVisitorReceipt } from "../../components/VisitorReceipt/DataTableVisitorReceipt";
 import { ModalFormVisitorReceipt } from "../../components/VisitorReceipt/ModalFormVisitorReceipt";
 import { Link } from "react-router-dom";
+import { useNightlyReceipts } from "../../hooks/useNightlyReceipts";
+import { DataTableNightlyReceipts } from "../../components/NightlyReceipt/DataTableNightlyReceipts";
 
 export const Home = () => {
   const { login, handlerLogout } = useAuth();
@@ -37,6 +39,18 @@ export const Home = () => {
     totalPaidVistorState,
     totalVisitorReceipt,
   } = useVisitorReceipt();
+
+  const {
+    getNightlyReceipts,
+    nightlyReceipts,
+    getCountNightUnpaid,
+    getCountNightPaid,
+    getCountNightTotal,
+
+    totalNightUnPaidState,
+    totalNightPaidState,
+    totalNightState,
+  } = useNightlyReceipts();
   const { getTotalCountUsers, totalCountState } = useUsers();
 
   useEffect(() => {
@@ -49,7 +63,12 @@ export const Home = () => {
       getCountTotalVisitor(),
       getReceipts();
     getVisitorReceipts();
+    getNightlyReceipts();
+    getCountNightUnpaid();
+    getCountNightPaid();
+    getCountNightTotal();
   }, []);
+
   return (
     <div>
       {/*Modal para generar recibo */}
@@ -63,28 +82,34 @@ export const Home = () => {
           <RiPoliceCarLine />
         </div>
       </div>
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 gap-8">
         {/* */}
         <CardTicket
           ticket="pending"
           totalTickets={totalUnpaidState}
           totalTicketsVisitor={totalUnpaidVisitorState}
+          totalTicketsNight={totalNightUnPaidState}
           text="Recibos pendientes usuarios."
           textVisitor="Recibos pendientes visitantes."
+          textNight="Recibos pendientes nocturnos."
         />
         <CardTicket
           ticket="payments"
           totalTickets={totalPaidState}
           totalTicketsVisitor={totalPaidVistorState}
+          totalTicketsNight={totalNightPaidState}
           text="Recibos pagos usuarios."
           textVisitor="Recibos pagos visitantes."
+          textNight="Recibos pagos nocturnos."
         />
         <CardTicket
           ticket="total"
           totalTickets={totalState}
           totalTicketsVisitor={totalVisitorReceipt}
+          totalTicketsNight={totalNightState}
           text="Recibos totales usuarios."
           textVisitor="Recibos totales visitantes."
+          textNight="Recibos totales nocturnos."
         />
         <CardTicket
           ticket="usersHome"
@@ -141,21 +166,33 @@ export const Home = () => {
                 >
                   Visitantes
                 </Tab>
+                <Tab
+                  className="py-2 px-4 rounded-lg hover:bg-secondary-900 hover:text-gray-100
+              transition-colors outline-none ui-selected:bg-secondary-900 ui-selected:text-primary"
+                >
+                  Nocturno
+                </Tab>
               </div>
               <div className="flex items-center justify-center gap-2">
                 <Link
                   to="/users"
-                  className="font-bold text-xs py-2 px-4 bg-primary/80 text-black hover:bg-primary rounded-lg transition-colors"
+                  className="flex items-center gap-1 font-bold text-xs py-2 px-4 bg-primary/80 text-black hover:bg-primary rounded-lg transition-colors"
                 >
-                  Agregar recibo usuario
+                  Agregar recibo usuario <RiSunLine />
+                </Link>
+                <Link
+                  to="/vehicleType"
+                  className="font-bold text-xs py-2 px-4 bg-primary/80 text-black hover:bg-primary rounded-lg transition-colors flex items-center gap-1"
+                >
+                  Agregar recibo nocturno <RiMoonLine />
                 </Link>
                 <button
-                  className="font-bold text-xs py-2 px-4 bg-primary/80 text-black hover:bg-primary rounded-lg transition-colors"
+                  className=" flex items-center gap-1 font-bold text-xs py-2 px-4 bg-primary/80 text-black hover:bg-primary rounded-lg transition-colors"
                   onClick={() => {
                     handlerOpenModalFormVisitorReceipt();
                   }}
                 >
-                  Agregar recibo visitante
+                  Agregar recibo visitante <RiUserShared2Line />
                 </button>
               </div>
             </Tab.List>
@@ -182,6 +219,18 @@ export const Home = () => {
                   </div>
                 ) : (
                   <DataTableVisitorReceipt dataReceipts={visitorReceipts} />
+                )}
+              </Tab.Panel>
+              <Tab.Panel>
+                {nightlyReceipts.length == 0 ? (
+                  <div className=" flex justify-center">
+                    <span className="flex items-center gap-2  bg-secondary-900 py-4 px-4 rounded-lg">
+                      <RiAlertLine className="text-red-600" /> No hay recibos
+                      nocturnos registrados.
+                    </span>
+                  </div>
+                ) : (
+                  <DataTableNightlyReceipts dataReceipts={nightlyReceipts} />
                 )}
               </Tab.Panel>
             </Tab.Panels>

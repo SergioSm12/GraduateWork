@@ -3,19 +3,32 @@ import { useReceipts } from "../../hooks/useReceipts";
 import { RiCloseCircleLine, RiTicket2Line } from "react-icons/ri";
 import { formatInTimeZone } from "date-fns-tz";
 import { es } from "date-fns/locale";
-export const ModalReceipt = () => {
-  const { receiptSelected, handlerCloseModalShowReceipt, initialReceiptForm } =
-    useReceipts();
-  const [receiptShow, setReceiptShow] = useState(receiptSelected);
+import { useNightlyReceipts } from "../../hooks/useNightlyReceipts";
+export const ModalReceipt = ({ receiptType }) => {
+  const {
+    receiptSelected,
+    nightlyReceiptSelected,
+    handlerCloseModalShowReceipt,
+    handlerCloseModalShowNightlyReceipt,
+  } = receiptType === "normal" ? useReceipts() : useNightlyReceipts();
+  const [receiptShow, setReceiptShow] = useState(
+    receiptType === "normal" ? receiptSelected : nightlyReceiptSelected
+  );
 
   useEffect(() => {
-    if (receiptSelected) {
+    if (receiptType === "normal") {
       setReceiptShow({ ...receiptSelected });
+    } else {
+      setReceiptShow({ ...nightlyReceiptSelected });
     }
-  }, [receiptSelected]);
+  }, [receiptSelected, nightlyReceiptSelected, receiptType]);
 
   const onCloseModal = () => {
-    handlerCloseModalShowReceipt();
+    if (receiptType === "normal") {
+      handlerCloseModalShowReceipt();
+    } else {
+      handlerCloseModalShowNightlyReceipt();
+    }
   };
   // funcion de formato moneda
   const formatCurrency = (amount) => {
@@ -96,7 +109,9 @@ export const ModalReceipt = () => {
                     </h5>
                     <p className="text-primary/80 text-center bg-secondary-900 p-1 rounded-lg text-sm mr-1">
                       {formatInTimeZone(
-                        receiptShow.issueDate,
+                        receiptType === "normal"
+                          ? receiptShow.issueDate
+                          : receiptShow.initialTime,
                         "America/Bogota",
                         "dd 'de' MMMM 'del' yyyy 'a las' HH:mm",
                         { locale: es }
@@ -109,7 +124,9 @@ export const ModalReceipt = () => {
                     </h5>
                     <p className="text-primary/80 text-center bg-secondary-900 p-1 rounded-lg text-sm">
                       {formatInTimeZone(
-                        receiptShow.dueDate,
+                        receiptType === "normal"
+                          ? receiptShow.dueDate
+                          : receiptShow.departureTime,
                         "America/Bogota",
                         "dd 'de' MMMM 'del' yyyy 'a las' HH:mm",
                         { locale: es }
@@ -123,7 +140,11 @@ export const ModalReceipt = () => {
                     :
                   </h5>
                   <p className="text-primary/90 font-bold text-center bg-secondary-900 p-1 rounded-lg text-sm mb-2">
-                    {formatCurrency(receiptShow.rate.amount)}
+                    {formatCurrency(
+                      receiptType === "normal"
+                        ? receiptShow.rate.amount
+                        : receiptShow.amount
+                    )}
                   </p>
                   <hr className="my-4 border-gray-500/30" />
                   <p className="text-center">{receiptShow.rate.time}</p>

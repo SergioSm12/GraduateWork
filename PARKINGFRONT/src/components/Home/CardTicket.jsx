@@ -16,8 +16,16 @@ const formatNumber = (num) => {
 };
 
 export const CardTicket = (props) => {
-  const { ticket, totalTickets, text, icon, textVisitor, totalTicketsVisitor } =
-    props;
+  const {
+    ticket,
+    totalTickets,
+    text,
+    icon,
+    textVisitor,
+    textNight,
+    totalTicketsVisitor,
+    totalTicketsNight,
+  } = props;
   let status = "";
   let textColor = "";
   let background = "";
@@ -116,12 +124,20 @@ export const CardTicket = (props) => {
         {icon == "user" ? (
           <></>
         ) : (
-          <div className="flex flex-col gap-3 p-2 bg-secondary-900/90 rounded-lg">
-            <h1 className="text-4xl text-center text-white font-bold ">
-              {formatNumber(totalTicketsVisitor)}
-            </h1>
-            <p className={textColor}>{textVisitor}</p>
-          </div>
+          <>
+            <div className="flex flex-col gap-3 p-2 bg-secondary-900/90 rounded-lg">
+              <h1 className="text-4xl text-center text-white font-bold ">
+                {formatNumber(totalTicketsVisitor)}
+              </h1>
+              <p className={textColor}>{textVisitor}</p>
+            </div>
+            <div className="flex flex-col gap-3 p-2 bg-secondary-900/90 rounded-lg ml-3">
+              <h1 className="text-4xl text-center text-white font-bold ">
+                {formatNumber(totalTicketsNight)}
+              </h1>
+              <p className={textColor}>{textNight}</p>
+            </div>
+          </>
         )}
       </div>
       <hr className="border border-dashed border-gray-500/50 my-4"></hr>
@@ -132,7 +148,14 @@ export const CardTicket = (props) => {
             Usuarios parqueadero{" "}
           </Link>
         ) : (
-          <p className="flex items-center gap-2 text-primary">Total : <span className="bg-secondary-900 px-2 py-0.5 rounded-lg text-white font-bold">{ formatNumber(totalTickets + totalTicketsVisitor)}</span></p>
+          <p className="flex items-center gap-2 text-primary">
+            Total :{" "}
+            <span className="bg-secondary-900 px-2 py-0.5 rounded-lg text-white font-bold">
+              {formatNumber(
+                totalTickets + totalTicketsVisitor + totalTicketsNight
+              )}
+            </span>
+          </p>
         )}
       </div>
     </div>

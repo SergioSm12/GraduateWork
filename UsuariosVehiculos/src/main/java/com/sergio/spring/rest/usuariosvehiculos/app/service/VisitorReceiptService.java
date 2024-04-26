@@ -82,9 +82,7 @@ public class VisitorReceiptService implements IVisitorReceiptService {
             VisitorReceipt visitorReceiptDb = vr.orElseThrow();
             String plateUpper = visitorReceipt.getPlate().toUpperCase();
             visitorReceiptDb.setPlate(plateUpper);
-            System.out.println(visitorReceipt.getIssueDate());
             visitorReceiptDb.setIssueDate(visitorReceipt.getIssueDate());
-            System.out.println(visitorReceipt.getDueDate());
             visitorReceiptDb.setDueDate(visitorReceipt.getDueDate());
             visitorReceiptDb.setPaymentStatus(visitorReceipt.isPaymentStatus());
             visitorReceiptDb.setRate(visitorReceipt.getRate());

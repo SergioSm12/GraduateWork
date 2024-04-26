@@ -4,6 +4,7 @@ export const qrCodeSlice = createSlice({
   initialState: {
     qrCodeImage: null,
     qrCodeImageVisitor: null,
+    qrcodeImageNightly: null,
   },
   reducers: {
     setQRCodeImage: (state, action) => {
@@ -18,6 +19,12 @@ export const qrCodeSlice = createSlice({
     resetQRCodeImageVisitor: (state) => {
       state.qrCodeImageVisitor = null;
     },
+    setQRCodeImageNightly: (state, action) => {
+      state.qrCodeImageVisitor = action.payload;
+    },
+    resetQRCodeImageNightly: (state) => {
+      state.qrcodeImageNightly = null;
+    },
   },
 });
 
@@ -26,4 +33,6 @@ export const {
   resetQRCodeImage,
   setQRCodeImageVisitor,
   resetQRCodeImageVisitor,
+  setQRCodeImageNightly,
+  resetQRCodeImageNightly,
 } = qrCodeSlice.actions;

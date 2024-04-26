@@ -9,13 +9,22 @@ import { useReceipts } from "../../hooks/useReceipts";
 import { useQRCode } from "../../hooks/useQRCode";
 import { useState } from "react";
 import { useVisitorReceipt } from "../../hooks/useVisitorReceipt";
+import { useNightlyReceipts } from "../../hooks/useNightlyReceipts";
 
 export const QRCode = () => {
   const { handlerCloseModalQRReceipt, idQRReceipt } = useReceipts();
   const { handlerCloseModalQRVisitorReceipt, idQRReceiptVisitor } =
     useVisitorReceipt();
-  const { qrCodeImage, getQRCodeUsers, qrCodeImageVisitor, getQRCodeVisitors } =
-    useQRCode();
+  const { handlerCloseModalQRNightlyReceipt, idQRNightlyReceipt } =
+    useNightlyReceipts();
+  const {
+    qrCodeImage,
+    getQRCodeUsers,
+    qrCodeImageVisitor,
+    getQRCodeVisitors,
+    qrcodeImageNightly,
+    getQRCodeNightly,
+  } = useQRCode();
 
   const [loading, setLoading] = useState(false);
 
@@ -25,6 +34,8 @@ export const QRCode = () => {
       setLoading(true);
       if (idQRReceiptVisitor) {
         await getQRCodeVisitors(idQRReceiptVisitor);
+      } else if (idQRNightlyReceipt) {
+        await getQRCodeNightly(idQRNightlyReceipt);
       } else {
         await getQRCodeUsers(idQRReceipt);
       }
@@ -34,11 +45,17 @@ export const QRCode = () => {
   };
 
   useEffect(() => {
-    if (idQRReceiptVisitor) {
-      getQRCodeVisitors(idQRReceiptVisitor);
-    } else {
-      getQRCodeUsers(idQRReceipt);
-    }
+    const fetchData = async () => {
+      if (idQRReceiptVisitor) {
+        await getQRCodeVisitors(idQRReceiptVisitor);
+      } else if (idQRNightlyReceipt) {
+        await getQRCodeNightly(idQRNightlyReceipt);
+      } else {
+        await getQRCodeUsers(idQRReceipt);
+      }
+    };
+
+    fetchData();
   }, []);
 
   return (
@@ -56,6 +73,8 @@ export const QRCode = () => {
                 onClick={
                   idQRReceiptVisitor
                     ? () => handlerCloseModalQRVisitorReceipt()
+                    : idQRNightlyReceipt
+                    ? () => handlerCloseModalQRNightlyReceipt()
                     : () => handlerCloseModalQRReceipt()
                 }
               >
@@ -63,11 +82,15 @@ export const QRCode = () => {
               </button>
             </div>
             <div>
-              {qrCodeImage || qrCodeImageVisitor ? (
+              {qrCodeImage || qrCodeImageVisitor || qrcodeImageNightly ? (
                 <div>
                   <img
                     className="mb-2"
-                    src={idQRReceipt == null ? qrCodeImageVisitor : qrCodeImage}
+                    src={
+                      idQRReceipt == null
+                        ? qrCodeImageVisitor || qrcodeImageNightly
+                        : qrCodeImage
+                    }
                     alt="QR Code"
                   />
                   <div className=" text-center">

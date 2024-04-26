@@ -1,14 +1,16 @@
 import { useDispatch, useSelector } from "react-redux";
 import {
   generateQRCodeImage,
+  generateQRCodeNightlyImage,
   generateQRCodeVisitorImage,
 } from "../services/QRService";
 import {
   setQRCodeImage,
+  setQRCodeImageNightly,
   setQRCodeImageVisitor,
 } from "../store/slices/receipt/qrCodeSlice";
 export const useQRCode = () => {
-  const { qrCodeImage, qrCodeImageVisitor } = useSelector(
+  const { qrCodeImage, qrCodeImageVisitor, qrcodeImageNightly } = useSelector(
     (state) => state.qrCode
   );
   const dispatch = useDispatch();
@@ -17,6 +19,15 @@ export const useQRCode = () => {
     try {
       const imageUrl = await generateQRCodeImage(id);
       dispatch(setQRCodeImage(imageUrl));
+    } catch (error) {
+      console.log("Error en el fetching de la imagen : ", error);
+    }
+  };
+
+  const getQRCodeNightly = async (id) => {
+    try {
+      const imageUrl = await generateQRCodeNightlyImage(id);
+      dispatch(setQRCodeImageNightly(imageUrl));
     } catch (error) {
       console.log("Error en el fetching de la imagen : ", error);
     }
@@ -36,5 +47,7 @@ export const useQRCode = () => {
     getQRCodeUsers,
     qrCodeImageVisitor,
     getQRCodeVisitors,
+    qrcodeImageNightly,
+    getQRCodeNightly,
   };
 };

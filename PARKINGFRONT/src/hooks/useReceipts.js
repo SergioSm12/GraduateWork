@@ -255,6 +255,7 @@ export const useReceipts = () => {
     dispatch(loadingErrorReceipt({}));
   };
 
+  
   //Show
   const handlerReceiptSelectedModalShow = (receipt) => {
     dispatch(onReceiptShowModalSelected({ ...receipt }));

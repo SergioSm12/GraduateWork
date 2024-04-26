@@ -99,7 +99,7 @@ public class SpringSecurityConfig {
                         //QRCode
                         .requestMatchers(HttpMethod.GET, "/qrcode/{id}").permitAll()
                         .requestMatchers(HttpMethod.GET, "/qrcode/visitor/{id}").permitAll()
-                        .requestMatchers(HttpMethod.GET,"/qrcode/nightly-receipt/{id}").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/qrcode/nightly-receipt/{id}").permitAll()
 
 
                         // visitor
@@ -116,6 +116,11 @@ public class SpringSecurityConfig {
                         .requestMatchers(HttpMethod.GET, "nightly-receipt").permitAll()
                         .requestMatchers(HttpMethod.GET, "nightly-receipt/user/{userId}").permitAll()
                         .requestMatchers(HttpMethod.POST, "nightly-receipt/{userId}/create").permitAll()
+                        .requestMatchers(HttpMethod.PATCH, "nightly-receipt/change-payment/{receiptId}").permitAll()
+                        .requestMatchers(HttpMethod.GET, "nightly-receipt/count-total").permitAll()
+                        .requestMatchers(HttpMethod.GET, "nightly-receipt/count-unpaid").permitAll()
+                        .requestMatchers(HttpMethod.GET, "nightly-receipt/count-paid").permitAll()
+                        .requestMatchers(HttpMethod.DELETE, "/nightly-receipt/{nightlyReceiptId}").permitAll()
 
                         .anyRequest().authenticated())
                 .addFilter(new JwtAuthenticationFilter(authenticationConfiguration.getAuthenticationManager()))

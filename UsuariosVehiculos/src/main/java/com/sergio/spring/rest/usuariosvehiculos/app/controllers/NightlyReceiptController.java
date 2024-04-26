@@ -2,6 +2,7 @@ package com.sergio.spring.rest.usuariosvehiculos.app.controllers;
 
 import com.sergio.spring.rest.usuariosvehiculos.app.Errors.ErrorResponse;
 import com.sergio.spring.rest.usuariosvehiculos.app.models.dto.entity.users.NightlyReceiptDto;
+import com.sergio.spring.rest.usuariosvehiculos.app.models.dto.entity.users.ReceiptDto;
 import com.sergio.spring.rest.usuariosvehiculos.app.models.dto.entity.users.UserDto;
 import com.sergio.spring.rest.usuariosvehiculos.app.models.entities.NightlyReceipt;
 import com.sergio.spring.rest.usuariosvehiculos.app.models.entities.User;
@@ -33,6 +34,24 @@ public class NightlyReceiptController {
         return nightlyReceiptService.nightlyReceiptList();
     }
 
+    @GetMapping("/count-unpaid")
+    public ResponseEntity<?> getCountUnpaidNightlyReceipts() {
+        Long totalUnpaidNightlyReceipts = nightlyReceiptService.getTotalUnpaidNightlyReceipts();
+        return ResponseEntity.ok(totalUnpaidNightlyReceipts);
+    }
+
+    @GetMapping("/count-paid")
+    public ResponseEntity<?> getCountPaidNightlyReceipts() {
+        Long totalPaidNightlyReceipts = nightlyReceiptService.getTotalPaidNightlyReceipts();
+        return ResponseEntity.ok(totalPaidNightlyReceipts);
+    }
+
+    @GetMapping("/count-total")
+    public ResponseEntity<?> getTotalNightlyReceipts() {
+        Long totalNightlyReceipts = nightlyReceiptService.getTotalNightlyReceipts();
+        return ResponseEntity.ok(totalNightlyReceipts);
+    }
+
     @GetMapping("/user/{userId}")
     public ResponseEntity<List<NightlyReceiptDto>> getNightlyReceiptsByUserId(@PathVariable Long userId) {
         List<NightlyReceiptDto> receipts = nightlyReceiptService.getNightlyReceiptsByUserId(userId);
@@ -62,6 +81,27 @@ public class NightlyReceiptController {
         nightlyReceipt.setUser(user);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(nightlyReceiptService.saveReceipt(nightlyReceipt));
+    }
+
+    @PatchMapping("/change-payment/{receiptId}")
+    public ResponseEntity<?> changePaymentStatus(@PathVariable Long receiptId) {
+
+        Optional<NightlyReceiptDto> NightlyReceiptOptional = nightlyReceiptService.findByIdNightlyReceipt(receiptId);
+        if (NightlyReceiptOptional.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+        nightlyReceiptService.changePaymentStatus(receiptId);
+        return ResponseEntity.ok().build();
+    }
+
+    @DeleteMapping("/{nightlyReceiptId}")
+    public ResponseEntity<?> deleteNightlyReceipt(@PathVariable Long nightlyReceiptId) {
+        Optional<NightlyReceiptDto> ro = nightlyReceiptService.findByIdNightlyReceipt(nightlyReceiptId);
+        if (ro.isPresent()) {
+            nightlyReceiptService.remove(nightlyReceiptId);
+            return ResponseEntity.noContent().build();
+        }
+        return ResponseEntity.notFound().build();
     }
 
     private ResponseEntity<?> validation(BindingResult result) {
