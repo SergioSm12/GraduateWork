@@ -2,6 +2,7 @@ package com.sergio.spring.rest.usuariosvehiculos.app.service;
 
 import com.sergio.spring.rest.usuariosvehiculos.app.models.dto.entity.users.NightlyReceiptDto;
 import com.sergio.spring.rest.usuariosvehiculos.app.models.entities.NightlyReceipt;
+import com.sergio.spring.rest.usuariosvehiculos.app.models.request.NightlyReceiptRequest;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
@@ -11,6 +12,8 @@ public interface INightlyReceiptService {
     List<NightlyReceiptDto> nightlyReceiptList();
 
     NightlyReceiptDto saveReceipt(NightlyReceipt nightlyReceipt);
+
+    Optional<NightlyReceiptDto> updateNightlyReceipt(NightlyReceiptRequest nightlyReceiptRequest, Long nightlyReceiptId);
 
     void changePaymentStatus(Long receiptId);
 

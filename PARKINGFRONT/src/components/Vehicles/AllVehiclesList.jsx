@@ -21,6 +21,7 @@ import classNames from "classnames";
 import { rankItem } from "@tanstack/match-sorter-utils";
 import { useReceipts } from "../../hooks/useReceipts";
 import { ModalFormReceipt } from "../Receipts/ModalFormReceipt";
+import { useNightlyReceipts } from "../../hooks/useNightlyReceipts";
 
 //Componente con TanStackReacttable
 //Tabla vehiculos dentro de seccion administrar vehiculos.
@@ -59,6 +60,8 @@ export const AllVehicles = ({ dataVehicles }) => {
   const [sorting, setSorting] = useState([]);
   const { handlerOpenModalFormReceipt, visibleFormReceiptModal } =
     useReceipts();
+  const { handlerOpenModalFormNightlyReceipt, visibleFormNightlyReceiptModal } =
+    useNightlyReceipts();
 
   useEffect(() => {
     setData(dataVehicles);
@@ -121,6 +124,10 @@ export const AllVehicles = ({ dataVehicles }) => {
 
   return (
     <>
+      {/*Create Nightly Receipt */}
+      {!visibleFormNightlyReceiptModal || (
+        <ModalFormReceipt receiptType={"nocturno"} />
+      )}
       {/*Create receipt modal */}
       {!visibleFormReceiptModal || <ModalFormReceipt />}
 
@@ -219,7 +226,7 @@ export const AllVehicles = ({ dataVehicles }) => {
                               plate: row.original.plate,
                               vehicleType: row.original.vehicleType,
                               active: row.original.active,
-                              user:row.original.user
+                              user: row.original.user,
                             });
                           }}
                         >
@@ -231,7 +238,13 @@ export const AllVehicles = ({ dataVehicles }) => {
                           className="py-2 px-2 bg-primary/80 text-black hover:bg-primary rounded-lg transition-colors"
                           onClick={() => {
                             // Pasa los datos del usuario al hacer clic en el botón de edición
-                            handlerReceiptSelectedModalForm(row.original);
+                            handlerOpenModalFormNightlyReceipt({
+                              id: row.original.id,
+                              plate: row.original.plate,
+                              vehicleType: row.original.vehicleType,
+                              active: row.original.active,
+                              user: row.original.user,
+                            });
                           }}
                         >
                           <RiPagesFill className="text-lg" />

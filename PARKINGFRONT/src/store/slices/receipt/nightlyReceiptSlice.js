@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { rate, user, vehicle } from "./receiptSlice";
+import { onReceiptSelectedForm, rate, user, vehicle } from "./receiptSlice";
 
 export const initialNightlyReceipt = {
   id: 0,
@@ -9,6 +9,11 @@ export const initialNightlyReceipt = {
   rate: null,
   user: user,
   vehicle: vehicle,
+};
+
+const initialErrorsNightlyReceipt = {
+  vehicle: vehicle,
+  rate: rate,
 };
 
 export const nightlyReceiptSlice = createSlice({
@@ -21,11 +26,27 @@ export const nightlyReceiptSlice = createSlice({
     totalNightState: 0,
     idQRNightlyReceipt: null,
     nightlyReceiptSelected: initialNightlyReceipt,
+    vehicleSelected: vehicle,
 
     visibleShowNightlyReceiptModal: false,
     visibleQRModalNightlyReceipt: false,
+    visibleFormNightlyReceiptModal: false,
+    errorsNightlyReceipt: initialErrorsNightlyReceipt,
   },
   reducers: {
+    addNightlyReceiptSlice: (state, action) => {
+      state.nightlyReceipts = state.nightlyReceipts.map((nr) => {
+        if (nr.id === action.payload.id) {
+          return {
+            ...action.payload,
+          };
+        }
+        return nr;
+      });
+      state.nightlyReceiptSelected = initialNightlyReceipt;
+      state.visibleFormNightlyReceiptModal = false;
+    },
+
     removeNightlyReceipt: (state, action) => {
       state.nightlyReceipts = state.nightlyReceipts.filter(
         (receipt) => receipt.id !== action.payload
@@ -69,10 +90,32 @@ export const nightlyReceiptSlice = createSlice({
       state.visibleQRModalNightlyReceipt = false;
       state.idQRNightlyReceipt = null;
     },
+
+    //form
+
+    onNightlyReceiptSelectedForm: (state, action) => {
+      state.nightlyReceiptSelected = action.payload;
+      state.visibleFormNightlyReceiptModal = true;
+    },
+
+    onOpenModalFormNightlyReceipt: (state, action) => {
+      state.vehicleSelected = action.payload;
+      state.visibleFormNightlyReceiptModal = true;
+    },
+
+    onCloseModalFormNightlyReceipt: (state) => {
+      state.visibleFormNightlyReceiptModal = false;
+      state.nightlyReceiptSelected = initialNightlyReceipt;
+      state.vehicleSelected = vehicle;
+    },
+    loadingErrorsNightlyReceipt: (state, action) => {
+      state.errorsNightlyReceipt = action.payload;
+    },
   },
 });
 
 export const {
+  addNightlyReceiptSlice,
   removeNightlyReceipt,
   loadingNightlyReceipts,
   loadingNightUnpaidCount,
@@ -84,4 +127,9 @@ export const {
 
   onNightlyReceiptShowModalSelected,
   onCloseShowModalNightlyReceipt,
+  onNightlyReceiptSelectedForm,
+  onOpenModalFormNightlyReceipt,
+  onCloseModalFormNightlyReceipt,
+
+  loadingErrorsNightlyReceipt,
 } = nightlyReceiptSlice.actions;

@@ -5,6 +5,7 @@ import com.sergio.spring.rest.usuariosvehiculos.app.models.dto.entity.users.Rece
 import com.sergio.spring.rest.usuariosvehiculos.app.models.dto.mapper.DtoMapperNightlyReceipt;
 import com.sergio.spring.rest.usuariosvehiculos.app.models.dto.mapper.DtoMapperReceipt;
 import com.sergio.spring.rest.usuariosvehiculos.app.models.entities.*;
+import com.sergio.spring.rest.usuariosvehiculos.app.models.request.NightlyReceiptRequest;
 import com.sergio.spring.rest.usuariosvehiculos.app.repositorys.INightlyReceiptRepository;
 import com.sergio.spring.rest.usuariosvehiculos.app.repositorys.IRateRepository;
 import com.sergio.spring.rest.usuariosvehiculos.app.repositorys.IUserRepository;
@@ -137,6 +138,38 @@ public class NightlyReceiptService implements INightlyReceiptService {
         return DtoMapperNightlyReceipt.builder().setNightlyReceipt(savedNightlyReceipt).build();
     }
 
+    @Override
+    @Transactional
+    public Optional<NightlyReceiptDto> updateNightlyReceipt(NightlyReceiptRequest nightlyReceiptRequest, Long nightlyReceiptId) {
+        Optional<NightlyReceipt> o = nightlyReceiptRepository.findById(nightlyReceiptId);
+        NightlyReceipt nightlyReceiptOptional = null;
+        if (o.isPresent()) {
+            NightlyReceipt nightlyReceiptdb = o.orElseThrow();
+
+            //Establecer initialTime
+            nightlyReceiptdb.setInitialTime(nightlyReceiptRequest.getInitialTime());
+            nightlyReceiptdb.setDepartureTime(nightlyReceiptRequest.getDepartureTime());
+            Optional<Rate> rateOptional = rateRepository.findById(nightlyReceiptRequest.getRate().getId());
+            if (rateOptional.isEmpty()) {
+                throw new IllegalArgumentException("Rate not found");
+            }
+            nightlyReceiptdb.setRate(rateOptional.get());
+            //obtener datos de la tarifa.
+            String rateTime = rateOptional.get().getTime();
+            double rateAmount = rateOptional.get().getAmount();
+
+            double amount = calculateAmount(nightlyReceiptRequest.getInitialTime(), nightlyReceiptRequest.getDepartureTime(), rateTime, rateAmount);
+            nightlyReceiptdb.setAmount(amount);
+
+
+            nightlyReceiptdb.setPaymentStatus(nightlyReceiptRequest.isPaymentStatus());
+
+
+            nightlyReceiptOptional = nightlyReceiptRepository.save(nightlyReceiptdb);
+        }
+
+        return Optional.ofNullable(DtoMapperNightlyReceipt.builder().setNightlyReceipt(nightlyReceiptOptional).build());
+    }
 
     @Override
     @Transactional

@@ -15,6 +15,7 @@ import "react-datepicker/dist/react-datepicker.css";
 import { formatInTimeZone } from "date-fns-tz";
 import { parse } from "date-fns";
 import { es } from "date-fns/locale";
+import { useNightlyReceipts } from "../../hooks/useNightlyReceipts";
 
 const formatCurrency = (amount) => {
   return new Intl.NumberFormat("es-CO", {
@@ -23,7 +24,7 @@ const formatCurrency = (amount) => {
   }).format(amount);
 };
 
-export const CreateReceipt = () => {
+export const CreateReceipt = ({ receiptType }) => {
   const {
     handlerCloseModalFormReceipt,
     receiptSelected,
@@ -32,19 +33,30 @@ export const CreateReceipt = () => {
     handlerAddReceiptByUser,
     initialReceiptForm,
     errorsReceipt,
-  } = useReceipts();
+    handlerCloseModalFormNighlyReceipt,
+    nightlyReceiptSelected,
+    handlerAddNightlyReceiptByUser,
+    initialNightlyReceipt,
+    errorsNightlyReceipt,
+  } = receiptType === "nocturno" ? useNightlyReceipts() : useReceipts();
   const { rates, getRates } = useRates();
 
   //estado para traer los datos del vehicle
   const [vehicleForm, setVehicleForm] = useState(vehicle);
   const [vehicleFormEdit, setVehicleFormEdit] = useState(vehicle);
   //Estado para guardar lso datos del recibo
-  const [receiptForm, setReceiptForm] = useState(initialReceiptForm);
+  const [receiptForm, setReceiptForm] = useState(
+    receiptType === "nocturno" ? initialNightlyReceipt : initialReceiptForm
+  );
   const [selectedRate, setSelectedRate] = useState(null);
 
   //DatePicker fechas
   const [issueDate, setIssueDate] = useState(new Date());
   const [dueDate, setDueDate] = useState(new Date());
+
+  const [initialTime, setInitialTime] = useState(new Date());
+  const [departureTime, setDepartureTime] = useState(new Date());
+
   const { id } = useParams();
 
   //filtrar tarifas
@@ -52,15 +64,36 @@ export const CreateReceipt = () => {
 
   //Agrega el recibo si viene seleccionado
   useEffect(() => {
-    setReceiptForm({
-      ...receiptSelected,
-    });
+    setReceiptForm(
+      receiptType === "nocturno"
+        ? { ...nightlyReceiptSelected }
+        : {
+            ...receiptSelected,
+          }
+    );
 
-    setSelectedRate(receiptSelected.rate);
-    setVehicleFormEdit(receiptSelected.vehicle);
-    if (receiptSelected.issueDate) {
+    setSelectedRate(
+      receiptType === "nocturno"
+        ? nightlyReceiptSelected.rate
+        : receiptSelected.rate
+    );
+
+    setVehicleFormEdit(
+      receiptType === "nocturno"
+        ? nightlyReceiptSelected.vehicle
+        : receiptSelected.vehicle
+    );
+
+    //validacion initial y issue editar
+    if (
+      receiptType === "nocturno"
+        ? nightlyReceiptSelected.initialTime
+        : receiptSelected.issueDate
+    ) {
       const formattedIssueDate = formatInTimeZone(
-        receiptSelected.issueDate,
+        receiptType === "nocturno"
+          ? nightlyReceiptSelected.initialTime
+          : receiptSelected.issueDate,
         "America/Bogota",
         "yyyy-MM-dd"
       );
@@ -71,17 +104,33 @@ export const CreateReceipt = () => {
         "yyyy-MM-dd",
         new Date()
       );
-      setIssueDate(parsedIssueDate);
+      if (receiptType === "nocturno") {
+        setInitialTime(parsedIssueDate);
+      } else {
+        setIssueDate(parsedIssueDate);
+      }
     }
-    if (receiptSelected.dueDate) {
+    //validacion due y departure editar
+    if (
+      receiptType === "nocturno"
+        ? nightlyReceiptSelected.departureTime
+        : receiptSelected.dueDate
+    ) {
       const formattedDueDate = formatInTimeZone(
-        receiptSelected.dueDate,
+        receiptType === "nocturno"
+          ? nightlyReceiptSelected.departureTime
+          : receiptSelected.dueDate,
         "America/Bogota",
         "yyyy-MM-dd"
       );
       //Parsear fecha formatead timeZone
       const parsedDueDate = parse(formattedDueDate, "yyyy-MM-dd", new Date());
-      setDueDate(parsedDueDate);
+
+      if (receiptType === "nocturno") {
+        setDepartureTime(parsedDueDateDate);
+      } else {
+        setDueDate(parsedDueDate);
+      }
     }
   }, [receiptSelected]);
 
@@ -93,7 +142,9 @@ export const CreateReceipt = () => {
 
   //cerrar formulario
   const onCloseForm = () => {
-    handlerCloseModalFormReceipt();
+    receiptType === "nocturno"
+      ? handlerCloseModalFormNighlyReceipt()
+      : handlerCloseModalFormReceipt();
   };
 
   useEffect(() => {
@@ -102,17 +153,33 @@ export const CreateReceipt = () => {
       (vehicleForm.vehicleType.name || vehicleFormEdit.vehicleType.name)
     ) {
       //Filtrar tarifas
-      const filteredRates = rates.filter((rate) => {
-        const vehicleTypeName =
-          vehicleForm.vehicleType.name || vehicleFormEdit.vehicleType.name;
-        if (vehicleTypeName === "CARRO") {
-          return rate.time.includes("CARRO");
-        } else if (vehicleTypeName === "MOTO") {
-          return rate.time.includes("MOTO");
-        }
-        return false;
-      });
-      setFilteredRates(filteredRates);
+      let filteredRates;
+      if (receiptType === "nocturno") {
+        filteredRates = rates.filter((rate) => {
+          const vehicleTypeName =
+            vehicleForm.vehicleType.name || vehicleFormEdit.vehicleType.name;
+          if (vehicleTypeName === "CARRO" && rate.time.includes("HORA")) {
+            return rate.time.includes("CARRO");
+          } else if (vehicleTypeName === "MOTO" && rate.time.includes("HORA")) {
+            return rate.time.includes("MOTO");
+          }
+          return false;
+        });
+
+        setFilteredRates(filteredRates);
+      } else {
+        filteredRates = rates.filter((rate) => {
+          const vehicleTypeName =
+            vehicleForm.vehicleType.name || vehicleFormEdit.vehicleType.name;
+          if (vehicleTypeName === "CARRO") {
+            return rate.time.includes("CARRO");
+          } else if (vehicleTypeName === "MOTO") {
+            return rate.time.includes("MOTO");
+          }
+          return false;
+        });
+        setFilteredRates(filteredRates);
+      }
     }
   }, [rates, vehicleFormEdit.vehicleType.name]);
 
@@ -139,11 +206,11 @@ export const CreateReceipt = () => {
 
   //cambia la data del datePicker
   const handleIssueDateChange = (date) => {
-    setIssueDate(date);
+    receiptType === "nocturno" ? setInitialTime(date) : setIssueDate(date);
   };
 
   const handleDueDateChange = (date) => {
-    setDueDate(date);
+    receiptType === "nocturno" ? setDepartureTime(date) : setDueDate(date);
   };
 
   //cambia la data de paymentStatus
@@ -158,21 +225,40 @@ export const CreateReceipt = () => {
   //Envia la data cuando se encia el formulario
   const onSubmit = (e) => {
     e.preventDefault();
-    const updatedReceiptForm = {
-      ...receiptForm,
-      vehicle: vehicleForm,
-      issueDate: issueDate,
-      dueDate: dueDate,
-    };
+
+    let updatedReceiptForm;
+    if (receiptType === "nocturno") {
+      updatedReceiptForm = {
+        ...receiptForm,
+        vehicle: vehicleForm,
+        initialTime: initialTime,
+        departureTime: departureTime,
+      };
+    } else {
+      updatedReceiptForm = {
+        ...receiptForm,
+        vehicle: vehicleForm,
+        issueDate: issueDate,
+        dueDate: dueDate,
+      };
+    }
 
     if (id == undefined) {
-      handlerAddReceiptByUser(
-        vehicleForm.user ? vehicleForm.user.id : null,
-        updatedReceiptForm,
-        "/"
-      );
+      receiptType === "nocturno"
+        ? handlerAddNightlyReceiptByUser(
+            vehicleForm.user ? vehicleForm.user.id : null,
+            updatedReceiptForm,
+            "/"
+          )
+        : handlerAddReceiptByUser(
+            vehicleForm.user ? vehicleForm.user.id : null,
+            updatedReceiptForm,
+            "/"
+          );
     } else {
-      handlerAddReceiptByUser(id, updatedReceiptForm);
+      receiptType === "nocturno"
+        ? handlerAddNightlyReceiptByUser(id, updatedReceiptForm)
+        : handlerAddReceiptByUser(id, updatedReceiptForm);
     }
   };
 
@@ -250,9 +336,9 @@ export const CreateReceipt = () => {
             </label>
             <div className="my-2">
               <DatePicker
-                id="issueDate"
+                id={receiptType === "nocturno" ? "initialTime" : "issueDate"}
                 showIcon
-                selected={issueDate}
+                selected={receiptType === "noctunro" ? initialTime : issueDate}
                 onChange={handleIssueDateChange}
                 locale={es}
                 className="py-3 pl-8 pr-4 text-center bg-secondary-900 w-full outline-none rounded-lg focus:border focus:border-primary appearance-none"
@@ -266,9 +352,9 @@ export const CreateReceipt = () => {
             </label>
             <div className="my-2">
               <DatePicker
-                id="dueDate"
+                id={receiptType === "nocturno" ? "departureTime" : "dueDate"}
                 showIcon
-                selected={dueDate}
+                selected={receiptType === "noctunro" ? departureTime : dueDate}
                 onChange={handleDueDateChange}
                 locale={es}
                 className="py-3 pl-8 pr-4 text-center bg-secondary-900 w-full outline-none rounded-lg focus:border focus:border-primary appearance-none"

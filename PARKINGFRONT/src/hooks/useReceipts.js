@@ -297,6 +297,7 @@ export const useReceipts = () => {
     visibleQRModalReceipt,
     vehicle,
 
+    
     handlerOpenModalShowReceipt,
     handlerReceiptSelectedModalShow,
     handlerCloseModalShowReceipt,

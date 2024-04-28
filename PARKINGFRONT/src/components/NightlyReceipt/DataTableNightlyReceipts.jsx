@@ -25,6 +25,7 @@ import { Paginator } from "../Paginator";
 import classNames from "classnames";
 import { QRCode } from "../QR/QRCode";
 import { ModalReceipt } from "../Receipts/ModalReceipt";
+import { ModalFormReceipt } from "../Receipts/ModalFormReceipt";
 
 const fuzzyFilter = (row, columnId, value, addMeta) => {
   const itemRank = rankItem(row.original.vehicle.plate, value);
@@ -59,6 +60,7 @@ export const DataTableNightlyReceipts = ({ dataReceipts }) => {
   const [sorting, setSorting] = useState([]);
   const {
     handlerChangePaymentStatus,
+    visibleFormNightlyReceiptModal,
     visibleQRModalNightlyReceipt,
     handlerOpenModalQRNightlyReceipt,
     handlerNightlyReceiptSelectedModalShow,
@@ -91,7 +93,7 @@ export const DataTableNightlyReceipts = ({ dataReceipts }) => {
     },
     {
       accessorKey: "departureTime",
-      header: () => <span>Fecha de vencimiento</span>,
+      header: () => <span>Fecha de salida</span>,
     },
 
     {
@@ -170,6 +172,8 @@ export const DataTableNightlyReceipts = ({ dataReceipts }) => {
           />
         </div>
       </div>
+      {/*Modal create */}
+      {!visibleFormNightlyReceiptModal || <ModalFormReceipt receiptType={"nocturno"} />}
       {/*Modal info */}
       {!visibleShowNightlyReceiptModal || <ModalReceipt />}
       {/*Modal QR */}

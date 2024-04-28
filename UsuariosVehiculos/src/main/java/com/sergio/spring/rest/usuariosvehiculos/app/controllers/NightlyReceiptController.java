@@ -6,6 +6,8 @@ import com.sergio.spring.rest.usuariosvehiculos.app.models.dto.entity.users.Rece
 import com.sergio.spring.rest.usuariosvehiculos.app.models.dto.entity.users.UserDto;
 import com.sergio.spring.rest.usuariosvehiculos.app.models.entities.NightlyReceipt;
 import com.sergio.spring.rest.usuariosvehiculos.app.models.entities.User;
+import com.sergio.spring.rest.usuariosvehiculos.app.models.request.NightlyReceiptRequest;
+import com.sergio.spring.rest.usuariosvehiculos.app.models.request.ReceiptRequest;
 import com.sergio.spring.rest.usuariosvehiculos.app.service.INightlyReceiptService;
 import com.sergio.spring.rest.usuariosvehiculos.app.service.IUserService;
 import jakarta.validation.Valid;
@@ -81,6 +83,19 @@ public class NightlyReceiptController {
         nightlyReceipt.setUser(user);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(nightlyReceiptService.saveReceipt(nightlyReceipt));
+    }
+
+    @PutMapping("/{nightlyReceiptId}/update")
+    public ResponseEntity<?> updateReceipt(@Valid @RequestBody NightlyReceiptRequest receipt, BindingResult result,
+                                           @PathVariable Long nightlyReceiptId) {
+        if (result.hasErrors()) {
+            return validation(result);
+        }
+        Optional<NightlyReceiptDto> ro = nightlyReceiptService.updateNightlyReceipt(receipt, nightlyReceiptId);
+        if (ro.isPresent()) {
+            return ResponseEntity.status(HttpStatus.CREATED).body(ro.orElseThrow());
+        }
+        return ResponseEntity.notFound().build();
     }
 
     @PatchMapping("/change-payment/{receiptId}")
