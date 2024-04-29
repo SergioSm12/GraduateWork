@@ -84,7 +84,7 @@ public class NightlyReceiptService implements INightlyReceiptService {
         return receipts.stream().map(r -> DtoMapperNightlyReceipt.builder().setNightlyReceipt(r).build())
                 .collect(Collectors.toList());
     }
-cd grad 
+
     //servicio optimizado qr
     @Override
     @Transactional(readOnly = true)
