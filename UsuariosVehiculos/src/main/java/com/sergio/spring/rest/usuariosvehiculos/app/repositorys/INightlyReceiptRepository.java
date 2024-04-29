@@ -17,6 +17,7 @@ public interface INightlyReceiptRepository extends CrudRepository<NightlyReceipt
     // contar recibos pagos
     long countByPaymentStatusTrue();
 
+    //Trae los recibos por usuario
     List<NightlyReceipt> findByUser(User user);
 
 

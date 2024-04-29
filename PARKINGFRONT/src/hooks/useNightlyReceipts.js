@@ -6,6 +6,7 @@ import {
   createNightlyReceiptByUser,
   deleteNightlyReciptById,
   findAllNightlyReceipts,
+  findNightlyReceiptsByUser,
   totalCountReceipts,
   totalPaid,
   totalUnpaid,
@@ -16,6 +17,7 @@ import {
   initialNightlyReceipt,
   loadingErrorsNightlyReceipt,
   loadingNightlyReceipts,
+  loadingNightlyReceiptsByUser,
   loadingNightPaidCount,
   loadingNightTotalCount,
   loadingNightUnpaidCount,
@@ -27,9 +29,13 @@ import {
   onOpenModalFormNightlyReceipt,
   onOpenQRModalNightlyReceipt,
   removeNightlyReceipt,
+  updateNightlyReceiptSlice,
 } from "../store/slices/receipt/nightlyReceiptSlice";
 import { useAuth } from "../auth/hooks/useAuth";
-import { updateReceiptSlice, vehicle } from "../store/slices/receipt/receiptSlice";
+import {
+  updateReceiptSlice,
+  vehicle,
+} from "../store/slices/receipt/receiptSlice";
 
 export const useNightlyReceipts = () => {
   const {
@@ -77,6 +83,19 @@ export const useNightlyReceipts = () => {
     }
   };
 
+  const getNightlyReceiptsByUser = async (id) => {
+    try {
+      const result = await findNightlyReceiptsByUser(id);
+      dispatch(loadingNightlyReceiptsByUser(result.data));
+    } catch (error) {
+      if (error.response.status == 401) {
+        handlerLogout();
+      } else {
+        throw error;
+      }
+    }
+  };
+
   //create receipt
   const handlerAddNightlyReceiptByUser = async (
     userId,
@@ -97,7 +116,7 @@ export const useNightlyReceipts = () => {
           nightlyReceipt.id,
           nightlyReceipt
         );
-        dispatch(updateReceiptSlice(response.data));
+        dispatch(updateNightlyReceiptSlice(response.data));
       }
       Toast.fire({
         icon: "success",
@@ -263,6 +282,7 @@ export const useNightlyReceipts = () => {
     nightlyReceipts,
     nightlyReceiptsByUser,
     getNightlyReceipts,
+    getNightlyReceiptsByUser,
     getCountNightUnpaid,
     getCountNightPaid,
     getCountNightTotal,
@@ -288,6 +308,6 @@ export const useNightlyReceipts = () => {
     visibleShowNightlyReceiptModal,
     visibleQRModalNightlyReceipt,
     handlerRemoveNightlyReceipt,
-    initialNightlyReceipt
+    initialNightlyReceipt,
   };
 };

@@ -10,11 +10,13 @@ import {
 import {
   RiDeleteBin7Line,
   RiLineHeight,
+  RiMoonLine,
   RiPagesFill,
   RiPagesLine,
   RiSearch2Line,
   RiSortAsc,
   RiSortDesc,
+  RiSunLine,
 } from "react-icons/ri";
 import { Paginator } from "../Paginator";
 import classNames from "classnames";
@@ -230,7 +232,7 @@ export const AllVehicles = ({ dataVehicles }) => {
                             });
                           }}
                         >
-                          <RiPagesLine className="text-lg" />
+                          <RiSunLine className="text-lg" />
                         </button>
 
                         <button
@@ -247,17 +249,7 @@ export const AllVehicles = ({ dataVehicles }) => {
                             });
                           }}
                         >
-                          <RiPagesFill className="text-lg" />
-                        </button>
-                        <button
-                          type="button"
-                          className="py-2 px-2 bg-secondary-100/50 hover:bg-secondary-100 text-red-500/70 hover:text-red-500
-                   transition-colors rounded-lg  flex items-center "
-                          onClick={() => {
-                            handlerRemoveReceipt(row.original.id);
-                          }}
-                        >
-                          <RiDeleteBin7Line className="text-lg" />
+                          <RiMoonLine className="text-lg" />
                         </button>
                       </div>
                     )}

@@ -113,7 +113,7 @@ public class SpringSecurityConfig {
 
                         //Nightly Receipt
                         .requestMatchers(HttpMethod.GET, "nightly-receipt").permitAll()
-                        .requestMatchers(HttpMethod.GET, "nightly-receipt/user/{userId}").permitAll()
+                        .requestMatchers(HttpMethod.GET, "nightly-receipt/{userId}").permitAll()
                         .requestMatchers(HttpMethod.POST, "nightly-receipt/{userId}/create").permitAll()
                         .requestMatchers(HttpMethod.PUT, "/nightly-receipt/{nightlyReceiptId}/update").permitAll()
                         .requestMatchers(HttpMethod.PATCH, "nightly-receipt/change-payment/{receiptId}").permitAll()

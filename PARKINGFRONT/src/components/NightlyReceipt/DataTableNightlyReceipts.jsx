@@ -64,6 +64,7 @@ export const DataTableNightlyReceipts = ({ dataReceipts }) => {
     visibleQRModalNightlyReceipt,
     handlerOpenModalQRNightlyReceipt,
     handlerNightlyReceiptSelectedModalShow,
+    handlerNightlyReceiptSelectedModalForm,
     visibleShowNightlyReceiptModal,
     handlerRemoveNightlyReceipt,
   } = useNightlyReceipts();
@@ -173,7 +174,9 @@ export const DataTableNightlyReceipts = ({ dataReceipts }) => {
         </div>
       </div>
       {/*Modal create */}
-      {!visibleFormNightlyReceiptModal || <ModalFormReceipt receiptType={"nocturno"} />}
+      {!visibleFormNightlyReceiptModal || (
+        <ModalFormReceipt receiptType={"nocturno"} />
+      )}
       {/*Modal info */}
       {!visibleShowNightlyReceiptModal || <ModalReceipt />}
       {/*Modal QR */}
@@ -315,7 +318,9 @@ export const DataTableNightlyReceipts = ({ dataReceipts }) => {
                           className="py-2 px-2 bg-primary/80 text-black hover:bg-primary rounded-lg transition-colors"
                           onClick={() => {
                             // Pasa los datos del usuario al hacer clic en el botón de edición
-                            handlerReceiptSelectedModalForm(row.original);
+                            handlerNightlyReceiptSelectedModalForm(
+                              row.original
+                            );
                           }}
                         >
                           <RiEdit2Line className="text-lg" />

@@ -13,6 +13,9 @@ import com.sergio.spring.rest.usuariosvehiculos.app.models.entities.Vehicle;
 public interface IVehicleRepository extends CrudRepository<Vehicle, Long> {
 
     List<Vehicle> findByUserIdAndActiveFalse(Long userId);
+
+    List<Vehicle> findByActiveTrue();
+
     @Query("select  v from Vehicle v where v.id= :vehicleId and v.user.id = :userId")
     Optional<Vehicle> findByIdAndUserId(Long vehicleId, Long userId);
 

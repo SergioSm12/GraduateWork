@@ -35,12 +35,15 @@ public class NightlyReceiptService implements INightlyReceiptService {
     @Autowired
     private IRateRepository rateRepository;
 
+
+    //obtener recibos
     @Override
     @Transactional(readOnly = true)
     public List<NightlyReceiptDto> nightlyReceiptList() {
         List<NightlyReceipt> nightlyReceipts = (List<NightlyReceipt>) nightlyReceiptRepository.findAll();
         return nightlyReceipts.stream().map(nr -> DtoMapperNightlyReceipt.builder().setNightlyReceipt(nr).build()).collect(Collectors.toList());
     }
+
 
     @Override
     @Transactional(readOnly = true)
@@ -81,7 +84,7 @@ public class NightlyReceiptService implements INightlyReceiptService {
         return receipts.stream().map(r -> DtoMapperNightlyReceipt.builder().setNightlyReceipt(r).build())
                 .collect(Collectors.toList());
     }
-
+cd grad 
     //servicio optimizado qr
     @Override
     @Transactional(readOnly = true)

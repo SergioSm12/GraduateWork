@@ -11,6 +11,15 @@ export const findAllNightlyReceipts = async () => {
   }
 };
 
+export const findNightlyReceiptsByUser = async (id) => {
+  try {
+    const response = await parkingApi.get(`${BASE_URL_RECEIPT}/${id}`);
+    return response;
+  } catch (error) {
+    throw error;
+  }
+};
+
 export const changePaymentStatusNight = async (receiptNightlyId) => {
   try {
     await parkingApi.patch(

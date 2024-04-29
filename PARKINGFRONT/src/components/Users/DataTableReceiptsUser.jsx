@@ -26,6 +26,8 @@ import { useReceipts } from "../../hooks/useReceipts";
 import { ModalReceipt } from "../Receipts/ModalReceipt";
 import { es } from "date-fns/locale";
 import { QRCode } from "../QR/QRCode";
+import { useNightlyReceipts } from "../../hooks/useNightlyReceipts";
+import { ModalFormReceipt } from "../Receipts/ModalFormReceipt";
 
 //Componente con TanStackReacttable
 
@@ -57,7 +59,7 @@ const DebuncedInput = ({ value: keyWord, onchange, ...props }) => {
   );
 };
 
-export const DataTableReceiptsUser = ({ dataReceipts }) => {
+export const DataTableReceiptsUser = ({ dataReceipts, receiptType }) => {
   const { id } = useParams();
   const [data, setData] = useState(dataReceipts);
   const [globalFilter, setGlobalFilter] = useState("");
@@ -70,7 +72,16 @@ export const DataTableReceiptsUser = ({ dataReceipts }) => {
     handlerChangePaymentStatus,
     handlerRemoveReceipt,
     handlerOpenModalQRReceipt,
-  } = useReceipts();
+
+
+    handlerNightlyReceiptSelectedModalShow,
+    visibleShowNightlyReceiptModal,
+    visibleQRModalNightlyReceipt,
+    visibleFormNightlyReceiptModal,
+    handlerNightlyReceiptSelectedModalForm,
+    handlerRemoveNightlyReceipt,
+    handlerOpenModalQRNightlyReceipt,
+  } = receiptType === "nocturno" ? useNightlyReceipts() : useReceipts();
 
   useEffect(() => {
     setData(dataReceipts);
@@ -87,11 +98,11 @@ export const DataTableReceiptsUser = ({ dataReceipts }) => {
       header: () => <span>Estado de pago</span>,
     },
     {
-      accessorKey: "issueDate",
+      accessorKey: receiptType === "nocturno" ? "initialTime" : "issueDate",
       header: () => <span>Fecha de emision</span>,
     },
     {
-      accessorKey: "dueDate",
+      accessorKey: receiptType === "nocturno" ? "departureTime" : "dueDate",
       header: () => <span>Fecha de vencimiento</span>,
     },
 
@@ -142,7 +153,9 @@ export const DataTableReceiptsUser = ({ dataReceipts }) => {
   };
 
   const handlerDeleteStatusReceipt = async (receiptId) => {
-    await handlerRemoveReceipt(receiptId, id);
+    receiptType === "nocturno"
+      ? await handlerRemoveNightlyReceipt(receiptId, id)
+      : await handlerRemoveReceipt(receiptId, id);
   };
 
   return (
@@ -171,9 +184,17 @@ export const DataTableReceiptsUser = ({ dataReceipts }) => {
         </div>
       </div>
       {/*Modal showreceipt */}
-      {!visibleShowReceiptModal || <ModalReceipt />}
+      {!visibleShowReceiptModal || <ModalReceipt receiptType={"normal"}/>}
+      {/*Modal showNightly receipt */}
+      {!visibleShowNightlyReceiptModal || (
+        <ModalReceipt />
+      )}
+      {/*Modal crear*/}
+      {!visibleFormNightlyReceiptModal || <ModalFormReceipt receiptType={"nocturno"}/>}
       {/*Modal QR */}
       {!visibleQRModalReceipt || <QRCode />}
+      {/* Modal QR Nightly Receipt */}
+      {!visibleQRModalNightlyReceipt || <QRCode />}
       {/*Table */}
       <div className="overflow-x-auto">
         <table className="table-auto min-w-full border-collapse">
@@ -243,10 +264,13 @@ export const DataTableReceiptsUser = ({ dataReceipts }) => {
                       </div>
                     )}
 
-                    {cell.column.id === "issueDate" && (
+                    {(cell.column.id === "issueDate" ||
+                      cell.column.id === "initialTime") && (
                       <div className="text-center">
                         {formatInTimeZone(
-                          row.original.issueDate,
+                          receiptType === "nocturno"
+                            ? row.original.initialTime
+                            : row.original.issueDate,
                           "America/Bogota",
                           "dd 'de' MMMM 'del' yyyy 'a las' HH:mm",
                           { locale: es }
@@ -254,16 +278,23 @@ export const DataTableReceiptsUser = ({ dataReceipts }) => {
                       </div>
                     )}
 
-                    {cell.column.id === "dueDate" && (
+                    {(cell.column.id === "dueDate" ||
+                      cell.column.id === "departureTime") && (
                       <div
                         className={classNames({
                           "text-center": true,
                           "text-red-500/50":
-                            new Date(row.original.dueDate) <= new Date(),
+                            new Date(
+                              receiptType === "nocturno"
+                                ? row.original.departureTime
+                                : row.original.dueDate
+                            ) <= new Date(),
                         })}
                       >
                         {formatInTimeZone(
-                          row.original.dueDate,
+                          receiptType === "nocturno"
+                            ? row.original.departureTime
+                            : row.original.dueDate,
                           "America/Bogota",
                           "dd 'de' MMMM 'del' yyyy 'a las' HH:mm",
                           { locale: es }
@@ -277,7 +308,11 @@ export const DataTableReceiptsUser = ({ dataReceipts }) => {
                           type="button"
                           className="py-2 px-2 bg-primary/80 text-black hover:bg-secondary-100 rounded-lg transition-colors"
                           onClick={() =>
-                            handlerOpenModalQRReceipt(row.original.id)
+                            receiptType === "nocturno"
+                              ? handlerOpenModalQRNightlyReceipt(
+                                  row.original.id
+                                )
+                              : handlerOpenModalQRReceipt(row.original.id)
                           }
                         >
                           <RiQrCodeLine className="text-lg" />
@@ -287,7 +322,11 @@ export const DataTableReceiptsUser = ({ dataReceipts }) => {
                           type="button"
                           className="py-2 px-2 bg-primary/80 text-black hover:bg-secondary-100 rounded-lg transition-colors"
                           onClick={() => {
-                            handlerReceiptSelectedModalShow(row.original);
+                            receiptType === "nocturno"
+                              ? handlerNightlyReceiptSelectedModalShow(
+                                  row.original
+                                )
+                              : handlerReceiptSelectedModalShow(row.original);
                           }}
                         >
                           <RiInformationLine className="text-lg" />
@@ -298,7 +337,11 @@ export const DataTableReceiptsUser = ({ dataReceipts }) => {
                           className="py-2 px-2 bg-primary/80 text-black hover:bg-primary rounded-lg transition-colors"
                           onClick={() => {
                             // Pasa los datos del usuario al hacer clic en el botón de edición
-                            handlerReceiptSelectedModalForm(row.original);
+                            receiptType === "nocturno"
+                              ? handlerNightlyReceiptSelectedModalForm(
+                                  row.original
+                                )
+                              : handlerReceiptSelectedModalForm(row.original);
                           }}
                         >
                           <RiEdit2Line className="text-lg" />

@@ -54,7 +54,7 @@ public class NightlyReceiptController {
         return ResponseEntity.ok(totalNightlyReceipts);
     }
 
-    @GetMapping("/user/{userId}")
+    @GetMapping("/{userId}")
     public ResponseEntity<List<NightlyReceiptDto>> getNightlyReceiptsByUserId(@PathVariable Long userId) {
         List<NightlyReceiptDto> receipts = nightlyReceiptService.getNightlyReceiptsByUserId(userId);
         return ResponseEntity.ok(receipts);

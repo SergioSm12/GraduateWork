@@ -95,13 +95,13 @@ export const CreateReceipt = ({ receiptType }) => {
           ? nightlyReceiptSelected.initialTime
           : receiptSelected.issueDate,
         "America/Bogota",
-        "yyyy-MM-dd"
+        "yyyy-MM-dd HH:mm"
       );
 
       //parsear fecha formateada a timezone
       const parsedIssueDate = parse(
         formattedIssueDate,
-        "yyyy-MM-dd",
+        "yyyy-MM-dd HH:mm",
         new Date()
       );
       if (receiptType === "nocturno") {
@@ -121,13 +121,17 @@ export const CreateReceipt = ({ receiptType }) => {
           ? nightlyReceiptSelected.departureTime
           : receiptSelected.dueDate,
         "America/Bogota",
-        "yyyy-MM-dd"
+        "yyyy-MM-dd HH:mm"
       );
       //Parsear fecha formatead timeZone
-      const parsedDueDate = parse(formattedDueDate, "yyyy-MM-dd", new Date());
+      const parsedDueDate = parse(
+        formattedDueDate,
+        "yyyy-MM-dd HH:mm",
+        new Date()
+      );
 
       if (receiptType === "nocturno") {
-        setDepartureTime(parsedDueDateDate);
+        setDepartureTime(parsedDueDate);
       } else {
         setDueDate(parsedDueDate);
       }
@@ -228,6 +232,8 @@ export const CreateReceipt = ({ receiptType }) => {
 
     let updatedReceiptForm;
     if (receiptType === "nocturno") {
+      setInitialTime(initialTime.setHours(initialTime.getHours() - 5));
+      setDepartureTime(departureTime.setHours(departureTime.getHours() - 5));
       updatedReceiptForm = {
         ...receiptForm,
         vehicle: vehicleForm,
@@ -338,12 +344,13 @@ export const CreateReceipt = ({ receiptType }) => {
               <DatePicker
                 id={receiptType === "nocturno" ? "initialTime" : "issueDate"}
                 showIcon
-                selected={receiptType === "noctunro" ? initialTime : issueDate}
+                selected={receiptType === "nocturno" ? initialTime : issueDate}
                 onChange={handleIssueDateChange}
                 locale={es}
                 className="py-3 pl-8 pr-4 text-center bg-secondary-900 w-full outline-none rounded-lg focus:border focus:border-primary appearance-none"
                 timeInputLabel="Time:"
-                dateFormat={"dd 'de' MMMM yyyy '7:00'"}
+                dateFormat={"dd 'de' MMMM yyyy h:mm aa"}
+                showTimeInput
                 icon={<RiCalendarCheckLine className="text-primary" />}
               />
             </div>
@@ -354,12 +361,13 @@ export const CreateReceipt = ({ receiptType }) => {
               <DatePicker
                 id={receiptType === "nocturno" ? "departureTime" : "dueDate"}
                 showIcon
-                selected={receiptType === "noctunro" ? departureTime : dueDate}
+                selected={receiptType === "nocturno" ? departureTime : dueDate}
                 onChange={handleDueDateChange}
                 locale={es}
                 className="py-3 pl-8 pr-4 text-center bg-secondary-900 w-full outline-none rounded-lg focus:border focus:border-primary appearance-none"
-                timeInputLabel="Time:"
-                dateFormat={"dd 'de' MMMM yyyy '22:00'"}
+                timeInputLabel="Hora :"
+                dateFormat={"dd 'de' MMMM yyyy h:mm aa"}
+                showTimeInput
                 icon={<RiCalendarCloseLine className="text-primary" />}
               />
             </div>

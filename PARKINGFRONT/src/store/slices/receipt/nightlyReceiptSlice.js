@@ -3,8 +3,8 @@ import { onReceiptSelectedForm, rate, user, vehicle } from "./receiptSlice";
 
 export const initialNightlyReceipt = {
   id: 0,
-  initialTime: null,
-  departureTime: null,
+  initialTime: new Date().toISOString(),
+  departureTime: new Date().toISOString(),
   paymentStatus: false,
   rate: null,
   user: user,
@@ -35,6 +35,25 @@ export const nightlyReceiptSlice = createSlice({
   },
   reducers: {
     addNightlyReceiptSlice: (state, action) => {
+      state.nightlyReceipts = [
+        ...state.nightlyReceipts,
+        {
+          ...action.payload,
+        },
+      ];
+
+      state.nightlyReceiptsByUser = [
+        ...state.nightlyReceiptsByUser,
+        {
+          ...action.payload,
+        },
+      ];
+
+      state.nightlyReceiptSelected = initialNightlyReceipt;
+      state.visibleFormNightlyReceiptModal = false;
+    },
+
+    updateNightlyReceiptSlice: (state, action) => {
       state.nightlyReceipts = state.nightlyReceipts.map((nr) => {
         if (nr.id === action.payload.id) {
           return {
@@ -43,6 +62,16 @@ export const nightlyReceiptSlice = createSlice({
         }
         return nr;
       });
+
+      state.nightlyReceiptsByUser = state.nightlyReceiptsByUser.map((nr) => {
+        if (nr.id === action.payload.id) {
+          return {
+            ...action.payload,
+          };
+        }
+        return nr;
+      });
+
       state.nightlyReceiptSelected = initialNightlyReceipt;
       state.visibleFormNightlyReceiptModal = false;
     },
@@ -51,10 +80,18 @@ export const nightlyReceiptSlice = createSlice({
       state.nightlyReceipts = state.nightlyReceipts.filter(
         (receipt) => receipt.id !== action.payload
       );
+
+      state.nightlyReceiptsByUser = state.nightlyReceiptsByUser.filter(
+        (receipt) => receipt.id !== action.payload
+      );
     },
 
     loadingNightlyReceipts: (state, action) => {
       state.nightlyReceipts = action.payload;
+    },
+
+    loadingNightlyReceiptsByUser: (state, action) => {
+      state.nightlyReceiptsByUser = action.payload;
     },
 
     //Total receipts nightly
@@ -116,8 +153,10 @@ export const nightlyReceiptSlice = createSlice({
 
 export const {
   addNightlyReceiptSlice,
+  updateNightlyReceiptSlice,
   removeNightlyReceipt,
   loadingNightlyReceipts,
+  loadingNightlyReceiptsByUser,
   loadingNightUnpaidCount,
   loadingNightPaidCount,
   loadingNightTotalCount,

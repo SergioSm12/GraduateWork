@@ -21,6 +21,7 @@ export const ListVehicles = () => {
   } = useVehicle();
   const { visibleFormReceiptModal, handlerOpenModalFormReceipt } =
     useReceipts();
+   
   const { id: userId } = useParams();
   useEffect(() => {
     getVehiclesActive(userId);

@@ -2,14 +2,18 @@ import React, { useEffect } from "react";
 import {
   RiDeleteBinLine,
   RiEdit2Line,
+  RiMoonLine,
   RiSettings5Line,
   RiShutDownLine,
+  RiSunLine,
   RiTicket2Line,
 } from "react-icons/ri";
 import "@szhsin/react-menu/dist/index.css";
 import "@szhsin/react-menu/dist/transitions/slide.css";
 import { Menu, MenuItem, MenuButton } from "@szhsin/react-menu";
 import { useVehicle } from "../../hooks/useVehicle";
+import { useNightlyReceipts } from "../../hooks/useNightlyReceipts";
+import { ModalFormReceipt } from "../Receipts/ModalFormReceipt";
 export const DataTableVehicles = ({
   vehicles,
   handlerRemoveVehicle,
@@ -18,8 +22,15 @@ export const DataTableVehicles = ({
   handlerOpenModalFormReceipt,
   userId,
 }) => {
+  const { handlerOpenModalFormNightlyReceipt, visibleFormNightlyReceiptModal } =
+    useNightlyReceipts();
+
   return (
     <div className="bg-secondary-100 py-8 px-2 rounded-lg ">
+      {/*Modal create Nightly receipt */}
+      {!visibleFormNightlyReceiptModal || (
+        <ModalFormReceipt receiptType={"nocturno"} />
+      )}
       <div className="overflow-x-auto">
         <table className="table-auto border min-w-full ">
           <thead>
@@ -66,8 +77,26 @@ export const DataTableVehicles = ({
                           })
                         }
                       >
-                        <RiTicket2Line className="text-[#8DE800]" /> Generar
-                        recibo
+                        <RiSunLine  className="text-[#8DE800]" /> Generar
+                        recibo diurno
+                      </button>
+                    </MenuItem>
+
+                    <MenuItem className="p-0 hover:bg-transparent">
+                      <button
+                        className="rounded-lg transition-colors text-gray-300 hover:bg-secondary-900
+                     flex items-center gap-x-2 p-2 flex-1"
+                        onClick={() =>
+                          handlerOpenModalFormNightlyReceipt({
+                            id: id,
+                            plate: plate,
+                            vehicleType: vehicleType,
+                            active: active,
+                          })
+                        }
+                      >
+                        <RiMoonLine className="text-[#8DE800]" /> Generar recibo
+                        nocturno
                       </button>
                     </MenuItem>
 

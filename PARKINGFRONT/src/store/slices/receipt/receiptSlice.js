@@ -9,7 +9,7 @@ export const vehicle = {
   id: 0,
   plate: "",
   vehicleType: vehicleType,
-  user:null
+  user: null,
 };
 
 export const role = {
@@ -40,7 +40,7 @@ export const rate = {
 export const initialReceiptForm = {
   id: 0,
   issueDate: new Date().toISOString(),
-  dueDate: null,
+  dueDate: new Date().toISOString(),
   paymentStatus: false,
   rate: null,
   user: user,
@@ -71,8 +71,16 @@ export const receiptSlice = createSlice({
   },
   reducers: {
     addReceipt: (state, action) => {
+      
       state.receiptsByUser = [
         ...state.receiptsByUser,
+        {
+          ...action.payload,
+        },
+      ];
+
+      state.receipts = [
+        ...state.receipts,
         {
           ...action.payload,
         },
@@ -104,6 +112,10 @@ export const receiptSlice = createSlice({
 
     removeReceipt: (state, action) => {
       state.receiptsByUser = state.receiptsByUser.filter(
+        (receipt) => receipt.id !== action.payload
+      );
+
+      state.receipts = state.receipts.filter(
         (receipt) => receipt.id !== action.payload
       );
     },
