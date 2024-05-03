@@ -63,6 +63,7 @@ export const receiptSlice = createSlice({
     receiptSelected: initialReceiptForm,
     vehicleSelected: vehicle,
     idQRReceipt: null,
+    
 
     visibleShowReceiptModal: false,
     visibleFormReceiptModal: false,
@@ -71,7 +72,6 @@ export const receiptSlice = createSlice({
   },
   reducers: {
     addReceipt: (state, action) => {
-      
       state.receiptsByUser = [
         ...state.receiptsByUser,
         {
@@ -179,6 +179,8 @@ export const receiptSlice = createSlice({
       state.idQRReceipt = null;
     },
 
+  
+
     loadingErrorReceipt: (state, action) => {
       state.errorsReceipt = action.payload;
     },
@@ -196,6 +198,7 @@ export const {
   onReceiptSelectedForm,
   onOpenModalFormReceipt,
   onCloseModalFormReceipt,
+  onGenerateQRPdfReceipt,
 
   onOpenQRModalReceipt,
   onCloseQRModalReceipt,

@@ -26,6 +26,7 @@ import { ModalReceipt } from "../Receipts/ModalReceipt";
 import { es } from "date-fns/locale";
 import { ModalFormReceipt } from "./ModalFormReceipt";
 import { QRCode } from "../QR/QRCode";
+import { GenerateInvoicePdf } from "../PDF/GenerateInvoicePdf";
 
 //Componente con TanStackReacttable
 
@@ -70,6 +71,8 @@ export const DataTableReceipt = ({ dataReceipts }) => {
     handlerReceiptSelectedModalForm,
     handlerChangePaymentStatus,
     handlerRemoveReceipt,
+    idQRReceipt,
+  
   } = useReceipts();
 
   useEffect(() => {
@@ -181,7 +184,7 @@ export const DataTableReceipt = ({ dataReceipts }) => {
         </div>
       </div>
       {/*Modal showreceipt */}
-      {!visibleShowReceiptModal || <ModalReceipt receiptType={"normal"}/>}
+      {!visibleShowReceiptModal || <ModalReceipt receiptType={"normal"} />}
       {/*Modal QR */}
       {!visibleQRModalReceipt || <QRCode />}
       {/*Table */}
@@ -230,8 +233,11 @@ export const DataTableReceipt = ({ dataReceipts }) => {
                     })}
                   >
                     {cell.column.id === "vehiclePlate" && (
-                      <div className=" flex justify-center">
+                      <div className=" flex justify-between gap-2">
                         {row.original.vehicle.plate}
+                        <GenerateInvoicePdf
+                          row={row}
+                        />
                       </div>
                     )}
                     {cell.column.id === "paymentStatus" && (

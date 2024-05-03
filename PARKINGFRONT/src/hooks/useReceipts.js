@@ -30,6 +30,7 @@ import {
   loadingTotalCount,
   onOpenQRModalReceipt,
   onCloseQRModalReceipt,
+  onGenerateQRPdfReceipt,
 } from "../store/slices/receipt/receiptSlice";
 import Swal from "sweetalert2";
 import { useAuth } from "../auth/hooks/useAuth";
@@ -255,7 +256,6 @@ export const useReceipts = () => {
     dispatch(loadingErrorReceipt({}));
   };
 
-  
   //Show
   const handlerReceiptSelectedModalShow = (receipt) => {
     dispatch(onReceiptShowModalSelected({ ...receipt }));
@@ -297,7 +297,6 @@ export const useReceipts = () => {
     visibleQRModalReceipt,
     vehicle,
 
-    
     handlerOpenModalShowReceipt,
     handlerReceiptSelectedModalShow,
     handlerCloseModalShowReceipt,

@@ -19,6 +19,7 @@ export const useQRCode = () => {
     try {
       const imageUrl = await generateQRCodeImage(id);
       dispatch(setQRCodeImage(imageUrl));
+      return imageUrl;
     } catch (error) {
       console.log("Error en el fetching de la imagen : ", error);
     }
@@ -28,6 +29,7 @@ export const useQRCode = () => {
     try {
       const imageUrl = await generateQRCodeNightlyImage(id);
       dispatch(setQRCodeImageNightly(imageUrl));
+      return imageUrl;
     } catch (error) {
       console.log("Error en el fetching de la imagen : ", error);
     }
@@ -37,6 +39,7 @@ export const useQRCode = () => {
     try {
       const imageUrl = await generateQRCodeVisitorImage(id);
       dispatch(setQRCodeImageVisitor(imageUrl));
+      return imageUrl;
     } catch (error) {
       console.log("Error en el fetching de la imagen : ", error);
     }

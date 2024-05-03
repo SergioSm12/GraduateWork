@@ -25,6 +25,7 @@ import { es } from "date-fns/locale";
 import { useVisitorReceipt } from "../../hooks/useVisitorReceipt";
 import { ModalReceiptVisitor } from "./ModalReceiptVisitor";
 import { QRCode } from "../QR/QRCode";
+import { GenerateInvoicePdf } from "../PDF/GenerateInvoicePdf";
 
 //Componente con TanStackReacttable
 
@@ -227,8 +228,12 @@ export const DataTableVisitorReceipt = ({ dataReceipts }) => {
                     })}
                   >
                     {cell.column.id === "vehiclePlate" && (
-                      <div className=" flex justify-center">
+                      <div className=" flex justify-between gap-2">
                         {row.original.plate}
+                        <GenerateInvoicePdf
+                          row={row}
+                          receiptType={"visitante"}
+                        />
                       </div>
                     )}
                     {cell.column.id === "paymentStatus" && (
@@ -258,7 +263,6 @@ export const DataTableVisitorReceipt = ({ dataReceipts }) => {
 
                     {cell.column.id === "issueDate" && (
                       <div className="text-center">
-                      
                         {formatInTimeZone(
                           row.original.issueDate,
                           "America/Bogota",

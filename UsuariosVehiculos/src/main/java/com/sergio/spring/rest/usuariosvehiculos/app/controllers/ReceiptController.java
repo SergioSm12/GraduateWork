@@ -149,6 +149,7 @@ public class ReceiptController {
         if (receiptOptional.isEmpty()) {
             return ResponseEntity.notFound().build();
         }
+
         receiptService.changePaymentStatus(receiptId);
         return ResponseEntity.ok().build();
     }

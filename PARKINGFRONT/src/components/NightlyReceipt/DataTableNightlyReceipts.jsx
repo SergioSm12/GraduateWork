@@ -26,6 +26,7 @@ import classNames from "classnames";
 import { QRCode } from "../QR/QRCode";
 import { ModalReceipt } from "../Receipts/ModalReceipt";
 import { ModalFormReceipt } from "../Receipts/ModalFormReceipt";
+import { GenerateInvoicePdf } from "../PDF/GenerateInvoicePdf";
 
 const fuzzyFilter = (row, columnId, value, addMeta) => {
   const itemRank = rankItem(row.original.vehicle.plate, value);
@@ -227,8 +228,12 @@ export const DataTableNightlyReceipts = ({ dataReceipts }) => {
                     })}
                   >
                     {cell.column.id === "vehiclePlate" && (
-                      <div className=" flex justify-center">
+                      <div className=" flex justify-between gap-2">
                         {row.original.vehicle.plate}
+                        <GenerateInvoicePdf
+                          row={row}
+                          receiptType={"nocturno"}
+                        />
                       </div>
                     )}
                     {cell.column.id === "paymentStatus" && (

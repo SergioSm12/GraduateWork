@@ -1,9 +1,7 @@
 package com.sergio.spring.rest.usuariosvehiculos.app.service;
 
 import com.sergio.spring.rest.usuariosvehiculos.app.models.dto.entity.users.NightlyReceiptDto;
-import com.sergio.spring.rest.usuariosvehiculos.app.models.dto.entity.users.ReceiptDto;
 import com.sergio.spring.rest.usuariosvehiculos.app.models.dto.mapper.DtoMapperNightlyReceipt;
-import com.sergio.spring.rest.usuariosvehiculos.app.models.dto.mapper.DtoMapperReceipt;
 import com.sergio.spring.rest.usuariosvehiculos.app.models.entities.*;
 import com.sergio.spring.rest.usuariosvehiculos.app.models.request.NightlyReceiptRequest;
 import com.sergio.spring.rest.usuariosvehiculos.app.repositorys.INightlyReceiptRepository;
