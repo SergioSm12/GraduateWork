@@ -1,5 +1,6 @@
 package com.sergio.spring.rest.usuariosvehiculos.app.repositorys;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -13,8 +14,8 @@ import com.sergio.spring.rest.usuariosvehiculos.app.models.entities.User;
 public interface IReceiptRepository extends CrudRepository<Receipt, Long> {
 
     //Orden desendente 
-   List<Receipt> findAllByOrderByIssueDateDesc();
-   
+    List<Receipt> findAllByOrderByIssueDateDesc();
+
     List<Receipt> findByPaymentStatusFalse();
 
     List<Receipt> findByPaymentStatusTrue();
@@ -31,7 +32,14 @@ public interface IReceiptRepository extends CrudRepository<Receipt, Long> {
 
     //query optimisado find by idQR
     @Query("SELECT r FROM Receipt r LEFT JOIN FETCH r.rate LEFT JOIN FETCH r.user LEFT JOIN FETCH r.vehicle LEFT JOIN FETCH r.vehicle.vehicleType WHERE r.id = :receiptId")
-    Optional<Receipt> findByIdWithDetails (@Param("receiptId") Long receiptId);
+    Optional<Receipt> findByIdWithDetails(@Param("receiptId") Long receiptId);
+
+
+    //reportes filtrar recibos
+    List<Receipt> findByIssueDateBetween(LocalDateTime startDate, LocalDateTime endDate);
+
+    //filtar recibos por estado de pago.
+    List<Receipt> findByIssueDateBetweenAndPaymentStatus(LocalDateTime startDate, LocalDateTime endDate, boolean paymentStatus);
 
 
 }

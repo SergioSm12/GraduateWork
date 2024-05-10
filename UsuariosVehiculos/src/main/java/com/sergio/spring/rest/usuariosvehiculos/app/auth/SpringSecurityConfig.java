@@ -122,6 +122,13 @@ public class SpringSecurityConfig {
                         .requestMatchers(HttpMethod.GET, "nightly-receipt/count-paid").permitAll()
                         .requestMatchers(HttpMethod.DELETE, "/nightly-receipt/{nightlyReceiptId}").permitAll()
 
+                        //reports
+                        .requestMatchers(HttpMethod.GET, "reports/income/monthly").permitAll()
+                        .requestMatchers(HttpMethod.POST, "reports/income/monthly").permitAll()
+                        .requestMatchers(HttpMethod.GET, "reports/income/weekly").permitAll()
+                        .requestMatchers(HttpMethod.GET, "reports/income/biweekly").permitAll()
+
+
                         .anyRequest().authenticated())
                 .addFilter(new JwtAuthenticationFilter(authenticationConfiguration.getAuthenticationManager()))
                 .addFilter(new JwtValidationFilter(authenticationConfiguration.getAuthenticationManager()))

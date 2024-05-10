@@ -12,6 +12,8 @@ import { UserRoutes } from "./routes/UserRoutes";
 import { Rates } from "./pages/admin/Rates";
 import { VehicleTypes } from "./pages/admin/VehicleTypes";
 import { RegisterVisitor } from "./pages/visitor/RegisterVisitor";
+import { MonthlyReceipt } from "./components/Reports/ReceiptReports/MonthlyReceipt";
+import { ReportRutes } from "./routes/ReportRutes";
 
 export const AppRoutes = () => {
   const { login } = useAuth();
@@ -27,13 +29,12 @@ export const AppRoutes = () => {
   return (
     <Routes>
       {login.isAuth ? (
-
-
         <Route path="/" element={<LayoutAdmin />}>
           <Route index element={<Home />} />
           <Route path="users/*" element={<UserRoutes />} />
           <Route path="rate" element={<Rates />} />
           <Route path="vehicleType" element={<VehicleTypes />} />
+          <Route path="reports/*" element={<ReportRutes />} />
         </Route>
       ) : (
         <>

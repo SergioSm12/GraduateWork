@@ -1,6 +1,8 @@
 package com.sergio.spring.rest.usuariosvehiculos.app.service;
 
+import java.time.Month;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import com.sergio.spring.rest.usuariosvehiculos.app.models.dto.entity.users.ReceiptDto;
@@ -36,6 +38,19 @@ public interface IReceiptService {
 
     void changePaymentStatus(Long receiptId);
 
-    public void remove(Long receiptId);
+    void remove(Long receiptId);
+
+    //Reportes
+    //Mes
+    Map<String, Double> getWeeklyIncome();
+
+    Map<String, Double> getWeeklyIncome(int year, Month month);
+
+    //Quincena
+    Map<String, Double> getBiWeeklyIncome();
+
+    //Semana
+    Map<String, Double> getDailyIncomeForCurrentWeek();
+
 
 }

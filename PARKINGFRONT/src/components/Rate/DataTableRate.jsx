@@ -1,7 +1,6 @@
 import React from "react";
 import { RiDeleteBin5Line, RiEdit2Line } from "react-icons/ri";
 import { useRates } from "../../hooks/useRates";
-import { vehicleType } from "../../store/slices/rate/rateSlice";
 
 // funcion de formato moneda
 const formatCurrency = (amount) => {
@@ -16,7 +15,7 @@ export const DataTableRate = () => {
     <div className="overflow-x-auto">
       <table className="table-auto min-w-full  border ">
         <thead>
-          <tr>
+          <tr >
             <th>Tiempo</th>
             <th>Valor</th>
             <th>Vehiculo</th>

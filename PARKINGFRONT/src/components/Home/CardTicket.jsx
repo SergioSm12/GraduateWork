@@ -94,11 +94,11 @@ export const CardTicket = (props) => {
           >
             <MenuItem className="p-0 hover:bg-transparent">
               <Link
-                to="/"
+                to="/reports/monthly/receipt"
                 className="rounded-lg transition-colors text-gray-300 hover:bg-secondary-900
                      flex items-center gap-x-4 p-2 flex-1"
               >
-                Dashboard tickets
+                Reportes de ingresos diurnos.
               </Link>
             </MenuItem>
             <MenuItem className="p-0 hover:bg-transparent">
@@ -107,7 +107,16 @@ export const CardTicket = (props) => {
                 className="rounded-lg transition-colors text-gray-300 hover:bg-secondary-900
                      flex items-center gap-x-4 p-2 flex-1"
               >
-                Informacion
+                Reportes de ingresos nocturnos 
+              </Link>
+            </MenuItem>
+            <MenuItem className="p-0 hover:bg-transparent">
+              <Link
+                to="/"
+                className="rounded-lg transition-colors text-gray-300 hover:bg-secondary-900
+                     flex items-center gap-x-4 p-2 flex-1"
+              >
+                Reportes de ingresos visitantes
               </Link>
             </MenuItem>
           </Menu>
