@@ -2,8 +2,12 @@ import React from "react";
 import { useState } from "react";
 import { RiCalendarLine } from "react-icons/ri";
 import { useReports } from "../../../hooks/useReports";
-export const GenerateReportMonthlySpecific = () => {
-  const { getCurrentMonthlyReceiptReportSpecific } = useReports();
+export const GenerateReportMonthlySpecific = ({ reportType }) => {
+  const {
+    getCurrentMonthlyReceiptReportSpecific,
+    getCurrentMonthlyNightlyReceiptReportSpecific,
+    getCurrentMonthlyVisitorReceiptReportSpecific,
+  } = useReports();
 
   const currentYear = new Date().getFullYear();
   const currentMonth = new Date().getMonth() + 1;
@@ -26,7 +30,14 @@ export const GenerateReportMonthlySpecific = () => {
 
   const onSubmit = (e) => {
     e.preventDefault();
-    getCurrentMonthlyReceiptReportSpecific(reportForm);
+
+    if (reportType === "nightly") {
+      getCurrentMonthlyNightlyReceiptReportSpecific(reportForm);
+    } else if (reportType === "visitor") {
+      getCurrentMonthlyVisitorReceiptReportSpecific(reportForm);
+    } else {
+      getCurrentMonthlyReceiptReportSpecific(reportForm);
+    }
   };
 
   return (

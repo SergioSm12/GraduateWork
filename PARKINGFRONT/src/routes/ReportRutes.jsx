@@ -1,11 +1,15 @@
 import React from "react";
 import { Route, Routes } from "react-router-dom";
 import { MonthlyReceipt } from "../components/Reports/ReceiptReports/MonthlyReceipt";
+import { NightlyReceipReports } from "../components/Reports/NightlyReceiptReports/NightlyReceipReports";
+import { VisitorReceiptReport } from "../components/Reports/VisitorReceiptReport/VisitorReceiptReport";
 
 export const ReportRutes = () => {
   return (
     <Routes>
-      <Route path="/monthly/receipt" element={<MonthlyReceipt />} />
+      <Route path="/receipt" element={<MonthlyReceipt />} />
+      <Route path="/nightlyreceipt" element={<NightlyReceipReports />} />
+      <Route path="/visitorreceipt" element={<VisitorReceiptReport/>}/>
     </Routes>
   );
 };

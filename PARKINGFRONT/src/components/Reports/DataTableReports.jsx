@@ -1,4 +1,4 @@
-import { GnerateReportPDF } from "../PDF/GnerateReportPDF";
+import { GenerateReportPDF } from "../PDF/GenerateReportPDF";
 
 export const DataTableReports = ({ dataReports }) => {
   const formatCurrency = (amount) => {
@@ -16,6 +16,7 @@ export const DataTableReports = ({ dataReports }) => {
   } else if (dataReports?.semana) {
     headerValue = dataReports.semana;
   }
+
   return (
     <div className="overflow-x-auto">
       <table className="table-auto min-w-full border">
@@ -23,7 +24,7 @@ export const DataTableReports = ({ dataReports }) => {
           <tr className="text-center">
             <th className="border">{headerValue}</th>
             <th className="border p-2">
-              <GnerateReportPDF />
+            <GenerateReportPDF dataReports={dataReports} />
             </th>
           </tr>
           <tr className="text-center">

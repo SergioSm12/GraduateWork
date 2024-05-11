@@ -5,7 +5,9 @@ import com.sergio.spring.rest.usuariosvehiculos.app.models.entities.NightlyRecei
 import com.sergio.spring.rest.usuariosvehiculos.app.models.request.NightlyReceiptRequest;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.Month;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 public interface INightlyReceiptService {
@@ -30,4 +32,13 @@ public interface INightlyReceiptService {
     long getTotalNightlyReceipts();
 
     void remove(Long nightlyReceiptId);
+
+    //Reportes
+    Map<String, Double> getWeeklyIncome();
+
+    Map<String, Double> getWeeklyIncome(int year, Month month);
+
+    Map<String, Double> getBiWeeklyIncome();
+
+    Map<String, Double> getDailyIncomeForCurrentWeek();
 }

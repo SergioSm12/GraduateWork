@@ -94,7 +94,7 @@ export const CardTicket = (props) => {
           >
             <MenuItem className="p-0 hover:bg-transparent">
               <Link
-                to="/reports/monthly/receipt"
+                to="/reports/receipt"
                 className="rounded-lg transition-colors text-gray-300 hover:bg-secondary-900
                      flex items-center gap-x-4 p-2 flex-1"
               >
@@ -103,7 +103,7 @@ export const CardTicket = (props) => {
             </MenuItem>
             <MenuItem className="p-0 hover:bg-transparent">
               <Link
-                to="/"
+                to="/reports/nightlyreceipt"
                 className="rounded-lg transition-colors text-gray-300 hover:bg-secondary-900
                      flex items-center gap-x-4 p-2 flex-1"
               >
@@ -112,7 +112,7 @@ export const CardTicket = (props) => {
             </MenuItem>
             <MenuItem className="p-0 hover:bg-transparent">
               <Link
-                to="/"
+                to="/reports/visitorreceipt"
                 className="rounded-lg transition-colors text-gray-300 hover:bg-secondary-900
                      flex items-center gap-x-4 p-2 flex-1"
               >

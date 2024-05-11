@@ -2,27 +2,26 @@ import React, { useEffect } from "react";
 import { useReports } from "../../../hooks/useReports";
 import { Link } from "react-router-dom";
 import { DataTableReports } from "../DataTableReports";
-import { GenerateReportMonthlySpecific } from "./GenerateReportMonthlySpecific";
+import { GenerateReportMonthlySpecific } from "../ReceiptReports/GenerateReportMonthlySpecific";
 
-export const MonthlyReceipt = () => {
+export const NightlyReceipReports = () => {
   const {
-    getCurrentMonthlyReceiptReport,
-    getCurrentBiweeklyReceiptReport,
-    getCurrentWeeklyReceiptReport,
-    currentWeeklyReceiptReport,
-    currentBiweeklyReceiptReport,
-    currentMonthlyReceiptReport,
+    currentMonthlyNightlyReceiptReport,
+    currentWeeklyNightlyReceiptReport,
+    currentBiweeklyNightlyReceiptReport,
+    getCurrentMonthlyNightlyReceiptReport,
+
+    getCurrentBiweeklyNightlyReceiptReport,
+    getCurrentWeeklyNightlyReceiptReport,
   } = useReports();
 
   useEffect(() => {
-    getCurrentMonthlyReceiptReport();
-    getCurrentBiweeklyReceiptReport();
-    getCurrentWeeklyReceiptReport();
+    getCurrentMonthlyNightlyReceiptReport();
+    getCurrentBiweeklyNightlyReceiptReport();
+    getCurrentWeeklyNightlyReceiptReport();
   }, []);
-
   return (
     <>
-      {/*Title */}
       <div className="mb-10">
         <h1 className="font-bold text-gray-100 text-xl">Reporte de ingresos</h1>
         <div className="flex items-center gap-2 text-sm text-gray-500">
@@ -30,21 +29,21 @@ export const MonthlyReceipt = () => {
             Principal
           </Link>
           <span>-</span>
-          <span>Centro de reportes recibos diurnos</span>
+          <span>Centro de reportes recibos nocturnos</span>
         </div>
       </div>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
         <div className="bg-secondary-100 p-8 rounded-lg">
-          <GenerateReportMonthlySpecific/>
+          <GenerateReportMonthlySpecific reportType={"nightly"} />
         </div>
         <div className="bg-secondary-100 p-8 rounded-lg">
-          <DataTableReports dataReports={currentMonthlyReceiptReport} />
+          <DataTableReports dataReports={currentMonthlyNightlyReceiptReport} />
         </div>
         <div className="bg-secondary-100 p-8 rounded-lg">
-          <DataTableReports dataReports={currentBiweeklyReceiptReport} />
+          <DataTableReports dataReports={currentBiweeklyNightlyReceiptReport} />
         </div>
         <div className="bg-secondary-100 p-8 rounded-lg">
-          <DataTableReports dataReports={currentWeeklyReceiptReport} />
+          <DataTableReports dataReports={currentWeeklyNightlyReceiptReport} />
         </div>
       </div>
     </>

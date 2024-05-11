@@ -1,6 +1,8 @@
 package com.sergio.spring.rest.usuariosvehiculos.app.service;
 
+import java.time.Month;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import org.springframework.transaction.annotation.Transactional;
@@ -33,4 +35,10 @@ public interface IVisitorReceiptService {
 
     //devolver el total de recibos visitante
     long getTotalVisitorReceipt();
+
+    //Reportes
+    Map<String, Double> getWeeklyIncome();
+    Map<String, Double> getWeeklyIncome(int year, Month month);
+    Map<String, Double> getBiWeeklyIncome();
+    Map<String, Double> getDailyIncomeForCurrentWeek();
 }
