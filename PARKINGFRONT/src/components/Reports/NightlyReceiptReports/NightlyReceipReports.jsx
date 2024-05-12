@@ -3,6 +3,7 @@ import { useReports } from "../../../hooks/useReports";
 import { Link } from "react-router-dom";
 import { DataTableReports } from "../DataTableReports";
 import { GenerateReportMonthlySpecific } from "../ReceiptReports/GenerateReportMonthlySpecific";
+import { LinesChart } from "../../Statistics/LinesChart";
 
 export const NightlyReceipReports = () => {
   const {
@@ -32,7 +33,15 @@ export const NightlyReceipReports = () => {
           <span>Centro de reportes recibos nocturnos</span>
         </div>
       </div>
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+      <div className="grid grid-cols-1">
+        <div className=" flex justify-center bg-secondary-100 p-8 rounded-lg overflow-auto ">
+         <div className="w-[450px] h-[230px] md:w-full md:h-full">
+         <LinesChart dataReport={currentMonthlyNightlyReceiptReport} />
+         </div>
+       
+        </div>
+      </div>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mt-8">
         <div className="bg-secondary-100 p-8 rounded-lg">
           <GenerateReportMonthlySpecific reportType={"nightly"} />
         </div>

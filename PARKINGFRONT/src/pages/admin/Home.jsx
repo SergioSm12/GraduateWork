@@ -1,6 +1,12 @@
 import React, { useEffect } from "react";
 import { CardTicket } from "../../components/Home/CardTicket";
-import { RiAlertLine, RiMoonLine, RiPoliceCarLine, RiSunLine, RiUserShared2Line } from "react-icons/ri";
+import {
+  RiAlertLine,
+  RiMoonLine,
+  RiPoliceCarLine,
+  RiSunLine,
+  RiUserShared2Line,
+} from "react-icons/ri";
 import { useAuth } from "../../auth/hooks/useAuth";
 import { useReceipts } from "../../hooks/useReceipts";
 import { useUsers } from "../../hooks/useUsers";
@@ -12,6 +18,7 @@ import { ModalFormVisitorReceipt } from "../../components/VisitorReceipt/ModalFo
 import { Link } from "react-router-dom";
 import { useNightlyReceipts } from "../../hooks/useNightlyReceipts";
 import { DataTableNightlyReceipts } from "../../components/NightlyReceipt/DataTableNightlyReceipts";
+import { CardTicketReports } from "../../components/Home/CardTicketReports";
 
 export const Home = () => {
   const { login, handlerLogout } = useAuth();
@@ -82,14 +89,37 @@ export const Home = () => {
           <RiPoliceCarLine />
         </div>
       </div>
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 gap-8">
+      <div className="grid grid-cols-1 md:grid-cols-1 lg:grid-cols-2 xl:grid-cols-2 gap-8 ">
+        <CardTicket
+          ticket="total"
+          totalTickets={totalState}
+          totalTicketsVisitor={totalVisitorReceipt}
+          totalTicketsNight={totalNightState}
+          text="Recibos totales diurnos."
+          textVisitor="Recibos totales visitantes."
+          textNight="Recibos totales nocturnos."
+        />
+        <CardTicketReports
+          totalUnpaidState={totalUnpaidState}
+          totalPaidState={totalPaidState}
+          totalState={totalState}
+          totalUnpaidVisitorState={totalUnpaidVisitorState}
+          totalPaidVistorState={totalPaidVistorState}
+          totalVisitorReceipt={totalVisitorReceipt}
+          totalNightUnPaidState={totalNightUnPaidState}
+          totalNightPaidState={totalNightPaidState}
+          totalNightState={totalNightState}
+         
+        />
+      </div>
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 gap-8 mt-8">
         {/* */}
         <CardTicket
           ticket="pending"
           totalTickets={totalUnpaidState}
           totalTicketsVisitor={totalUnpaidVisitorState}
           totalTicketsNight={totalNightUnPaidState}
-          text="Recibos pendientes usuarios."
+          text="Recibos pendientes diurnos."
           textVisitor="Recibos pendientes visitantes."
           textNight="Recibos pendientes nocturnos."
         />
@@ -98,18 +128,9 @@ export const Home = () => {
           totalTickets={totalPaidState}
           totalTicketsVisitor={totalPaidVistorState}
           totalTicketsNight={totalNightPaidState}
-          text="Recibos pagos usuarios."
+          text="Recibos pagos diurnos."
           textVisitor="Recibos pagos visitantes."
           textNight="Recibos pagos nocturnos."
-        />
-        <CardTicket
-          ticket="total"
-          totalTickets={totalState}
-          totalTicketsVisitor={totalVisitorReceipt}
-          totalTicketsNight={totalNightState}
-          text="Recibos totales usuarios."
-          textVisitor="Recibos totales visitantes."
-          textNight="Recibos totales nocturnos."
         />
         <CardTicket
           ticket="usersHome"
@@ -118,6 +139,7 @@ export const Home = () => {
           icon="user"
         />
       </div>
+
       <div>
         <h1 className="text-2xl text-white my-10">Administrar Facturas :</h1>
       </div>
