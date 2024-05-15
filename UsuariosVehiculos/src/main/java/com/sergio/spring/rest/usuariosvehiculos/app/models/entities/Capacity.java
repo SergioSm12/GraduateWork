@@ -6,7 +6,6 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 
 @Entity
@@ -14,11 +13,17 @@ public class Capacity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private LocalDate date;
+
     @ManyToOne
-    @JoinColumn(name = "vehicle_type_id")
+    private Building building;
+    @ManyToOne
     private VehicleType vehicleType;
-    private int currentCapacity;
+
+    private int availableCarSpaces;
+    private int availableMotorcycleSpaces;
+
+    public Capacity() {
+    }
 
     public Long getId() {
         return id;
@@ -28,12 +33,12 @@ public class Capacity {
         this.id = id;
     }
 
-    public LocalDate getDate() {
-        return date;
+    public Building getBuilding() {
+        return building;
     }
 
-    public void setDate(LocalDate date) {
-        this.date = date;
+    public void setBuilding(Building building) {
+        this.building = building;
     }
 
     public VehicleType getVehicleType() {
@@ -44,11 +49,19 @@ public class Capacity {
         this.vehicleType = vehicleType;
     }
 
-    public int getCurrentCapacity() {
-        return currentCapacity;
+    public int getAvailableCarSpaces() {
+        return availableCarSpaces;
     }
 
-    public void setCurrentCapacity(int currentCapacity) {
-        this.currentCapacity = currentCapacity;
+    public void setAvailableCarSpaces(int availableCarSpaces) {
+        this.availableCarSpaces = availableCarSpaces;
+    }
+
+    public int getAvailableMotorcycleSpaces() {
+        return availableMotorcycleSpaces;
+    }
+
+    public void setAvailableMotorcycleSpaces(int availableMotorcycleSpaces) {
+        this.availableMotorcycleSpaces = availableMotorcycleSpaces;
     }
 }

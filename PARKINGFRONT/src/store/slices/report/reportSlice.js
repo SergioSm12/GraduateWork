@@ -14,6 +14,11 @@ export const reportSlice = createSlice({
     currentMonthlyVisitorReceiptReport: null,
     currentWeeklyVisitorReceiptReport: null,
     currentBiweeklyVisitorReceiptReport: null,
+
+    currentMonthlyUnifiedReceiptReport: null,
+    currentWeeklyUnifiedReceiptReport: null,
+    currentBiweeklyUnifiedReceiptReport: null,
+
   },
 
   reducers: {
@@ -48,6 +53,17 @@ export const reportSlice = createSlice({
     loadingCurrentbiweeklyReportVisitorReceipt: (state, action) => {
       state.currentBiweeklyVisitorReceiptReport = action.payload;
     },
+
+    //unified
+    loadingCurrentMonthlyReportUnifiedReceipt: (state, action) => {
+      state.currentMonthlyUnifiedReceiptReport = action.payload;
+    },
+    loadingCurrentWeeklyReportUnifiedReceipt: (state, action) => {
+      state.currentWeeklyUnifiedReceiptReport = action.payload;
+    },
+    loadingCurrentbiweeklyReportUnifiedReceipt: (state, action) => {
+      state.currentBiweeklyUnifiedReceiptReport = action.payload;
+    },
   },
 });
 
@@ -62,5 +78,9 @@ export const {
 
   loadingCurrentMonthlyReportVisitorReceipt,
   loadingCurrentWeeklyReportVisitorReceipt,
-  loadingCurrentbiweeklyReportVisitorReceipt
+  loadingCurrentbiweeklyReportVisitorReceipt,
+
+  loadingCurrentMonthlyReportUnifiedReceipt,
+  loadingCurrentWeeklyReportUnifiedReceipt,
+  loadingCurrentbiweeklyReportUnifiedReceipt
 } = reportSlice.actions;

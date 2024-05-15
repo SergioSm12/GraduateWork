@@ -100,14 +100,19 @@ export const getCurrentWeeklyReportNightlyReceipt = async () => {
 
 export const getCurrentMonthlyReportVisitorReceipt = async () => {
   try {
-    const response = await parkingApi.get(`${BASE_URL_REPORTS}/income/monthly/visitor`);
+    const response = await parkingApi.get(
+      `${BASE_URL_REPORTS}/income/monthly/visitor`
+    );
     return response;
   } catch (error) {
     throw error;
   }
 };
 
-export const currentMonthlyVisitorReceiptReportSpecific = async (year, month) => {
+export const currentMonthlyVisitorReceiptReportSpecific = async (
+  year,
+  month
+) => {
   try {
     const response = await parkingApi.post(
       `${BASE_URL_REPORTS}/income/monthly/visitor`,
@@ -135,7 +140,61 @@ export const getCurrentBiweeklyReportVisitorReceipt = async () => {
 
 export const getCurrentWeeklyReportVisitorReceipt = async () => {
   try {
-    const response = await parkingApi.get(`${BASE_URL_REPORTS}/income/weekly/visitor`);
+    const response = await parkingApi.get(
+      `${BASE_URL_REPORTS}/income/weekly/visitor`
+    );
+    return response;
+  } catch (error) {
+    throw error;
+  }
+};
+
+//unified
+export const currentMonthlyUnifiedReceiptReportService = async () => {
+  try {
+    const response = await parkingApi.get(
+      `${BASE_URL_REPORTS}/income/monthly/unified`
+    );
+    return response;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const currentMonthlyUnifiedReceiptReportSpecific = async (
+  year,
+  month
+) => {
+  try {
+    const response = await parkingApi.post(
+      `${BASE_URL_REPORTS}/income/monthly/unified`,
+      {
+        year,
+        month,
+      }
+    );
+    return response;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const getCurrentBiweeklyReportUnifiedReceipt = async () => {
+  try {
+    const response = await parkingApi.get(
+      `${BASE_URL_REPORTS}/income/biweekly/unified`
+    );
+    return response;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const getCurrentWeeklyReportUnifiedReceipt = async () => {
+  try {
+    const response = await parkingApi.get(
+      `${BASE_URL_REPORTS}/income/weekly/unified`
+    );
     return response;
   } catch (error) {
     throw error;

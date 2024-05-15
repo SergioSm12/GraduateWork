@@ -2,26 +2,33 @@ import { useDispatch, useSelector } from "react-redux";
 import {
   currentMonthlyNightlyReceiptReportSpecific,
   currentMonthlyReceiptReportSpecific,
+  currentMonthlyUnifiedReceiptReportService,
+  currentMonthlyUnifiedReceiptReportSpecific,
   currentMonthlyVisitorReceiptReportSpecific,
   getCurrentBiweeklyReportNightlyReceipt,
   getCurrentBiweeklyReportReceipt,
+  getCurrentBiweeklyReportUnifiedReceipt,
   getCurrentBiweeklyReportVisitorReceipt,
   getCurrentMonthlyReportNightlyReceipt,
   getCurrentMonthlyReportReceipt,
   getCurrentMonthlyReportVisitorReceipt,
   getCurrentWeeklyReportNightlyReceipt,
   getCurrentWeeklyReportReceipt,
+  getCurrentWeeklyReportUnifiedReceipt,
   getCurrentWeeklyReportVisitorReceipt,
 } from "../services/reportService";
 import {
   loadingCurrentbiweeklyReportNightlyReceipt,
   loadingCurrentbiweeklyReportReceipt,
+  loadingCurrentbiweeklyReportUnifiedReceipt,
   loadingCurrentbiweeklyReportVisitorReceipt,
   loadingCurrentMonthlyReportNightlyReceipt,
   loadingCurrentMonthlyReportReceipt,
+  loadingCurrentMonthlyReportUnifiedReceipt,
   loadingCurrentMonthlyReportVisitorReceipt,
   loadingCurrentWeeklyReportNightlyReceipt,
   loadingCurrentWeeklyReportReceipt,
+  loadingCurrentWeeklyReportUnifiedReceipt,
   loadingCurrentWeeklyReportVisitorReceipt,
 } from "../store/slices/report/reportSlice";
 import { useAuth } from "../auth/hooks/useAuth";
@@ -40,6 +47,10 @@ export const useReports = () => {
     currentMonthlyVisitorReceiptReport,
     currentWeeklyVisitorReceiptReport,
     currentBiweeklyVisitorReceiptReport,
+
+    currentMonthlyUnifiedReceiptReport,
+    currentWeeklyUnifiedReceiptReport,
+    currentBiweeklyUnifiedReceiptReport,
   } = useSelector((state) => state.reports);
 
   const dispatch = useDispatch();
@@ -246,6 +257,71 @@ export const useReports = () => {
     }
   };
 
+  //unified
+  const getCurrentMonthlyUnifiedReceiptReport = async () => {
+    try {
+      const result = await currentMonthlyUnifiedReceiptReportService();
+      dispatch(loadingCurrentMonthlyReportUnifiedReceipt(result.data));
+    } catch (error) {
+      if (error.response.status == 401) {
+        handlerLogout();
+      } else {
+        throw error;
+      }
+    }
+  };
+
+  const getCurrentMonthlyUnifiedReceiptReportSpecific = async ({
+    year,
+    month,
+  }) => {
+    try {
+      const response = await currentMonthlyUnifiedReceiptReportSpecific(
+        year,
+        month
+      );
+
+      dispatch(loadingCurrentMonthlyReportUnifiedReceipt(response.data));
+
+      Toast.fire({
+        icon: "success",
+        title: `Reporte unificado generado mes : ${month}`,
+      });
+    } catch (error) {
+      if (error.response.status == 401) {
+        handlerLogout();
+      } else {
+        throw error;
+      }
+    }
+  };
+
+  const getCurrentBiweeklyUnifiedReceiptReport = async () => {
+    try {
+      const result = await getCurrentBiweeklyReportUnifiedReceipt();
+      dispatch(loadingCurrentbiweeklyReportUnifiedReceipt(result.data));
+    } catch (error) {
+      if (error.response.status == 401) {
+        handlerLogout();
+      } else {
+        throw error;
+      }
+    }
+  };
+
+  const getCurrentWeeklyUnifiedReceiptReport = async () => {
+    try {
+      const result = await getCurrentWeeklyReportUnifiedReceipt();
+      dispatch(loadingCurrentWeeklyReportUnifiedReceipt(result.data));
+    } catch (error) {
+      if (error.response.status == 401) {
+        handlerLogout();
+      } else {
+        throw error;
+      }
+    }
+  };
+
   return {
     getCurrentMonthlyReceiptReport,
     getCurrentMonthlyReceiptReportSpecific,
@@ -270,5 +346,13 @@ export const useReports = () => {
     getCurrentMonthlyVisitorReceiptReportSpecific,
     getCurrentBiweeklyVisitorReceiptReport,
     getCurrentWeeklyVisitorReceiptReport,
+
+    currentMonthlyUnifiedReceiptReport,
+    currentWeeklyUnifiedReceiptReport,
+    currentBiweeklyUnifiedReceiptReport,
+    getCurrentMonthlyUnifiedReceiptReportSpecific,
+    getCurrentBiweeklyUnifiedReceiptReport,
+    getCurrentWeeklyUnifiedReceiptReport,
+    getCurrentMonthlyUnifiedReceiptReport,
   };
 };

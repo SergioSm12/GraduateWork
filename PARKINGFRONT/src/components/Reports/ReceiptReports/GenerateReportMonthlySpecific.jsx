@@ -7,6 +7,7 @@ export const GenerateReportMonthlySpecific = ({ reportType }) => {
     getCurrentMonthlyReceiptReportSpecific,
     getCurrentMonthlyNightlyReceiptReportSpecific,
     getCurrentMonthlyVisitorReceiptReportSpecific,
+    getCurrentMonthlyUnifiedReceiptReportSpecific,
   } = useReports();
 
   const currentYear = new Date().getFullYear();
@@ -35,6 +36,8 @@ export const GenerateReportMonthlySpecific = ({ reportType }) => {
       getCurrentMonthlyNightlyReceiptReportSpecific(reportForm);
     } else if (reportType === "visitor") {
       getCurrentMonthlyVisitorReceiptReportSpecific(reportForm);
+    } if(reportType === "unified"){
+      getCurrentMonthlyUnifiedReceiptReportSpecific(reportForm);
     } else {
       getCurrentMonthlyReceiptReportSpecific(reportForm);
     }

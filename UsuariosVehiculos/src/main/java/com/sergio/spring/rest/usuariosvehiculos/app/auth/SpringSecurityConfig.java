@@ -138,6 +138,16 @@ public class SpringSecurityConfig {
                         .requestMatchers(HttpMethod.GET, "reports/income/weekly/nightly").permitAll()
                         .requestMatchers(HttpMethod.GET, "reports/income/biweekly/nightly").permitAll()
 
+                        .requestMatchers(HttpMethod.GET, "reports/income/monthly/unified").permitAll()
+                        .requestMatchers(HttpMethod.POST, "reports/income/monthly/unified").permitAll()
+                        .requestMatchers(HttpMethod.GET, "reports/income/biweekly/unified").permitAll()
+                        .requestMatchers(HttpMethod.GET, "reports/income/weekly/unified").permitAll()
+
+                        .requestMatchers(HttpMethod.GET, "/building").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/building/{buildingId}").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/building").permitAll()
+                        .requestMatchers(HttpMethod.PUT, "/building/{buildingId}").permitAll()
+                        .requestMatchers(HttpMethod.DELETE, "/building/{buildingId}").permitAll()
 
                         .anyRequest().authenticated())
                 .addFilter(new JwtAuthenticationFilter(authenticationConfiguration.getAuthenticationManager()))

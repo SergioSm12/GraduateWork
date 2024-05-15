@@ -3,6 +3,7 @@ package com.sergio.spring.rest.usuariosvehiculos.app.controllers;
 import com.sergio.spring.rest.usuariosvehiculos.app.repositorys.IVisitorReceiptRepository;
 import com.sergio.spring.rest.usuariosvehiculos.app.service.INightlyReceiptService;
 import com.sergio.spring.rest.usuariosvehiculos.app.service.IReceiptService;
+import com.sergio.spring.rest.usuariosvehiculos.app.service.IReportsUnifiedService;
 import com.sergio.spring.rest.usuariosvehiculos.app.service.IVisitorReceiptService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -32,6 +33,9 @@ public class ReportReceiptController {
 
     @Autowired
     private IVisitorReceiptService visitorReceiptService;
+
+    @Autowired
+    private IReportsUnifiedService reportsUnifiedService;
 
     //obtener ingresos mensuales receipt
     @GetMapping("/income/monthly")
@@ -345,5 +349,105 @@ public class ReportReceiptController {
 
         return ResponseEntity.ok(response);
     }
+
+    //Reports unified
+
+    @GetMapping("/income/monthly/unified")
+    public ResponseEntity<?> getMonthlyIncomeUnified() {
+        Map<String, Double> monthlyIncomeUnified = reportsUnifiedService.generateMonthlyIncomeReport();
+        //Obtener el mes actual
+        LocalDate currentDate = LocalDate.now();
+        int year = currentDate.getYear();
+        Month month = currentDate.getMonth();
+
+        Locale locale = new Locale("es", "CO");
+
+        //Obtener el nombre del mes
+        String monthName = month.getDisplayName(TextStyle.FULL, locale);
+
+        Map<String, Object> response = new LinkedHashMap<>();
+        response.put("Mes", monthName.toUpperCase() + " DEL " + year);
+        response.putAll(monthlyIncomeUnified);
+        return ResponseEntity.ok(response);
+
+    }
+
+    @PostMapping("/income/monthly/unified")
+    public ResponseEntity<?> getMonthlyIncomeSpecificUnified(@RequestBody(required = false) Map<String, Integer> requestParams) {
+        int year;
+        Month month;
+
+        //Verificar si se proporcionaron parametros
+        if (requestParams != null && requestParams.containsKey("year") && requestParams.containsKey("month")) {
+            year = requestParams.get("year");
+            month = Month.of(requestParams.get("month"));
+
+        } else {
+            LocalDate currentDate = LocalDate.now();
+            year = currentDate.getYear();
+            month = currentDate.getMonth();
+        }
+
+        Map<String, Double> monthlyIncomeReportUnified = reportsUnifiedService.generateMonthlyIncomeReport(year, month);
+
+        Locale locale = new Locale("es", "CO");
+        String monthName = month.getDisplayName(TextStyle.FULL, locale);
+        Map<String, Object> response = new LinkedHashMap<>();
+        response.put("Mes", monthName.toUpperCase() + " DEL " + year);
+        response.putAll(monthlyIncomeReportUnified);
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    @GetMapping("/income/biweekly/unified")
+    public ResponseEntity<?> getCurrentBiweeklyIncomeUnified() {
+        Map<String, Double> biWeeklyIncome = reportsUnifiedService.biWeeklyIncomeUnified();
+        //Obtener el primer y último día de la quincena actual
+        LocalDate today = LocalDate.now();
+        LocalDate middleOfMonth = today.withDayOfMonth(1).plusDays(today.lengthOfMonth() / 2);
+        boolean isAfterMiddleOfMonth = today.isAfter(middleOfMonth);
+        LocalDate startDate;
+        LocalDate endDate;
+        if (isAfterMiddleOfMonth) {
+            startDate = middleOfMonth.plusDays(1);
+            endDate = today.withDayOfMonth(today.lengthOfMonth());
+        } else {
+            startDate = today.withDayOfMonth(1);
+            endDate = middleOfMonth;
+        }
+
+        // Formatear las fechas de la quincena actual
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        String startOfBiWeekFormatted = startDate.format(formatter);
+        String endOfBiWeekFormatted = endDate.format(formatter);
+        String biWeekInfo = "QUINCENA DEL  " + startOfBiWeekFormatted + " AL " + endOfBiWeekFormatted;
+
+        Map<String, Object> response = new LinkedHashMap<>();
+        response.put("quincena", biWeekInfo);
+        response.putAll(biWeeklyIncome);
+
+        return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/income/weekly/unified")
+    public ResponseEntity<?> getCurrentWeeklyIncomeUnified() {
+        Map<String, Double> weeklyIncome = reportsUnifiedService.getWeeklyIncomeUnified();
+        LocalDate today = LocalDate.now();
+        LocalDate startOfWeek = today.with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY));
+        LocalDate endOfWeek = today.with(TemporalAdjusters.nextOrSame(DayOfWeek.SUNDAY));
+
+        //Formatear fechas semana actual
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        String startOfWeekFormatter = startOfWeek.format(formatter);
+        String endOfWeekFormatted = endOfWeek.format(formatter);
+
+        String weekInfo = "SEMANA DEL " + startOfWeekFormatter + " AL " + endOfWeekFormatted;
+
+        Map<String, Object> response = new LinkedHashMap<>();
+        response.put("semana", weekInfo);
+        response.putAll(weeklyIncome);
+
+        return ResponseEntity.ok(response);
+    }
+
 
 }

@@ -206,7 +206,7 @@ public class VisitorReceiptService implements IVisitorReceiptService {
 
         double totalIncomeSum = 0.0;
         while (startDate.isBefore(endDate) || startDate.equals(endDate)) {
-            LocalDate endOfPeriod = startDate.plusDays(13);
+            LocalDate endOfPeriod = startDate.plusDays(6);
 
             //Ajustar el final del periodo si excede el dinal del mes
             if (endOfPeriod.isAfter(endDate)) {
