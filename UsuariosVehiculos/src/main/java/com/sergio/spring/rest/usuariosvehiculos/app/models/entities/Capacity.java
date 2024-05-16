@@ -7,6 +7,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
+import jakarta.validation.constraints.NotNull;
 
 @Entity
 public class Capacity {
@@ -14,13 +15,15 @@ public class Capacity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @NotNull(message = "Debe seleccionar un edificio")
     @ManyToOne
     private Building building;
+    @NotNull(message = "Debe seleccionar un tipo de vehiculo.")
     @ManyToOne
     private VehicleType vehicleType;
 
-    private int availableCarSpaces;
-    private int availableMotorcycleSpaces;
+    private int parkingSpaces;
+
 
     public Capacity() {
     }
@@ -49,19 +52,11 @@ public class Capacity {
         this.vehicleType = vehicleType;
     }
 
-    public int getAvailableCarSpaces() {
-        return availableCarSpaces;
+    public int getParkingSpaces() {
+        return parkingSpaces;
     }
 
-    public void setAvailableCarSpaces(int availableCarSpaces) {
-        this.availableCarSpaces = availableCarSpaces;
-    }
-
-    public int getAvailableMotorcycleSpaces() {
-        return availableMotorcycleSpaces;
-    }
-
-    public void setAvailableMotorcycleSpaces(int availableMotorcycleSpaces) {
-        this.availableMotorcycleSpaces = availableMotorcycleSpaces;
+    public void setParkingSpaces(int parkingSpaces) {
+        this.parkingSpaces = parkingSpaces;
     }
 }

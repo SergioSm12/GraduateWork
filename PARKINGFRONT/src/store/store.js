@@ -9,6 +9,8 @@ import { visitorReceiptSlice } from "./slices/receipt/visitorReceiptSlice";
 import { qrCodeSlice } from "./slices/receipt/qrCodeSlice";
 import { nightlyReceiptSlice } from "./slices/receipt/nightlyReceiptSlice";
 import { reportSlice } from "./slices/report/reportSlice";
+import { buildingSlice } from "./slices/building/buildingSlice";
+import { capacitySlice } from "./slices/capacity/capacitySlice";
 
 export const store = configureStore({
   reducer: {
@@ -22,5 +24,7 @@ export const store = configureStore({
     nightlyReceipts: nightlyReceiptSlice.reducer,
     qrCode: qrCodeSlice.reducer,
     reports: reportSlice.reducer,
+    buildings: buildingSlice.reducer,
+    capacities: capacitySlice.reducer,
   },
 });

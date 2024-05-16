@@ -42,9 +42,7 @@ public class BuildingService implements IBuildingService {
     public Optional<Building> update(Building building, Long id) {
         return buildingRepository.findById(id)
                 .map(buildingDB -> {
-                    buildingDB.setName(building.getName());
-                    buildingDB.setCarSpaces(building.getCarSpaces());
-                    buildingDB.setMotorcycleSpaces(building.getMotorcycleSpaces());
+                    buildingDB.setName(building.getName().toUpperCase());
                     return buildingRepository.save(buildingDB);
                 });
     }

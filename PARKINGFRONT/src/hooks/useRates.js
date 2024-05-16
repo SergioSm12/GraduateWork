@@ -78,7 +78,7 @@ export const useRates = () => {
 
   const handlerRemoveRate = (id) => {
     Swal.fire({
-      title: "Esta seguro que desea eliminar?",
+      title: "¿Esta seguro que desea eliminar?",
       text: "Cuidado la tarifa sera eliminada ",
       icon: "warning",
       showCancelButton: true,

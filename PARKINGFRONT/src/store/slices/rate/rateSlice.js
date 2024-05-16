@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { initialUserForm } from "../user/usersSlice";
+
 
 export const vehicleType = {
   id: 0,
@@ -55,7 +55,7 @@ export const rateSlice = createSlice({
     },
     loadingErrorRates: (state, action) => {
       state.errorsRate = action.payload;
-      state.rateSelected = initialUserForm;
+      state.rateSelected = initialRateForm;
     },
     onRateSelectedForm: (state, action) => {
       state.rateSelected = action.payload;

@@ -14,6 +14,7 @@ import { VehicleTypes } from "./pages/admin/VehicleTypes";
 import { RegisterVisitor } from "./pages/visitor/RegisterVisitor";
 import { MonthlyReceipt } from "./components/Reports/ReceiptReports/MonthlyReceipt";
 import { ReportRutes } from "./routes/ReportRutes";
+import { Aforo } from "./pages/admin/Aforo";
 
 export const AppRoutes = () => {
   const { login } = useAuth();
@@ -35,6 +36,7 @@ export const AppRoutes = () => {
           <Route path="rate" element={<Rates />} />
           <Route path="vehicleType" element={<VehicleTypes />} />
           <Route path="reports/*" element={<ReportRutes />} />
+          <Route path="aforo" element={<Aforo/>}/>
         </Route>
       ) : (
         <>

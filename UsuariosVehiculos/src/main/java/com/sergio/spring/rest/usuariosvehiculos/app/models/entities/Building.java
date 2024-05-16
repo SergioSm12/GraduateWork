@@ -15,10 +15,6 @@ public class Building {
 
     @NotBlank(message = "El nombre no puede estar vacío")
     private String name;
-    @NotNull(message = "El campo plazas de carro no puede estar vacío")
-    private int carSpaces;
-    @NotNull(message = "El campo plazas de motocicleta no puede estar vacío")
-    private int motorcycleSpaces;
 
     public Building() {
     }
@@ -37,21 +33,5 @@ public class Building {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public int getCarSpaces() {
-        return carSpaces;
-    }
-
-    public void setCarSpaces(int carSpaces) {
-        this.carSpaces = carSpaces;
-    }
-
-    public int getMotorcycleSpaces() {
-        return motorcycleSpaces;
-    }
-
-    public void setMotorcycleSpaces(int motorcycleSpaces) {
-        this.motorcycleSpaces = motorcycleSpaces;
     }
 }
