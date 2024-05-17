@@ -26,7 +26,9 @@ export const DataTableCapacity = () => {
                 <tr className="text-center">
                   <th className="border">Edificio</th>
                   <th className="border">Vehiculo</th>
-                  <th className="border">Espacios totales</th>
+                  <th className="border">Espacios disponibles</th>
+                  <th className="border">Espacios Ocupados</th>
+                  <th className="border"> Espacios Totales</th>
                   <th colSpan={2}>Opciones</th>
                 </tr>
               </thead>
@@ -44,6 +46,12 @@ export const DataTableCapacity = () => {
                     </td>
                     <td className="border bg-secondary-900 p-2">
                       {capacity.parkingSpaces}
+                    </td>
+                    <td className="border bg-secondary-900 p-2">
+                      {capacity.occupiedSpaces}
+                    </td>
+                    <td className="border bg-secondary-900 p-2">
+                      {capacity.maxParking}
                     </td>
                     <td className="border bg-secondary-900 flex items-center justify-center gap-2 px-2 py-2">
                       <button

@@ -154,6 +154,9 @@ public class SpringSecurityConfig {
                         .requestMatchers(HttpMethod.POST, "/capacity").permitAll()
                         .requestMatchers(HttpMethod.PUT, "/capacity/{capacityId}").permitAll()
                         .requestMatchers(HttpMethod.DELETE, "/capacity/{capacityId}").permitAll()
+                        .requestMatchers(HttpMethod.PATCH, "/capacity/vehicle-entry/{capacityId}").permitAll()
+                        .requestMatchers(HttpMethod.PATCH, "/capacity/vehicle-exit/{capacityId}").permitAll()
+
 
                         .anyRequest().authenticated())
                 .addFilter(new JwtAuthenticationFilter(authenticationConfiguration.getAuthenticationManager()))

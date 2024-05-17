@@ -24,6 +24,10 @@ public class Capacity {
 
     private int parkingSpaces;
 
+    private int maxParking;
+
+    private int occupiedSpaces;
+
 
     public Capacity() {
     }
@@ -56,7 +60,24 @@ public class Capacity {
         return parkingSpaces;
     }
 
+
     public void setParkingSpaces(int parkingSpaces) {
         this.parkingSpaces = parkingSpaces;
+    }
+
+    public int getMaxParking() {
+        return maxParking;
+    }
+
+    public void setMaxParking(int maxParking) {
+        this.maxParking = maxParking;
+    }
+
+    public int getOccupiedSpaces() {
+        return occupiedSpaces;
+    }
+
+    public void setOccupiedSpaces(int occupiedSpaces) {
+        this.occupiedSpaces = occupiedSpaces;
     }
 }

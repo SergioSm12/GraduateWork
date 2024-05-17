@@ -17,4 +17,9 @@ public interface ICapacityService {
     Optional<Capacity> update(Capacity capacity, Long id);
 
     void deleteCapacity(Long id);
+
+    //Controlar aforo
+    void vehicleEntry(Long capacityId);
+
+    void vehicleExit(Long capacityId);
 }

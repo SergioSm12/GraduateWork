@@ -3,6 +3,7 @@ package com.sergio.spring.rest.usuariosvehiculos.app.controllers;
 import com.sergio.spring.rest.usuariosvehiculos.app.models.entities.Capacity;
 import com.sergio.spring.rest.usuariosvehiculos.app.service.ICapacityService;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -63,6 +64,17 @@ public class CapacityController {
             return ResponseEntity.noContent().build();
         }
         return ResponseEntity.notFound().build();
+    }
+
+    //Control aforo
+    @PatchMapping("/vehicle-entry/{capacityId}")
+    public void vehicleEntry(@PathVariable @NotNull Long capacityId) {
+        capacityService.vehicleEntry(capacityId);
+    }
+
+    @PatchMapping("/vehicle-exit/{capacityId}")
+    public void vehicleExit(@PathVariable @NotNull Long capacityId) {
+        capacityService.vehicleExit(capacityId);
     }
 
     private ResponseEntity<?> validation(BindingResult result) {
