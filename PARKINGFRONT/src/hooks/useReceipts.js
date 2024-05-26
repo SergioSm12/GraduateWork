@@ -30,7 +30,7 @@ import {
   loadingTotalCount,
   onOpenQRModalReceipt,
   onCloseQRModalReceipt,
-  onGenerateQRPdfReceipt,
+
 } from "../store/slices/receipt/receiptSlice";
 import Swal from "sweetalert2";
 import { useAuth } from "../auth/hooks/useAuth";
@@ -49,6 +49,7 @@ export const useReceipts = () => {
     receiptSelected,
     vehicleSelected,
     errorsReceipt,
+  
     idQRReceipt,
   } = useSelector((state) => state.receipts);
   const dispatch = useDispatch();
@@ -155,6 +156,18 @@ export const useReceipts = () => {
       handlerCloseModalFormReceipt();
     } catch (error) {
       if (error.response && error.response.status == 400) {
+        if (error.response.data.message) {
+        
+          Swal.fire({
+            position: "top",
+            icon: "error",
+            title: `${error.response.data.message}`,
+            showConfirmButton: false,
+            timer: 1500,
+          });
+          
+        }
+
         dispatch(loadingErrorReceipt(error.response.data));
       } else if (error.response?.status == 401) {
         //manejamos el cierre de sesion cuando tengamos autenticacion

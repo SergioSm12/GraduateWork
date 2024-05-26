@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
+import com.sergio.spring.rest.usuariosvehiculos.app.models.entities.Vehicle;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
@@ -41,5 +42,5 @@ public interface IReceiptRepository extends CrudRepository<Receipt, Long> {
     //filtar recibos por estado de pago.
     List<Receipt> findByIssueDateBetweenAndPaymentStatus(LocalDateTime startDate, LocalDateTime endDate, boolean paymentStatus);
 
-
+Optional<Receipt> findByUserAndVehicleAndPaymentStatus(User user, Vehicle vehicle, boolean paymentStatus);
 }

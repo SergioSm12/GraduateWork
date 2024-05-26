@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+import com.sergio.spring.rest.usuariosvehiculos.app.Errors.PendingReceiptException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -124,7 +125,12 @@ public class ReceiptController {
         User user = optionalUser.orElseThrow();
         receipt.setUser(user);
 
-        return ResponseEntity.status(HttpStatus.CREATED).body(receiptService.saveReceipt(receipt));
+        try{
+            return ResponseEntity.status(HttpStatus.CREATED).body(receiptService.saveReceipt(receipt));
+        }catch (PendingReceiptException ex){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponse(ex.getMessage()));
+        }
+
     }
 
     // Admin update

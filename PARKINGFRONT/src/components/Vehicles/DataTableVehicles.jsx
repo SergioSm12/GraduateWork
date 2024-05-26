@@ -1,12 +1,12 @@
 import React, { useEffect } from "react";
 import {
-  RiDeleteBinLine,
+ 
   RiEdit2Line,
   RiMoonLine,
   RiSettings5Line,
   RiShutDownLine,
   RiSunLine,
-  RiTicket2Line,
+
 } from "react-icons/ri";
 import "@szhsin/react-menu/dist/index.css";
 import "@szhsin/react-menu/dist/transitions/slide.css";

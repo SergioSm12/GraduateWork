@@ -9,6 +9,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import com.sergio.spring.rest.usuariosvehiculos.app.Errors.PendingReceiptException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -143,6 +144,11 @@ public class ReceiptService implements IReceiptService {
         Vehicle vehicle = vehicleOptional.get();
         if (!user.getVehicles().contains(vehicle)) {
             throw new IllegalArgumentException("Vehicle is not associated with the user");
+        }
+
+        boolean hasPendingReceipt = receiptRepository.findByUserAndVehicleAndPaymentStatus(user,vehicle,false).isPresent();
+        if(hasPendingReceipt){
+            throw  new PendingReceiptException("Existen recibos pendientes para este vehículo");
         }
 
         // Obtiene el rate asociado

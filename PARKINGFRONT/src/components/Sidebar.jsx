@@ -3,7 +3,6 @@ import { Link } from "react-router-dom";
 //icons
 import {
   RiBarChart2Line,
-  RiWalletLine,
   RiGroupLine,
   RiCalendarTodoLine,
   RiLogoutCircleLine,
