@@ -1,11 +1,11 @@
-import axios from "axios";
+import apiClient from "../middleware/apiClient";
 
 export const loginUser = async ({ email, password }) => {
   try {
-    return  await axios.post(`${import.meta.env.VITE_API_BASE_URL}/login`,{
-        email,
-        password,
-    })
+    return await apiClient.post("/login", {
+      email,
+      password,
+    });
   } catch (error) {
     throw error;
   }

@@ -1,10 +1,10 @@
-import parkingApi from "../apis/parkingApi";
+import apiClient from "../auth/middleware/apiClient";
 
 const BASE_URL_REPORTS = "/reports";
 
 export const getCurrentMonthlyReportReceipt = async () => {
   try {
-    const response = await parkingApi.get(`${BASE_URL_REPORTS}/income/monthly`);
+    const response = await apiClient.get(`${BASE_URL_REPORTS}/income/monthly`);
     return response;
   } catch (error) {
     throw error;
@@ -13,7 +13,7 @@ export const getCurrentMonthlyReportReceipt = async () => {
 
 export const currentMonthlyReceiptReportSpecific = async (year, month) => {
   try {
-    const response = await parkingApi.post(
+    const response = await apiClient.post(
       `${BASE_URL_REPORTS}/income/monthly`,
       {
         year,
@@ -28,7 +28,7 @@ export const currentMonthlyReceiptReportSpecific = async (year, month) => {
 
 export const getCurrentBiweeklyReportReceipt = async () => {
   try {
-    const response = await parkingApi.get(
+    const response = await apiClient.get(
       `${BASE_URL_REPORTS}/income/biweekly`
     );
     return response;
@@ -39,7 +39,7 @@ export const getCurrentBiweeklyReportReceipt = async () => {
 
 export const getCurrentWeeklyReportReceipt = async () => {
   try {
-    const response = await parkingApi.get(`${BASE_URL_REPORTS}/income/weekly`);
+    const response = await apiClient.get(`${BASE_URL_REPORTS}/income/weekly`);
     return response;
   } catch (error) {
     throw error;
@@ -49,7 +49,7 @@ export const getCurrentWeeklyReportReceipt = async () => {
 // nightly
 export const getCurrentMonthlyReportNightlyReceipt = async () => {
   try {
-    const response = await parkingApi.get(
+    const response = await apiClient.get(
       `${BASE_URL_REPORTS}/income/monthly/nightly`
     );
     return response;
@@ -63,7 +63,7 @@ export const currentMonthlyNightlyReceiptReportSpecific = async (
   month
 ) => {
   try {
-    const response = await parkingApi.post(
+    const response = await apiClient.post(
       `${BASE_URL_REPORTS}/income/monthly/nightly`,
       {
         year,
@@ -78,7 +78,7 @@ export const currentMonthlyNightlyReceiptReportSpecific = async (
 
 export const getCurrentBiweeklyReportNightlyReceipt = async () => {
   try {
-    const response = await parkingApi.get(
+    const response = await apiClient.get(
       `${BASE_URL_REPORTS}/income/biweekly/nightly`
     );
     return response;
@@ -89,7 +89,7 @@ export const getCurrentBiweeklyReportNightlyReceipt = async () => {
 
 export const getCurrentWeeklyReportNightlyReceipt = async () => {
   try {
-    const response = await parkingApi.get(
+    const response = await apiClient.get(
       `${BASE_URL_REPORTS}/income/weekly/nightly`
     );
     return response;
@@ -100,7 +100,7 @@ export const getCurrentWeeklyReportNightlyReceipt = async () => {
 
 export const getCurrentMonthlyReportVisitorReceipt = async () => {
   try {
-    const response = await parkingApi.get(
+    const response = await apiClient.get(
       `${BASE_URL_REPORTS}/income/monthly/visitor`
     );
     return response;
@@ -114,7 +114,7 @@ export const currentMonthlyVisitorReceiptReportSpecific = async (
   month
 ) => {
   try {
-    const response = await parkingApi.post(
+    const response = await apiClient.post(
       `${BASE_URL_REPORTS}/income/monthly/visitor`,
       {
         year,
@@ -129,7 +129,7 @@ export const currentMonthlyVisitorReceiptReportSpecific = async (
 
 export const getCurrentBiweeklyReportVisitorReceipt = async () => {
   try {
-    const response = await parkingApi.get(
+    const response = await apiClient.get(
       `${BASE_URL_REPORTS}/income/biweekly/visitor`
     );
     return response;
@@ -140,7 +140,7 @@ export const getCurrentBiweeklyReportVisitorReceipt = async () => {
 
 export const getCurrentWeeklyReportVisitorReceipt = async () => {
   try {
-    const response = await parkingApi.get(
+    const response = await apiClient.get(
       `${BASE_URL_REPORTS}/income/weekly/visitor`
     );
     return response;
@@ -152,7 +152,7 @@ export const getCurrentWeeklyReportVisitorReceipt = async () => {
 //unified
 export const currentMonthlyUnifiedReceiptReportService = async () => {
   try {
-    const response = await parkingApi.get(
+    const response = await apiClient.get(
       `${BASE_URL_REPORTS}/income/monthly/unified`
     );
     return response;
@@ -166,7 +166,7 @@ export const currentMonthlyUnifiedReceiptReportSpecific = async (
   month
 ) => {
   try {
-    const response = await parkingApi.post(
+    const response = await apiClient.post(
       `${BASE_URL_REPORTS}/income/monthly/unified`,
       {
         year,
@@ -181,7 +181,7 @@ export const currentMonthlyUnifiedReceiptReportSpecific = async (
 
 export const getCurrentBiweeklyReportUnifiedReceipt = async () => {
   try {
-    const response = await parkingApi.get(
+    const response = await apiClient.get(
       `${BASE_URL_REPORTS}/income/biweekly/unified`
     );
     return response;
@@ -192,7 +192,7 @@ export const getCurrentBiweeklyReportUnifiedReceipt = async () => {
 
 export const getCurrentWeeklyReportUnifiedReceipt = async () => {
   try {
-    const response = await parkingApi.get(
+    const response = await apiClient.get(
       `${BASE_URL_REPORTS}/income/weekly/unified`
     );
     return response;

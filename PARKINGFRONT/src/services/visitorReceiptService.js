@@ -1,11 +1,10 @@
-import parkingApi from "../apis/parkingApi";
+import apiClient from "../auth/middleware/apiClient";
 const BASE_URL_VISITOR_RECEIPT = "/visitor-receipt";
 
 export const findAllVisitorReceipts = async () => {
   try {
-    const response = await parkingApi.get(BASE_URL_VISITOR_RECEIPT);
+    const response = await apiClient.get(BASE_URL_VISITOR_RECEIPT);
     return response;
-  
   } catch (error) {
     throw error;
   }
@@ -13,7 +12,7 @@ export const findAllVisitorReceipts = async () => {
 
 export const createVisitorReceipt = async ({ plate, rate }) => {
   try {
-    return await parkingApi.post(BASE_URL_VISITOR_RECEIPT, {
+    return await apiClient.post(BASE_URL_VISITOR_RECEIPT, {
       plate,
       rate,
     });
@@ -31,7 +30,7 @@ export const updateVisitorReceipt = async ({
   rate,
 }) => {
   try {
-    return await parkingApi.put(`${BASE_URL_VISITOR_RECEIPT}/${id}`, {
+    return await apiClient.put(`${BASE_URL_VISITOR_RECEIPT}/${id}`, {
       plate,
       issueDate,
       dueDate,
@@ -45,7 +44,7 @@ export const updateVisitorReceipt = async ({
 
 export const changePaymentStatusVisitor = async (receiptId) => {
   try {
-    await parkingApi.put(
+    await apiClient.put(
       `${BASE_URL_VISITOR_RECEIPT}/change-payment/${receiptId}`
     );
   } catch (error) {
@@ -55,7 +54,7 @@ export const changePaymentStatusVisitor = async (receiptId) => {
 
 export const deleteVisitorReceipt = async (visitorReceiptId) => {
   try {
-    await parkingApi.delete(`${BASE_URL_VISITOR_RECEIPT}/${visitorReceiptId}`);
+    await apiClient.delete(`${BASE_URL_VISITOR_RECEIPT}/${visitorReceiptId}`);
   } catch (error) {
     throw error;
   }
@@ -63,7 +62,7 @@ export const deleteVisitorReceipt = async (visitorReceiptId) => {
 
 export const totalUnpaidVisitor = async () => {
   try {
-    const response = await parkingApi.get(
+    const response = await apiClient.get(
       `${BASE_URL_VISITOR_RECEIPT}/count-unpaid`
     );
     return response;
@@ -74,7 +73,7 @@ export const totalUnpaidVisitor = async () => {
 
 export const totalPaidVisitor = async () => {
   try {
-    const response = await parkingApi.get(
+    const response = await apiClient.get(
       `${BASE_URL_VISITOR_RECEIPT}/count-paid`
     );
     return response;
@@ -85,7 +84,7 @@ export const totalPaidVisitor = async () => {
 
 export const totalCountReceiptsVisitor = async () => {
   try {
-    const response = await parkingApi.get(
+    const response = await apiClient.get(
       `${BASE_URL_VISITOR_RECEIPT}/count-total`
     );
     return response;

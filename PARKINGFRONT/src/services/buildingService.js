@@ -1,10 +1,10 @@
-import parkingApi from "../apis/parkingApi";
+import apiClient from "../auth/middleware/apiClient";
 
 const BASE_URL_BUILDING = "/building";
 
 export const findAllBuilding = async () => {
   try {
-    const response = await parkingApi.get(BASE_URL_BUILDING);
+    const response = await apiClient.get(BASE_URL_BUILDING);
     return response;
   } catch (error) {
     throw error;
@@ -13,7 +13,7 @@ export const findAllBuilding = async () => {
 
 export const saveBuilding = async ({ name }) => {
   try {
-    return await parkingApi.post(BASE_URL_BUILDING, {
+    return await apiClient.post(BASE_URL_BUILDING, {
       name,
     });
   } catch (error) {
@@ -27,7 +27,7 @@ export const updateBuilding = async ({
 
 }) => {
   try {
-    return await parkingApi.put(`${BASE_URL_BUILDING}/${id}`, {
+    return await apiClient.put(`${BASE_URL_BUILDING}/${id}`, {
       name,
     });
   } catch (error) {
@@ -37,7 +37,7 @@ export const updateBuilding = async ({
 
 export const removeBuilding = async (id) => {
   try {
-    await parkingApi.delete(`${BASE_URL_BUILDING}/${id}`);
+    await apiClient.delete(`${BASE_URL_BUILDING}/${id}`);
   } catch (error) {
     throw error;
   }

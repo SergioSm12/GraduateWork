@@ -1,4 +1,4 @@
-import parkingApi from "../apis/parkingApi";
+import apiClient from "../auth/middleware/apiClient";
 
 const BASE_URL_USERS = "/users";
 
@@ -12,7 +12,7 @@ export const save = async ({
   guard,
 }) => {
   try {
-    return await parkingApi.post(BASE_URL_USERS, {
+    return await apiClient.post(BASE_URL_USERS, {
       name,
       lastName,
       email,
@@ -36,7 +36,7 @@ export const update = async ({
   guard,
 }) => {
   try {
-    return await parkingApi.put(`${BASE_URL_USERS}/${id}`, {
+    return await apiClient.put(`${BASE_URL_USERS}/${id}`, {
       name,
       lastName,
       email,
@@ -51,7 +51,7 @@ export const update = async ({
 
 export const changePasswordUser = async ({ password, id }) => {
   try {
-    return await parkingApi.patch(`${BASE_URL_USERS}/changePassword/${id}`, {
+    return await apiClient.patch(`${BASE_URL_USERS}/changePassword/${id}`, {
       password,
     });
   } catch (error) {
@@ -61,7 +61,7 @@ export const changePasswordUser = async ({ password, id }) => {
 
 export const findAllUsers = async () => {
   try {
-    const response = await parkingApi.get(BASE_URL_USERS);
+    const response = await apiClient.get(BASE_URL_USERS);
     return response;
   } catch (error) {
     console.log(error);
@@ -71,7 +71,7 @@ export const findAllUsers = async () => {
 
 export const totalCountUsers = async () => {
   try {
-    const response = await parkingApi.get(`${BASE_URL_USERS}/count-total`);
+    const response = await apiClient.get(`${BASE_URL_USERS}/count-total`);
     return response;
   } catch (error) {
     throw error;
@@ -80,7 +80,7 @@ export const totalCountUsers = async () => {
 
 export const findActiveUsers = async () => {
   try {
-    const response = await parkingApi.get(`${BASE_URL_USERS}/active-users`);
+    const response = await apiClient.get(`${BASE_URL_USERS}/active-users`);
     return response;
   } catch (error) {
     throw error;
@@ -89,7 +89,7 @@ export const findActiveUsers = async () => {
 
 export const findInactiveUsers = async () => {
   try {
-    const response = await parkingApi.get(`${BASE_URL_USERS}/inactive-users`);
+    const response = await apiClient.get(`${BASE_URL_USERS}/inactive-users`);
     return response;
   } catch (error) {
     throw error;
@@ -98,7 +98,7 @@ export const findInactiveUsers = async () => {
 
 export const findUserById = async (id) => {
   try {
-    const response = await parkingApi.get(`${BASE_URL_USERS}/${id}`);
+    const response = await apiClient.get(`${BASE_URL_USERS}/${id}`);
     return response;
   } catch (error) {
     throw error;
@@ -107,7 +107,7 @@ export const findUserById = async (id) => {
 
 export const findUserByEmail = async (email) => {
   try {
-    const response = await parkingApi.get(`${BASE_URL_USERS}/email`, {
+    const response = await apiClient.get(`${BASE_URL_USERS}/email`, {
       params: { email },
     });
     return response.data;
@@ -118,7 +118,7 @@ export const findUserByEmail = async (email) => {
 
 export const activateUser = async (id) => {
   try {
-    await parkingApi.put(`${BASE_URL_USERS}/activate/${id}`);
+    await apiClient.put(`${BASE_URL_USERS}/activate/${id}`);
   } catch (error) {
     throw error;
   }
@@ -126,7 +126,7 @@ export const activateUser = async (id) => {
 
 export const deactivateUser = async (id) => {
   try {
-    await parkingApi.put(`${BASE_URL_USERS}/deactivate/${id}`);
+    await apiClient.put(`${BASE_URL_USERS}/deactivate/${id}`);
   } catch (error) {
     throw error;
   }
@@ -134,7 +134,7 @@ export const deactivateUser = async (id) => {
 
 export const remove = async (id) => {
   try {
-    await parkingApi.delete(`${BASE_URL_USERS}/${id}`);
+    await apiClient.delete(`${BASE_URL_USERS}/${id}`);
   } catch (error) {
     throw error;
   }

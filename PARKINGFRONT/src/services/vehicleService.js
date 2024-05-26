@@ -1,10 +1,10 @@
-import parkingApi from "../apis/parkingApi";
+import apiClient from "../auth/middleware/apiClient";
 
 const BASE_URL_VEHICLES = "/vehicle";
 
 export const totalRegisteredVehiclesCount = async () => {
   try {
-    const response = await parkingApi.get(`${BASE_URL_VEHICLES}/count-total`);
+    const response = await apiClient.get(`${BASE_URL_VEHICLES}/count-total`);
     return response;
   } catch (error) {
     throw error;
@@ -13,7 +13,7 @@ export const totalRegisteredVehiclesCount = async () => {
 
 export const findAllVehiclesByUser = async (id) => {
   try {
-    const response = await parkingApi.get(`${BASE_URL_VEHICLES}/${id}/list`);
+    const response = await apiClient.get(`${BASE_URL_VEHICLES}/${id}/list`);
     return response;
   } catch (error) {
     throw error;
@@ -22,7 +22,7 @@ export const findAllVehiclesByUser = async (id) => {
 
 export const findAllVehicles = async () => {
   try {
-    const response = await parkingApi.get(`${BASE_URL_VEHICLES}/list`);
+    const response = await apiClient.get(`${BASE_URL_VEHICLES}/list`);
     return response;
   } catch (error) {
     throw error;
@@ -31,7 +31,7 @@ export const findAllVehicles = async () => {
 
 export const findAllVehiclesActiveByUser = async (id) => {
   try {
-    const response = await parkingApi.get(
+    const response = await apiClient.get(
       `${BASE_URL_VEHICLES}/${id}/active-vehicles`
     );
     return response;
@@ -42,7 +42,7 @@ export const findAllVehiclesActiveByUser = async (id) => {
 
 export const findInactiveVehiclesByUser = async (id) => {
   try {
-    const response = await parkingApi.get(
+    const response = await apiClient.get(
       `${BASE_URL_VEHICLES}/${id}/inactive-vehicles`
     );
     return response;
@@ -53,7 +53,7 @@ export const findInactiveVehiclesByUser = async (id) => {
 
 export const saveVehicle = async (userId, { plate, vehicleType }) => {
   try {
-    return await parkingApi.post(`${BASE_URL_VEHICLES}/${userId}/create`, {
+    return await apiClient.post(`${BASE_URL_VEHICLES}/${userId}/create`, {
       plate,
       vehicleType,
     });
@@ -67,7 +67,7 @@ export const updateVehicle = async (
   { id, plate, vehicleType, active }
 ) => {
   try {
-    return await parkingApi.put(`${BASE_URL_VEHICLES}/${userId}/update/${id}`, {
+    return await apiClient.put(`${BASE_URL_VEHICLES}/${userId}/update/${id}`, {
       plate,
       vehicleType,
       active,
@@ -79,7 +79,7 @@ export const updateVehicle = async (
 
 export const removeVehicle = async (userId, id) => {
   try {
-    await parkingApi.delete(`${BASE_URL_VEHICLES}/${userId}/delete/${id}`);
+    await apiClient.delete(`${BASE_URL_VEHICLES}/${userId}/delete/${id}`);
   } catch (error) {
     throw error;
   }
@@ -87,7 +87,7 @@ export const removeVehicle = async (userId, id) => {
 
 export const activateVehicle = async (userId, id) => {
   try {
-    await parkingApi.get(
+    await apiClient.get(
       `${BASE_URL_VEHICLES}/${userId}/activate-vehicle/${id}`
     );
   } catch (error) {

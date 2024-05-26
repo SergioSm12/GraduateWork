@@ -30,7 +30,6 @@ export const AppRoutes = () => {
       </div>
     );
   }
-
   
   return (
     <Routes>

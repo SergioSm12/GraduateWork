@@ -7,6 +7,7 @@ import {
   onInitLogin,
 } from "../../store/slices/auth/authSlice";
 import Swal from "sweetalert2";
+import { jwtDecode } from "jwt-decode";
 
 export const useAuth = () => {
   const dispatch = useDispatch();
@@ -35,8 +36,15 @@ export const useAuth = () => {
       dispatch(onInitLogin());
       const response = await loginUser({ email, password });
       const token = response.data.token;
-      const claims = JSON.parse(window.atob(token.split(".")[1]));
+      const claims = jwtDecode(token);
       const user = { email: response.data.user };
+      const currentTime = Date.now() / 1000;
+
+      //verificar si el token ha expirado
+      if (claims.exp < currentTime) {
+        throw new Error("Token ha expirado");
+      }
+
       dispatch(
         onLogin({ user, isAdmin: claims.isAdmin, isGuard: claims.isGuard })
       );
@@ -72,6 +80,14 @@ export const useAuth = () => {
           position: "top",
           icon: "error",
           title: "Error de validacion",
+          showConfirmButton: false,
+          timer: 1500,
+        });
+      } else if (error.message === "Token ha expirado") {
+        Swal.fire({
+          position: "top",
+          icon: "error",
+          title: "La sesión ha expirado",
           showConfirmButton: false,
           timer: 1500,
         });

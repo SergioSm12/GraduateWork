@@ -1,10 +1,10 @@
-import parkingApi from "../apis/parkingApi";
+import apiClient from "../auth/middleware/apiClient";
 
 const BASE_URL_QR = "/qrcode";
 
 export const generateQRCodeImage = async (id) => {
   try {
-    const response = await parkingApi.get(`${BASE_URL_QR}/${id}`, {
+    const response = await apiClient.get(`${BASE_URL_QR}/${id}`, {
       responseType: "arraybuffer",
     });
     const imageBlob = new Blob([response.data], { type: "image/png" });
@@ -17,7 +17,7 @@ export const generateQRCodeImage = async (id) => {
 
 export const generateQRCodeNightlyImage = async (id) => {
   try {
-    const response = await parkingApi.get(
+    const response = await apiClient.get(
       `${BASE_URL_QR}/nightly-receipt/${id}`,
       {
         responseType: "arraybuffer",
@@ -33,7 +33,7 @@ export const generateQRCodeNightlyImage = async (id) => {
 
 export const generateQRCodeVisitorImage = async (id) => {
   try {
-    const response = await parkingApi.get(`${BASE_URL_QR}/visitor/${id}`, {
+    const response = await apiClient.get(`${BASE_URL_QR}/visitor/${id}`, {
       responseType: "arraybuffer",
     });
     const imageBlob = new Blob([response.data], { type: "image/png" });

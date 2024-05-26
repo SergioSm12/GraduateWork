@@ -1,10 +1,10 @@
-import parkingApi from "../apis/parkingApi";
+import apiClient from "../auth/middleware/apiClient";
 
 const BASE_URL_CAPACITY = "/capacity";
 
 export const findAllCapacity = async () => {
   try {
-    const response = await parkingApi.get(BASE_URL_CAPACITY);
+    const response = await apiClient.get(BASE_URL_CAPACITY);
     return response;
   } catch (error) {
     throw error;
@@ -17,7 +17,7 @@ export const saveCapacity = async ({
   parkingSpaces,
 }) => {
   try {
-    return await parkingApi.post(BASE_URL_CAPACITY, {
+    return await apiClient.post(BASE_URL_CAPACITY, {
       vehicleType,
       building,
       parkingSpaces,
@@ -34,7 +34,7 @@ export const updateCapacity = async ({
   parkingSpaces,
 }) => {
   try {
-    return await parkingApi.put(`${BASE_URL_CAPACITY}/${id}`, {
+    return await apiClient.put(`${BASE_URL_CAPACITY}/${id}`, {
       vehicleType,
       building,
       parkingSpaces,
@@ -46,25 +46,24 @@ export const updateCapacity = async ({
 
 export const removeCapacity = async (id) => {
   try {
-    await parkingApi.delete(`${BASE_URL_CAPACITY}/${id}`);
+    await apiClient.delete(`${BASE_URL_CAPACITY}/${id}`);
   } catch (error) {
     throw error;
   }
 };
 
-export const vehicleEntry = async (id)=>{
+export const vehicleEntry = async (id) => {
   try {
-    await parkingApi.patch(`${BASE_URL_CAPACITY}/vehicle-entry/${id}`);
+    await apiClient.patch(`${BASE_URL_CAPACITY}/vehicle-entry/${id}`);
   } catch (error) {
     throw error;
   }
-}
+};
 
-
-export const vehicleExit = async (id)=>{
+export const vehicleExit = async (id) => {
   try {
-    await parkingApi.patch(`${BASE_URL_CAPACITY}/vehicle-exit/${id}`);
+    await apiClient.patch(`${BASE_URL_CAPACITY}/vehicle-exit/${id}`);
   } catch (error) {
     throw error;
   }
-}
+};

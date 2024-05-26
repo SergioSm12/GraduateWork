@@ -1,10 +1,10 @@
-import parkingApi from "../apis/parkingApi";
+import apiClient from "../auth/middleware/apiClient";
 
 const BASE_URL_RECEIPT = "/nightly-receipt";
 
 export const findAllNightlyReceipts = async () => {
   try {
-    const response = await parkingApi.get(BASE_URL_RECEIPT);
+    const response = await apiClient.get(BASE_URL_RECEIPT);
     return response;
   } catch (error) {
     throw error;
@@ -13,7 +13,7 @@ export const findAllNightlyReceipts = async () => {
 
 export const findNightlyReceiptsByUser = async (id) => {
   try {
-    const response = await parkingApi.get(`${BASE_URL_RECEIPT}/${id}`);
+    const response = await apiClient.get(`${BASE_URL_RECEIPT}/${id}`);
     return response;
   } catch (error) {
     throw error;
@@ -22,7 +22,7 @@ export const findNightlyReceiptsByUser = async (id) => {
 
 export const changePaymentStatusNight = async (receiptNightlyId) => {
   try {
-    await parkingApi.patch(
+    await apiClient.patch(
       `${BASE_URL_RECEIPT}/change-payment/${receiptNightlyId}`
     );
   } catch (error) {
@@ -32,7 +32,7 @@ export const changePaymentStatusNight = async (receiptNightlyId) => {
 
 export const createNightlyReceiptByUser = async (userId, { vehicle, rate }) => {
   try {
-    return await parkingApi.post(`${BASE_URL_RECEIPT}/${userId}/create`, {
+    return await apiClient.post(`${BASE_URL_RECEIPT}/${userId}/create`, {
       vehicle,
       rate,
     });
@@ -46,7 +46,7 @@ export const updateNightlyReceipt = async (
   { initialTime, departureTime, paymentStatus, rate }
 ) => {
   try {
-    return await parkingApi.put(
+    return await apiClient.put(
       `${BASE_URL_RECEIPT}/${nightlyReceiptId}/update`,
       {
         initialTime,
@@ -62,7 +62,7 @@ export const updateNightlyReceipt = async (
 
 export const deleteNightlyReciptById = async (nightlyReceiptId) => {
   try {
-    await parkingApi.delete(`${BASE_URL_RECEIPT}/${nightlyReceiptId}`);
+    await apiClient.delete(`${BASE_URL_RECEIPT}/${nightlyReceiptId}`);
   } catch (error) {
     throw error;
   }
@@ -70,7 +70,7 @@ export const deleteNightlyReciptById = async (nightlyReceiptId) => {
 
 export const totalUnpaid = async () => {
   try {
-    const response = await parkingApi.get(`${BASE_URL_RECEIPT}/count-unpaid`);
+    const response = await apiClient.get(`${BASE_URL_RECEIPT}/count-unpaid`);
     return response;
   } catch (error) {
     throw error;
@@ -79,7 +79,7 @@ export const totalUnpaid = async () => {
 
 export const totalPaid = async () => {
   try {
-    const response = await parkingApi.get(`${BASE_URL_RECEIPT}/count-paid`);
+    const response = await apiClient.get(`${BASE_URL_RECEIPT}/count-paid`);
     return response;
   } catch (error) {
     throw error;
@@ -88,7 +88,7 @@ export const totalPaid = async () => {
 
 export const totalCountReceipts = async () => {
   try {
-    const response = await parkingApi.get(`${BASE_URL_RECEIPT}/count-total`);
+    const response = await apiClient.get(`${BASE_URL_RECEIPT}/count-total`);
     return response;
   } catch (error) {
     throw error;
