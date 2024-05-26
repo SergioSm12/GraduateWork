@@ -1,4 +1,3 @@
-import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useAuth } from "../auth/hooks/useAuth";
 import Swal from "sweetalert2";
@@ -7,6 +6,8 @@ import {
   removeCapacity,
   saveCapacity,
   updateCapacity,
+  vehicleEntry,
+  vehicleExit,
 } from "../services/capacityService";
 import {
   addCapacity,
@@ -80,6 +81,52 @@ export const useCapacity = () => {
     dispatch(onCapacitySelected({ ...capacity }));
   };
 
+  const handlerVehicleEntry = async (id) => {
+    try {
+      await vehicleEntry(id);
+      Toast.fire({
+        icon: "success",
+        title: "Entrada de vehiculo registrada",
+      });
+      await getCapacities();
+    } catch (error) {
+      if (error.response?.status == 401) {
+        handlerLogout();
+      }
+      if (error.response?.status == 403) {
+        Toast.fire({
+          icon: "warning",
+          title: "Todas los espacios estan ocupados",
+        });
+      } else {
+        throw error;
+      }
+    }
+  };
+
+  const handlerVehicleExit = async (id) => {
+    try {
+      await vehicleExit(id);
+      Toast.fire({
+        icon: "success",
+        title: "Salida de vehiculo registrada",
+      });
+      await getCapacities();
+    } catch (error) {
+      if (error.response?.status == 401) {
+        handlerLogout();
+      }
+      if (error.response?.status == 403) {
+        Toast.fire({
+          icon: "warning",
+          title: "Todas los espacios estan libres",
+        });
+      } else {
+        throw error;
+      }
+    }
+  };
+
   const handlerRemoveCapacity = (id) => {
     Swal.fire({
       title: "¿Esta seguro que desea eliminar?",
@@ -119,6 +166,8 @@ export const useCapacity = () => {
     errorsCapacity,
     initialCapacityForm,
     handlerCapacitySelected,
-    handlerRemoveCapacity
+    handlerRemoveCapacity,
+    handlerVehicleEntry,
+    handlerVehicleExit,
   };
 };

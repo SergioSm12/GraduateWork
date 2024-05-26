@@ -175,7 +175,7 @@ export const DataTableReceiptsUser = ({ dataReceipts, receiptType }) => {
             value={globalFilter ?? ""}
             onchange={(value) => {
               setGlobalFilter(String(value));
-              //getUsers();
+            
             }}
             className="bg-secondary-900 outline-none py-2 pr-4 pl-10 rounded-lg
               placeholder:text-gray-500 w-full"

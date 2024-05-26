@@ -69,6 +69,13 @@ public class UserController {
         return ResponseEntity.notFound().build();
     }
 
+    @GetMapping("/email")
+    public ResponseEntity<UserDto> getUserByEmail(@RequestParam String email) {
+        Optional<UserDto> user = userService.findByEmail(email);
+        return user.map(ResponseEntity::ok)
+                .orElseGet(() -> ResponseEntity.notFound().build());
+    }
+
     @PostMapping()
     public ResponseEntity<?> create(@Valid @RequestBody User user, BindingResult result) {
         if (result.hasErrors()) {

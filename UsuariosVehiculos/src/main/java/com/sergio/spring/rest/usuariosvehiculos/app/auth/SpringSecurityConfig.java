@@ -55,6 +55,7 @@ public class SpringSecurityConfig {
                         .requestMatchers(HttpMethod.PUT, "/users/activate/{id}").permitAll()
                         .requestMatchers(HttpMethod.PUT, "/users/deactivate/{id}").permitAll()
                         .requestMatchers(HttpMethod.DELETE, "/users/{id}").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/users/email").permitAll()
 
                         // usuario vehicle
                         .requestMatchers(HttpMethod.POST, "/vehicle/{userId}/create").permitAll()

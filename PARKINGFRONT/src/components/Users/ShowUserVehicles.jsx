@@ -19,11 +19,9 @@ export const ShowUserVehicles = ({ userByid }) => {
     });
   }, [userByid]);
 
-
-
   return (
     <>
-      {!visibleFormVehicle || <ModalFormVehicle />}
+      {!visibleFormVehicle || <ModalFormVehicle userId={userShow.id} />}
       <div className="flex flex-col bg-secondary-900 p-4 rounded-lg">
         <div className="flex justify-end mb-3">
           {visibleFormVehicle || (
@@ -36,7 +34,7 @@ export const ShowUserVehicles = ({ userByid }) => {
           )}
         </div>
         {userShow.vehicles.length > 0 ? (
-          <ListVehicles />
+          <ListVehicles userId={userShow.id} />
         ) : (
           <div className=" flex justify-center">
             <span className="flex items-center gap-2  bg-secondary-900 py-4 px-4 rounded-lg">

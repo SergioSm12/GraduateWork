@@ -6,7 +6,11 @@ import {
 } from "react-icons/ri";
 import { useVehicle } from "../../hooks/useVehicle";
 import { useParams } from "react-router-dom";
-export const CreateVehicle = ({ handlerCloseFormVehicle, vehicleSelected }) => {
+export const CreateVehicle = ({
+  handlerCloseFormVehicle,
+  vehicleSelected,
+  userId,
+}) => {
   const {
     handlerAddVehicle,
     initialVehicleForm,
@@ -67,13 +71,20 @@ export const CreateVehicle = ({ handlerCloseFormVehicle, vehicleSelected }) => {
   const onSubmit = (e) => {
     e.preventDefault();
 
-    handlerAddVehicle(id, vehicleForm).then(() => {
-      getVehicles(id);
-      getVehiclesActive(id);
-      getVehiclesInactive(id);
-    });
+    if (id === undefined) {
+      handlerAddVehicle(userId, vehicleForm,"/").then(() => {
+        getVehicles(userId);
+        getVehiclesActive(userId);
+        getVehiclesInactive(userId);
+      });
+    } else {
+      handlerAddVehicle(id, vehicleForm,`/users/show/${id}`).then(() => {
+        getVehicles(id);
+        getVehiclesActive(id);
+        getVehiclesInactive(id);
+      });
+    }
   };
-
 
   return (
     <div className="bg-secondary-100 p-8 rounded-xl shadow-2xl w-auto lg:w-[450px]">

@@ -71,6 +71,17 @@ public class UserService implements IUserService {
 
     @Override
     @Transactional(readOnly = true)
+    public Optional<UserDto> findByEmail(String email) {
+        return userRepository.getUserByEmail(email).map(u ->
+                DtoMapperUser
+                        .builder()
+                        .setUser(u)
+                        .build()
+        );
+    }
+
+    @Override
+    @Transactional(readOnly = true)
     public Optional<UserDto> findById(Long id) {
         return userRepository.findById(id).map(u ->
                 DtoMapperUser
@@ -179,8 +190,6 @@ public class UserService implements IUserService {
     public void remove(Long id) {
         userRepository.deleteById(id);
     }
-
-
 
 
     //Create

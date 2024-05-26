@@ -7,6 +7,7 @@ import {
   findActiveUsers,
   findAllUsers,
   findInactiveUsers,
+  findUserByEmail,
   findUserById,
   remove,
   save,
@@ -113,6 +114,17 @@ export const useUsers = () => {
     try {
       const result = await findUserById(id);
       dispatch(loadingUserById(result.data));
+    } catch (error) {
+      if (error.response?.status == 401) {
+        handlerLogout();
+      }
+    }
+  };
+
+  const getUserByEmail = async (email) => {
+    try {
+      const result = await findUserByEmail(email);
+      dispatch(loadingUserById(result));
     } catch (error) {
       if (error.response?.status == 401) {
         handlerLogout();
@@ -318,5 +330,6 @@ export const useUsers = () => {
     getUserById,
     userByid,
     totalCountState,
+    getUserByEmail
   };
 };

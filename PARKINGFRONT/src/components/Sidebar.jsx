@@ -11,12 +11,13 @@ import {
   RiCloseLine,
   RiRoadsterFill,
   RiParkingBoxLine,
+  RiAdminLine,
 } from "react-icons/ri";
 import { useAuth } from "../auth/hooks/useAuth";
 
 export const Sidebar = () => {
   const { handlerLogout } = useAuth();
-  const [showSubmenu, setShowSubmenu] = useState(false);
+
   const [showMenu, setShowMenu] = useState(false);
   return (
     <>
@@ -27,8 +28,8 @@ export const Sidebar = () => {
      } transition-all `}
       >
         <div>
-          <h1 className="text-center text-2xl font-bold text-white mb-10">
-            Parqueadero USTA<span className="text-primary text-4xl">.</span>
+          <h1 className="flex items-center gap-1 text-center text-2xl font-bold text-white mb-10">
+            Modulos <span className="text-primary"><RiAdminLine /></span>
           </h1>
           <ul>
             <li>

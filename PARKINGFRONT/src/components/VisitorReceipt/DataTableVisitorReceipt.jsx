@@ -26,6 +26,7 @@ import { useVisitorReceipt } from "../../hooks/useVisitorReceipt";
 import { ModalReceiptVisitor } from "./ModalReceiptVisitor";
 import { QRCode } from "../QR/QRCode";
 import { GenerateInvoicePdf } from "../PDF/GenerateInvoicePdf";
+import { useAuth } from "../../auth/hooks/useAuth";
 
 //Componente con TanStackReacttable
 
@@ -61,6 +62,7 @@ export const DataTableVisitorReceipt = ({ dataReceipts }) => {
   const [data, setData] = useState(dataReceipts);
   const [globalFilter, setGlobalFilter] = useState("");
   const [sorting, setSorting] = useState([]);
+  const { login } = useAuth();
 
   const {
     visibleShowReceiptVisitorModal,
@@ -241,14 +243,22 @@ export const DataTableVisitorReceipt = ({ dataReceipts }) => {
                         <button
                           type="button"
                           className={classNames({
-                            "p-1 my-3 text-red-500/80 bg-secondary-100 rounded-lg text-center w-full hover:border border-primary/80 transition-colors":
-                              !row.original.paymentStatus,
-                            "p-1 my-3 text-green-500/80 bg-secondary-100 text-center rounded-lg w-full hover:border border-primary/80 transition-colors":
-                              row.original.paymentStatus,
+                            "p-1 my-3 rounded-lg text-center w-full transition-colors": true,
+                            "text-red-500/80 bg-secondary-100 hover:border border-primary/80":
+                              !row.original.paymentStatus && !login.isGuard,
+                            "text-green-500/80 bg-secondary-100 hover:border border-primary/80":
+                              row.original.paymentStatus && !login.isGuard,
+                            "text-red-500/80 bg-secondary-100 cursor-not-allowed":
+                              !row.original.paymentStatus && login.isGuard,
+                            "text-green-500/80 bg-secondary-100 cursor-not-allowed":
+                              row.original.paymentStatus && login.isGuard,
                           })}
-                          onClick={() => {
-                            handlePaymentStatusChange(row.original.id);
-                          }}
+                          onClick={
+                            !login.isGuard
+                              ? () => handlePaymentStatusChange(row.original.id)
+                              : null
+                          }
+                          disabled={login.isGuard}
                         >
                           {row.original.paymentStatus ? "Pagado" : "Pendiente"}
                         </button>
@@ -314,28 +324,34 @@ export const DataTableVisitorReceipt = ({ dataReceipts }) => {
                           <RiInformationLine className="text-lg" />
                         </button>
 
-                        <button
-                          type="button"
-                          className="py-2 px-2 bg-primary/80 text-black hover:bg-primary rounded-lg transition-colors"
-                          onClick={() => {
-                            // Pasa los datos del usuario al hacer clic en el botón de edición
-                            handlerVisitorReceiptSelectedModalForm(
-                              row.original
-                            );
-                          }}
-                        >
-                          <RiEdit2Line className="text-lg" />
-                        </button>
-                        <button
-                          type="button"
-                          className="py-2 px-2 bg-secondary-100/50 hover:bg-secondary-100 text-red-500/70 hover:text-red-500
+                        {login.isGuard ? (
+                          <></>
+                        ) : (
+                          <>
+                            <button
+                              type="button"
+                              className="py-2 px-2 bg-primary/80 text-black hover:bg-primary rounded-lg transition-colors"
+                              onClick={() => {
+                                // Pasa los datos del usuario al hacer clic en el botón de edición
+                                handlerVisitorReceiptSelectedModalForm(
+                                  row.original
+                                );
+                              }}
+                            >
+                              <RiEdit2Line className="text-lg" />
+                            </button>
+                            <button
+                              type="button"
+                              className="py-2 px-2 bg-secondary-100/50 hover:bg-secondary-100 text-red-500/70 hover:text-red-500
                      transition-colors rounded-lg  flex items-center "
-                          onClick={() => {
-                            handlerRemoveVisitorReceipt(row.original.id);
-                          }}
-                        >
-                          <RiDeleteBin7Line className="text-lg" />
-                        </button>
+                              onClick={() => {
+                                handlerRemoveVisitorReceipt(row.original.id);
+                              }}
+                            >
+                              <RiDeleteBin7Line className="text-lg" />
+                            </button>
+                          </>
+                        )}
                       </div>
                     )}
                   </td>

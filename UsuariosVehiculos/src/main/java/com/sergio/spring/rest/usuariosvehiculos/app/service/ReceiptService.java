@@ -86,7 +86,7 @@ public class ReceiptService implements IReceiptService {
             throw new IllegalArgumentException("User not found");
         }
         User user = userOptional.get();
-        List<Receipt> receipts = receiptRepository.findByUser(user);
+        List<Receipt> receipts = receiptRepository.findByUserOrderByIssueDateDesc(user);
 
         return receipts.stream().map(r -> DtoMapperReceipt.builder().setReceipt(r).build())
                 .collect(Collectors.toList());

@@ -8,22 +8,42 @@ import { DataTableReceiptsUser } from "./DataTableReceiptsUser";
 import { useReceipts } from "../../hooks/useReceipts";
 import { Tab } from "@headlessui/react";
 import { useNightlyReceipts } from "../../hooks/useNightlyReceipts";
+import { useAuth } from "../../auth/hooks/useAuth";
+import { DataTableReceipt } from "../Receipts/DataTableReceipt";
+import { DataTableNightlyReceipts } from "../NightlyReceipt/DataTableNightlyReceipts";
 
 export const ShowUser = () => {
   //Traer datos del contexto
-  const { userByid, getUserById } = useUsers();
+  const { userByid, getUserById, getUserByEmail } = useUsers();
   const { receiptsByUser, getReciptsByUser } = useReceipts();
   const { nightlyReceiptsByUser, getNightlyReceiptsByUser } =
     useNightlyReceipts();
+  const { login } = useAuth();
 
   //Traemos el parametro de la url
+
   const { id } = useParams();
 
   useEffect(() => {
-    getReciptsByUser(id);
-    getNightlyReceiptsByUser(id);
-    getUserById(id);
+    if (!login.isAdmin) {
+      getUserByEmail(login.user.email);
+    }
+  }, []);
+
+  useEffect(() => {
+    if (login.isAdmin) {
+      getReciptsByUser(id);
+      getNightlyReceiptsByUser(id);
+      getUserById(id);
+    }
   }, [, id]);
+
+  useEffect(() => {
+    if (!userByid.id == 0) {
+      getNightlyReceiptsByUser(userByid.id);
+      getReciptsByUser(userByid.id);
+    }
+  }, [userByid]);
 
   return (
     <div>
@@ -31,22 +51,34 @@ export const ShowUser = () => {
         <div>
           <h1 className="font-bold text-gray-100 text-xl">Detalle usuario</h1>
           <div className="flex items-center gap-2 text-sm text-gray-500 ">
-            <Link to="/" className="hover:text-primary transition-colors">
-              Principal
-            </Link>
-            <span>-</span>
-            <span>Centro de administración de usuarios</span>
+            {login.isAdmin ? (
+              <>
+                {" "}
+                <Link to="/" className="hover:text-primary transition-colors">
+                  Principal
+                </Link>
+                <span>-</span>
+                <span>Centro de administración de usuarios</span>
+              </>
+            ) : (
+              <span>Centro de administración usuario</span>
+            )}
           </div>
         </div>
+
         <div className="flex items-center">
-          <Link
-            className="bg-primary/90 text-black hover:bg-primary flex items-center gap-2 py-2 px-4 rounded-lg
+          {login.isAdmin ? (
+            <Link
+              className="bg-primary/90 text-black hover:bg-primary flex items-center gap-2 py-2 px-4 rounded-lg
            transition-colors"
-            to="/users"
-          >
-            <RiArrowLeftLine />
-            Regresar
-          </Link>
+              to="/users"
+            >
+              <RiArrowLeftLine />
+              Regresar
+            </Link>
+          ) : (
+            <></>
+          )}
         </div>
       </div>
       {/*Cuerpo */}
@@ -80,7 +112,13 @@ export const ShowUser = () => {
                     </span>
                   </div>
                 ) : (
-                  <DataTableReceiptsUser dataReceipts={receiptsByUser} />
+                  <>
+                    {login.isAdmin ? (
+                      <DataTableReceiptsUser dataReceipts={receiptsByUser} />
+                    ) : (
+                      <DataTableReceipt dataReceipts={receiptsByUser} />
+                    )}
+                  </>
                 )}
               </Tab.Panel>
               <Tab.Panel>
@@ -92,10 +130,18 @@ export const ShowUser = () => {
                     </span>
                   </div>
                 ) : (
-                  <DataTableReceiptsUser
-                    receiptType={"nocturno"}
-                    dataReceipts={nightlyReceiptsByUser}
-                  />
+                  <>
+                    {login.isAdmin ? (
+                      <DataTableReceiptsUser
+                        receiptType={"nocturno"}
+                        dataReceipts={nightlyReceiptsByUser}
+                      />
+                    ) : (
+                      <DataTableNightlyReceipts
+                        dataReceipts={nightlyReceiptsByUser}
+                      />
+                    )}
+                  </>
                 )}
               </Tab.Panel>
             </Tab.Panels>

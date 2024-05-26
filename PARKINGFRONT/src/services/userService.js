@@ -105,6 +105,17 @@ export const findUserById = async (id) => {
   }
 };
 
+export const findUserByEmail = async (email) => {
+  try {
+    const response = await parkingApi.get(`${BASE_URL_USERS}/email`, {
+      params: { email },
+    });
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
 export const activateUser = async (id) => {
   try {
     await parkingApi.put(`${BASE_URL_USERS}/activate/${id}`);

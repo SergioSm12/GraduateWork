@@ -20,7 +20,7 @@ public interface IReceiptRepository extends CrudRepository<Receipt, Long> {
 
     List<Receipt> findByPaymentStatusTrue();
 
-    List<Receipt> findByUser(User user);
+    List<Receipt> findByUserOrderByIssueDateDesc(User user);
 
     List<Receipt> findByUserAndPaymentStatus(User user, boolean paymentStatus);
 

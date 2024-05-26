@@ -15,6 +15,10 @@ import { RegisterVisitor } from "./pages/visitor/RegisterVisitor";
 
 import { ReportRutes } from "./routes/ReportRutes";
 import { Aforo } from "./pages/admin/Aforo";
+import { LayoutSecurityGuard } from "./layout/LayoutSecurityGuard";
+import { LayoutUser } from "./layout/LayoutUser";
+import { HomeSecurityGuard } from "./pages/guard/HomeSecurityGuard";
+import { ShowUser } from "./components/Users/ShowUser";
 
 export const AppRoutes = () => {
   const { login } = useAuth();
@@ -27,17 +31,28 @@ export const AppRoutes = () => {
     );
   }
 
+  
   return (
     <Routes>
       {login.isAuth ? (
-        <Route path="/" element={<LayoutAdmin />}>
-          <Route index element={<Home />} />
-          <Route path="users/*" element={<UserRoutes />} />
-          <Route path="rate" element={<Rates />} />
-          <Route path="vehicleType" element={<VehicleTypes />} />
-          <Route path="reports/*" element={<ReportRutes />} />
-          <Route path="aforo" element={<Aforo/>}/>
-        </Route>
+        login.isAdmin ? (
+          <Route path="/" element={<LayoutAdmin />}>
+            <Route index element={<Home />} />
+            <Route path="users/*" element={<UserRoutes />} />
+            <Route path="rate" element={<Rates />} />
+            <Route path="vehicleType" element={<VehicleTypes />} />
+            <Route path="reports/*" element={<ReportRutes />} />
+            <Route path="aforo" element={<Aforo />} />
+          </Route>
+        ) : login.isGuard ? (
+          <Route path="/" element={<LayoutSecurityGuard />}>
+            <Route index element={<HomeSecurityGuard />} />
+          </Route>
+        ) : (
+          <Route path="/" element={<LayoutUser />}>
+            <Route index element={<ShowUser/>}/>
+          </Route>
+        )
       ) : (
         <>
           <Route path="/auth" element={<LayoutAuth />}>

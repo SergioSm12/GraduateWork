@@ -38,6 +38,14 @@ export const vehicleSlice = createSlice({
           ...action.payload,
         },
       ];
+
+      state.vehiclesAll = [
+        ...state.vehiclesAll,
+        {
+          ...action.payload,
+        },
+      ];
+
       state.vehicleSelected = initialUserForm;
       state.visibleFormVehicle = false;
     },

@@ -27,6 +27,7 @@ import { es } from "date-fns/locale";
 import { ModalFormReceipt } from "./ModalFormReceipt";
 import { QRCode } from "../QR/QRCode";
 import { GenerateInvoicePdf } from "../PDF/GenerateInvoicePdf";
+import { useAuth } from "../../auth/hooks/useAuth";
 
 //Componente con TanStackReacttable
 
@@ -71,9 +72,9 @@ export const DataTableReceipt = ({ dataReceipts }) => {
     handlerReceiptSelectedModalForm,
     handlerChangePaymentStatus,
     handlerRemoveReceipt,
-    idQRReceipt,
-  
   } = useReceipts();
+
+  const { login } = useAuth();
 
   useEffect(() => {
     setData(dataReceipts);
@@ -175,7 +176,6 @@ export const DataTableReceipt = ({ dataReceipts }) => {
             value={globalFilter ?? ""}
             onchange={(value) => {
               setGlobalFilter(String(value));
-             
             }}
             className="bg-secondary-900 outline-none py-2 pr-4 pl-10 rounded-lg
                 placeholder:text-gray-500 w-full"
@@ -235,9 +235,7 @@ export const DataTableReceipt = ({ dataReceipts }) => {
                     {cell.column.id === "vehiclePlate" && (
                       <div className=" flex justify-between gap-2">
                         {row.original.vehicle.plate}
-                        <GenerateInvoicePdf
-                          row={row}
-                        />
+                        <GenerateInvoicePdf row={row} />
                       </div>
                     )}
                     {cell.column.id === "paymentStatus" && (
@@ -245,14 +243,18 @@ export const DataTableReceipt = ({ dataReceipts }) => {
                         <button
                           type="button"
                           className={classNames({
-                            "p-1 my-3 text-red-500/80 bg-secondary-100 rounded-lg text-center w-full hover:border border-primary/80 transition-colors":
-                              !row.original.paymentStatus,
-                            "p-1 my-3 text-green-500/80 bg-secondary-100 text-center rounded-lg w-full hover:border border-primary/80 transition-colors":
-                              row.original.paymentStatus,
+                            "p-1 my-3 rounded-lg text-center w-full transition-colors": true,
+                            "text-red-500/80 bg-secondary-100": !row.original.paymentStatus,
+                            "text-green-500/80 bg-secondary-100": row.original.paymentStatus,
+                            "hover:border border-primary/80": login.isAdmin,
+                            "cursor-not-allowed": !login.isAdmin,
                           })}
-                          onClick={() => {
-                            handlePaymentStatusChange(row.original.id);
-                          }}
+                          onClick={
+                            login.isAdmin
+                              ? () => handlePaymentStatusChange(row.original.id)
+                              : null
+                          }
+                          disabled={!login.isAdmin}
                         >
                           {row.original.paymentStatus ? "Pagado" : "Pendiente"}
                         </button>
@@ -320,26 +322,32 @@ export const DataTableReceipt = ({ dataReceipts }) => {
                           <RiInformationLine className="text-lg" />
                         </button>
 
-                        <button
-                          type="button"
-                          className="py-2 px-2 bg-primary/80 text-black hover:bg-primary rounded-lg transition-colors"
-                          onClick={() => {
-                            // Pasa los datos del usuario al hacer clic en el botón de edición
-                            handlerReceiptSelectedModalForm(row.original);
-                          }}
-                        >
-                          <RiEdit2Line className="text-lg" />
-                        </button>
-                        <button
-                          type="button"
-                          className="py-2 px-2 bg-secondary-100/50 hover:bg-secondary-100 text-red-500/70 hover:text-red-500
+                        {!login.isAdmin ? (
+                          <></>
+                        ) : (
+                          <>
+                            <button
+                              type="button"
+                              className="py-2 px-2 bg-primary/80 text-black hover:bg-primary rounded-lg transition-colors"
+                              onClick={() => {
+                                // Pasa los datos del usuario al hacer clic en el botón de edición
+                                handlerReceiptSelectedModalForm(row.original);
+                              }}
+                            >
+                              <RiEdit2Line className="text-lg" />
+                            </button>
+                            <button
+                              type="button"
+                              className="py-2 px-2 bg-secondary-100/50 hover:bg-secondary-100 text-red-500/70 hover:text-red-500
                    transition-colors rounded-lg  flex items-center "
-                          onClick={() => {
-                            handlerRemoveReceipt(row.original.id);
-                          }}
-                        >
-                          <RiDeleteBin7Line className="text-lg" />
-                        </button>
+                              onClick={() => {
+                                handlerRemoveReceipt(row.original.id);
+                              }}
+                            >
+                              <RiDeleteBin7Line className="text-lg" />
+                            </button>
+                          </>
+                        )}
                       </div>
                     )}
                   </td>

@@ -109,7 +109,6 @@ export const Home = () => {
           totalNightUnPaidState={totalNightUnPaidState}
           totalNightPaidState={totalNightPaidState}
           totalNightState={totalNightState}
-         
         />
       </div>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 gap-8 mt-8">
@@ -146,7 +145,9 @@ export const Home = () => {
       {/*Date Table */}
 
       <div className="bg-secondary-100 p-8 rounded-xl">
-        {receipts.length === 0 && visitorReceipts.length === 0 ? (
+        {receipts.length === 0 &&
+        visitorReceipts.length === 0 &&
+        nightlyReceipts.length === 0 ? (
           <>
             <div className="flex items-center justify-center gap-2">
               <Link
@@ -180,7 +181,7 @@ export const Home = () => {
                   className="py-2 px-4 rounded-lg hover:bg-secondary-900 hover:text-gray-100
               transition-colors outline-none ui-selected:bg-secondary-900 ui-selected:text-primary"
                 >
-                  Registrados
+                  Diurnos
                 </Tab>
                 <Tab
                   className="py-2 px-4 rounded-lg hover:bg-secondary-900 hover:text-gray-100

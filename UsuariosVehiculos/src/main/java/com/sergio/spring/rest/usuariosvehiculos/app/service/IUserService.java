@@ -10,6 +10,7 @@ import com.sergio.spring.rest.usuariosvehiculos.app.models.dto.entity.users.User
 import com.sergio.spring.rest.usuariosvehiculos.app.models.entities.User;
 import com.sergio.spring.rest.usuariosvehiculos.app.models.request.UserChangePasswordRequest;
 import com.sergio.spring.rest.usuariosvehiculos.app.models.request.UserRequest;
+import org.springframework.transaction.annotation.Transactional;
 
 public interface IUserService {
 
@@ -19,6 +20,8 @@ public interface IUserService {
     long getTotalCountUsers();
 
     Page<UserDto> findAll(Pageable pageable);
+
+    Optional<UserDto> findByEmail(String email);
 
     Optional<UserDto> findById(Long id);
 

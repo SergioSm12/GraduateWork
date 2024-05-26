@@ -7,7 +7,7 @@ import { useReceipts } from "../../hooks/useReceipts";
 import { ModalFormReceipt } from "../Receipts/ModalFormReceipt";
 import { DataTableVehicles } from "./DataTableVehicles";
 import { RiAlertLine } from "react-icons/ri";
-export const ListVehicles = () => {
+export const ListVehicles = ({userId}) => {
   const {
     vehicles,
     vehiclesActive,
@@ -22,7 +22,7 @@ export const ListVehicles = () => {
   const { visibleFormReceiptModal, handlerOpenModalFormReceipt } =
     useReceipts();
    
-  const { id: userId } = useParams();
+
   useEffect(() => {
     getVehiclesActive(userId);
     getVehiclesInactive(userId);

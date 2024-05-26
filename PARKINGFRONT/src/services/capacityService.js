@@ -51,3 +51,20 @@ export const removeCapacity = async (id) => {
     throw error;
   }
 };
+
+export const vehicleEntry = async (id)=>{
+  try {
+    await parkingApi.patch(`${BASE_URL_CAPACITY}/vehicle-entry/${id}`);
+  } catch (error) {
+    throw error;
+  }
+}
+
+
+export const vehicleExit = async (id)=>{
+  try {
+    await parkingApi.patch(`${BASE_URL_CAPACITY}/vehicle-exit/${id}`);
+  } catch (error) {
+    throw error;
+  }
+}

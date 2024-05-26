@@ -19,7 +19,7 @@ public interface INightlyReceiptRepository extends CrudRepository<NightlyReceipt
     long countByPaymentStatusTrue();
 
     //Trae los recibos por usuario
-    List<NightlyReceipt> findByUser(User user);
+    List<NightlyReceipt> findByUserOrderByInitialTimeDesc(User user);
 
 
     @Query("SELECT r FROM NightlyReceipt r LEFT JOIN FETCH r.rate LEFT JOIN FETCH r.user LEFT JOIN FETCH r.vehicle LEFT JOIN FETCH r.vehicle.vehicleType WHERE r.id = :receiptId")

@@ -83,7 +83,7 @@ public class NightlyReceiptService implements INightlyReceiptService {
             throw new IllegalArgumentException("User not found");
         }
         User user = userOptional.get();
-        List<NightlyReceipt> receipts = nightlyReceiptRepository.findByUser(user);
+        List<NightlyReceipt> receipts = nightlyReceiptRepository.findByUserOrderByInitialTimeDesc(user);
 
         return receipts.stream().map(r -> DtoMapperNightlyReceipt.builder().setNightlyReceipt(r).build())
                 .collect(Collectors.toList());

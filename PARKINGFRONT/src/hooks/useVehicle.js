@@ -114,7 +114,7 @@ export const useVehicle = () => {
     }
   };
 
-  const handlerAddVehicle = async (userId, vehicle) => {
+  const handlerAddVehicle = async (userId, vehicle,redirecTo) => {
     let response;
     try {
       if (vehicle.id === 0) {
@@ -130,7 +130,7 @@ export const useVehicle = () => {
         title: vehicle.id === 0 ? "Vehiculo creado" : "Vehiculo Actualizado",
       });
       handlerCloseFormVehicle();
-      navigate(`/users/show/${userId}`);
+      navigate(redirecTo);
     } catch (error) {
       if (error.response && error.response.status == 400) {
         dispatch(loadingErrorVehicle(error.response.data));

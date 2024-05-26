@@ -27,8 +27,8 @@ export const Header = () => {
       getCapacities();
     }, 10000);
 
-    //Limpiar el intervalo 
-    return ()=> clearInterval(interval);
+    //Limpiar el intervalo
+    return () => clearInterval(interval);
   }, []);
 
   const carCapacities = capacities.filter(
@@ -50,7 +50,11 @@ export const Header = () => {
 
   return (
     <header className="h-[7vh] md:h-[10vh] border-b border-secondary-100 p-8 flex items-center justify-end">
-      <nav className="flex items-center gap-2">
+      <nav className="flex items-center gap-2 md:w-full">
+        <span className=" mr-auto md:flex hidden ">
+          Parqueadero universidad Santo Tomas
+        </span>
+
         <Menu
           menuButton={
             <MenuButton className="relative hover:bg-secondary-100 p-2 rounded-lg transition-colors">
@@ -70,7 +74,7 @@ export const Header = () => {
           <hr className="my-6 border-gray-500"></hr>
           <MenuItem className="p-0 hover:bg-transparent">
             <Link
-              to="/aforo"
+              to= {login.isAdmin ? "/aforo":"/" }
               className="text-gray-300 text-sm flex flex-1 items-center justify-content gap-2 py-2 px-4
             hover:bg-secondary-900 transition-colors rounded-lg"
             >
@@ -78,7 +82,7 @@ export const Header = () => {
               <div className="flex flex-col gap-1">
                 <span className="text-lg">Plazas disponibles </span>
                 {carCapacities.map((capacity) => (
-                  <span className="text-xs">
+                  <span className="text-xs" key={capacity.id}>
                     {capacity.building.name}{" "}
                     <span className="text-primary">
                       ({capacity.parkingSpaces})
@@ -90,7 +94,7 @@ export const Header = () => {
           </MenuItem>
           <MenuItem className="p-0 hover:bg-transparent">
             <Link
-              to="/aforo"
+              to={login.isAdmin ? "/aforo":"/" }
               className="text-gray-300 text-sm flex flex-1 items-center justify-content gap-2 py-2 px-4
             hover:bg-secondary-900 transition-colors rounded-lg"
             >
@@ -98,7 +102,7 @@ export const Header = () => {
               <div className="flex flex-col gap-1">
                 <span className="text-lg">Plazas ocupadas </span>
                 {carCapacities.map((capacity) => (
-                  <span className="text-xs">
+                  <span className="text-xs" key={capacity.id}>
                     {capacity.building.name}{" "}
                     <span className="text-primary">
                       ({capacity.occupiedSpaces})
@@ -110,7 +114,7 @@ export const Header = () => {
           </MenuItem>
           <MenuItem className="p-0 hover:bg-transparent">
             <Link
-              to="/aforo"
+              to={login.isAdmin ? "/aforo":"/" }
               className="text-gray-300 text-sm flex flex-1 items-center justify-content gap-2 py-2 px-4
             hover:bg-secondary-900 transition-colors rounded-lg"
             >
@@ -118,7 +122,7 @@ export const Header = () => {
               <div className="flex flex-col gap-1">
                 <span className="text-lg">Plazas totales </span>
                 {carCapacities.map((capacity) => (
-                  <span className="text-xs">
+                  <span className="text-xs" key={capacity.id}>
                     {capacity.building.name}{" "}
                     <span className="text-primary">
                       ({capacity.maxParking})
@@ -149,7 +153,7 @@ export const Header = () => {
           <hr className="my-6 border-gray-500"></hr>
           <MenuItem className="p-0 hover:bg-transparent">
             <Link
-              to="/aforo"
+              to={login.isAdmin ? "/aforo":"/" }
               className="text-gray-300 text-sm flex flex-1 items-center justify-content gap-2 py-2 px-4
             hover:bg-secondary-900 transition-colors rounded-lg"
             >
@@ -157,7 +161,7 @@ export const Header = () => {
               <div className="flex flex-col gap-1">
                 <span className="text-lg">Plazas disponibles </span>
                 {motoCapacities.map((capacity) => (
-                  <span className="text-xs">
+                  <span className="text-xs" key={capacity.id}>
                     {capacity.building.name}{" "}
                     <span className="text-primary">
                       ({capacity.parkingSpaces})
@@ -169,7 +173,7 @@ export const Header = () => {
           </MenuItem>
           <MenuItem className="p-0 hover:bg-transparent">
             <Link
-              to="/aforo"
+              to={login.isAdmin ? "/aforo":"/" }
               className="text-gray-300 text-sm flex flex-1 items-center justify-content gap-2 py-2 px-4
             hover:bg-secondary-900 transition-colors rounded-lg"
             >
@@ -177,7 +181,7 @@ export const Header = () => {
               <div className="flex flex-col gap-1">
                 <span className="text-lg">Plazas ocupadas </span>
                 {motoCapacities.map((capacity) => (
-                  <span className="text-xs">
+                  <span className="text-xs" key={capacity.id}>
                     {capacity.building.name}{" "}
                     <span className="text-primary">
                       ({capacity.occupiedSpaces})
@@ -189,7 +193,7 @@ export const Header = () => {
           </MenuItem>
           <MenuItem className="p-0 hover:bg-transparent">
             <Link
-              to="/aforo"
+              to={login.isAdmin ? "/aforo":"/" }
               className="text-gray-300 text-sm flex flex-1 items-center justify-content gap-2 py-2 px-4
             hover:bg-secondary-900 transition-colors rounded-lg"
             >
@@ -197,7 +201,7 @@ export const Header = () => {
               <div className="flex flex-col gap-1">
                 <span className="text-lg">Plazas totales </span>
                 {motoCapacities.map((capacity) => (
-                  <span className="text-xs">
+                  <span className="text-xs" key={capacity.id}>
                     {capacity.building.name}{" "}
                     <span className="text-primary">
                       ({capacity.maxParking})
@@ -236,7 +240,11 @@ export const Header = () => {
               />
               <div className="flex flex-col text-sm">
                 <span className="text-sm">
-                  {login.isAdmin ? "Administrador" : ""}
+                  {login.isAdmin
+                    ? "Administrador"
+                    : login.isGuard
+                    ? "Guardia"
+                    : "Usuario"}
                 </span>
                 <span className="text-xs text-gray-500">
                   {login.user?.email}

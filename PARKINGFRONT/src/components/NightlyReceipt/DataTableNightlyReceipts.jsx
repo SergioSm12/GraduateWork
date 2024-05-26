@@ -27,6 +27,7 @@ import { QRCode } from "../QR/QRCode";
 import { ModalReceipt } from "../Receipts/ModalReceipt";
 import { ModalFormReceipt } from "../Receipts/ModalFormReceipt";
 import { GenerateInvoicePdf } from "../PDF/GenerateInvoicePdf";
+import { useAuth } from "../../auth/hooks/useAuth";
 
 const fuzzyFilter = (row, columnId, value, addMeta) => {
   const itemRank = rankItem(row.original.vehicle.plate, value);
@@ -69,6 +70,8 @@ export const DataTableNightlyReceipts = ({ dataReceipts }) => {
     visibleShowNightlyReceiptModal,
     handlerRemoveNightlyReceipt,
   } = useNightlyReceipts();
+
+  const { login } = useAuth();
 
   useEffect(() => {
     setData(dataReceipts);
@@ -241,14 +244,20 @@ export const DataTableNightlyReceipts = ({ dataReceipts }) => {
                         <button
                           type="button"
                           className={classNames({
-                            "p-1 my-3 text-red-500/80 bg-secondary-100 rounded-lg text-center w-full hover:border border-primary/80 transition-colors":
+                            "p-1 my-3 rounded-lg text-center w-full transition-colors": true,
+                            "text-red-500/80 bg-secondary-100":
                               !row.original.paymentStatus,
-                            "p-1 my-3 text-green-500/80 bg-secondary-100 text-center rounded-lg w-full hover:border border-primary/80 transition-colors":
+                            "text-green-500/80 bg-secondary-100":
                               row.original.paymentStatus,
+                            "hover:border border-primary/80": login.isAdmin,
+                            "cursor-not-allowed": !login.isAdmin,
                           })}
-                          onClick={() => {
-                            handlePaymentStatusChange(row.original.id);
-                          }}
+                          onClick={
+                            login.isAdmin
+                              ? () => handlePaymentStatusChange(row.original.id)
+                              : null
+                          }
+                          disabled={!login.isAdmin}
                         >
                           {row.original.paymentStatus ? "Pagado" : "Pendiente"}
                         </button>
@@ -318,28 +327,55 @@ export const DataTableNightlyReceipts = ({ dataReceipts }) => {
                           <RiInformationLine className="text-lg" />
                         </button>
 
-                        <button
-                          type="button"
-                          className="py-2 px-2 bg-primary/80 text-black hover:bg-primary rounded-lg transition-colors"
-                          onClick={() => {
-                            // Pasa los datos del usuario al hacer clic en el botón de edición
-                            handlerNightlyReceiptSelectedModalForm(
-                              row.original
-                            );
-                          }}
-                        >
-                          <RiEdit2Line className="text-lg" />
-                        </button>
-                        <button
-                          type="button"
-                          className="py-2 px-2 bg-secondary-100/50 hover:bg-secondary-100 text-red-500/70 hover:text-red-500
+                        {login.isGuard ? (
+                          <>
+                            <button
+                              type="button"
+                              className="py-2 px-2 bg-primary/80 text-black hover:bg-primary rounded-lg transition-colors"
+                              onClick={() => {
+                                // Pasa los datos del usuario al hacer clic en el botón de edición
+                                handlerNightlyReceiptSelectedModalForm(
+                                  row.original
+                                );
+                              }}
+                            >
+                              <RiEdit2Line className="text-lg" />
+                            </button>
+                          </>
+                        ) : (
+                          <>
+                            {login.isAdmin ? (
+                              <>
+                                <button
+                                  type="button"
+                                  className="py-2 px-2 bg-primary/80 text-black hover:bg-primary rounded-lg transition-colors"
+                                  onClick={() => {
+                                    // Pasa los datos del usuario al hacer clic en el botón de edición
+                                    handlerNightlyReceiptSelectedModalForm(
+                                      row.original
+                                    );
+                                  }}
+                                >
+                                  <RiEdit2Line className="text-lg" />
+                                </button>
+                                <button
+                                  type="button"
+                                  className="py-2 px-2 bg-secondary-100/50 hover:bg-secondary-100 text-red-500/70 hover:text-red-500
                    transition-colors rounded-lg  flex items-center "
-                          onClick={() => {
-                            handlerRemoveNightlyReceipt(row.original.id);
-                          }}
-                        >
-                          <RiDeleteBin7Line className="text-lg" />
-                        </button>
+                                  onClick={() => {
+                                    handlerRemoveNightlyReceipt(
+                                      row.original.id
+                                    );
+                                  }}
+                                >
+                                  <RiDeleteBin7Line className="text-lg" />
+                                </button>
+                              </>
+                            ) : (
+                              <></>
+                            )}
+                          </>
+                        )}
                       </div>
                     )}
                   </td>

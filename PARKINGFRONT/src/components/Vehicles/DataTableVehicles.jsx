@@ -11,9 +11,9 @@ import {
 import "@szhsin/react-menu/dist/index.css";
 import "@szhsin/react-menu/dist/transitions/slide.css";
 import { Menu, MenuItem, MenuButton } from "@szhsin/react-menu";
-import { useVehicle } from "../../hooks/useVehicle";
 import { useNightlyReceipts } from "../../hooks/useNightlyReceipts";
 import { ModalFormReceipt } from "../Receipts/ModalFormReceipt";
+import { useAuth } from "../../auth/hooks/useAuth";
 export const DataTableVehicles = ({
   vehicles,
   handlerRemoveVehicle,
@@ -24,6 +24,8 @@ export const DataTableVehicles = ({
 }) => {
   const { handlerOpenModalFormNightlyReceipt, visibleFormNightlyReceiptModal } =
     useNightlyReceipts();
+
+  const { login } = useAuth();
 
   return (
     <div className="bg-secondary-100 py-8 px-2 rounded-lg ">
@@ -41,7 +43,7 @@ export const DataTableVehicles = ({
             </tr>
           </thead>
           <tbody>
-            {vehicles.map(({ id, plate, vehicleType, active }) => (
+            {vehicles.map(({ id, plate, vehicleType, active, user }) => (
               <tr key={id} className="bg-secondary-900 text-center">
                 <td className="border">{plate}</td>
                 {active == true ? (
@@ -64,58 +66,68 @@ export const DataTableVehicles = ({
                     transition
                     menuClassName="bg-secondary-100 "
                   >
-                    <MenuItem className="p-0 hover:bg-transparent">
-                      <button
-                        className="rounded-lg transition-colors text-gray-300 hover:bg-secondary-900
+                    {active == true ? (
+                      <>
+                        <MenuItem className="p-0 hover:bg-transparent">
+                          <button
+                            className="rounded-lg transition-colors text-gray-300 hover:bg-secondary-900
                      flex items-center gap-x-2 p-2 flex-1"
-                        onClick={() =>
-                          handlerOpenModalFormReceipt({
-                            id: id,
-                            plate: plate,
-                            vehicleType: vehicleType,
-                            active: active,
-                          })
-                        }
-                      >
-                        <RiSunLine  className="text-[#8DE800]" /> Generar
-                        recibo diurno
-                      </button>
-                    </MenuItem>
+                            onClick={() =>
+                              handlerOpenModalFormReceipt({
+                                id: id,
+                                plate: plate,
+                                vehicleType: vehicleType,
+                                active: active,
+                                user: user
+                              })
+                            }
+                          >
+                            <RiSunLine className="text-[#8DE800]" /> Generar
+                            recibo diurno
+                          </button>
+                        </MenuItem>
+                        {!login.isAdmin || (
+                          <>
+                            <MenuItem className="p-0 hover:bg-transparent">
+                              <button
+                                className="rounded-lg transition-colors text-gray-300 hover:bg-secondary-900
+                     flex items-center gap-x-2 p-2 flex-1"
+                                onClick={() =>
+                                  handlerOpenModalFormNightlyReceipt({
+                                    id: id,
+                                    plate: plate,
+                                    vehicleType: vehicleType,
+                                    active: active,
+                                  })
+                                }
+                              >
+                                <RiMoonLine className="text-[#8DE800]" />{" "}
+                                Generar recibo nocturno
+                              </button>
+                            </MenuItem>
 
-                    <MenuItem className="p-0 hover:bg-transparent">
-                      <button
-                        className="rounded-lg transition-colors text-gray-300 hover:bg-secondary-900
+                            <MenuItem className="p-0 hover:bg-transparent">
+                              <button
+                                className="rounded-lg transition-colors text-gray-300 hover:bg-secondary-900
                      flex items-center gap-x-2 p-2 flex-1"
-                        onClick={() =>
-                          handlerOpenModalFormNightlyReceipt({
-                            id: id,
-                            plate: plate,
-                            vehicleType: vehicleType,
-                            active: active,
-                          })
-                        }
-                      >
-                        <RiMoonLine className="text-[#8DE800]" /> Generar recibo
-                        nocturno
-                      </button>
-                    </MenuItem>
-
-                    <MenuItem className="p-0 hover:bg-transparent">
-                      <button
-                        className="rounded-lg transition-colors text-gray-300 hover:bg-secondary-900
-                     flex items-center gap-x-2 p-2 flex-1"
-                        onClick={() => {
-                          handlerVehicleSelectedForm({
-                            id: id,
-                            plate: plate,
-                            vehicleType: vehicleType,
-                          });
-                        }}
-                      >
-                        <RiEdit2Line className="text-blue-500" /> Editar
-                        vehiculo
-                      </button>
-                    </MenuItem>
+                                onClick={() => {
+                                  handlerVehicleSelectedForm({
+                                    id: id,
+                                    plate: plate,
+                                    vehicleType: vehicleType,
+                                  });
+                                }}
+                              >
+                                <RiEdit2Line className="text-blue-500" /> Editar
+                                vehiculo
+                              </button>
+                            </MenuItem>
+                          </>
+                        )}
+                      </>
+                    ) : (
+                      <></>
+                    )}
 
                     {active == true ? (
                       <MenuItem className="p-0 hover:bg-transparent">

@@ -19,6 +19,7 @@ public interface IUserRepository extends CrudRepository<User, Long> {
     @Query("select u from User  u where u.email=?1")
     Optional<User> getUserByEmail(String email);
 
+
     //paginacion
     Page<User> findAll(Pageable pageable);
 

@@ -16,6 +16,7 @@ import { formatInTimeZone } from "date-fns-tz";
 import { parse } from "date-fns";
 import { es } from "date-fns/locale";
 import { useNightlyReceipts } from "../../hooks/useNightlyReceipts";
+import { useAuth } from "../../auth/hooks/useAuth";
 
 const formatCurrency = (amount) => {
   return new Intl.NumberFormat("es-CO", {
@@ -40,6 +41,7 @@ export const CreateReceipt = ({ receiptType }) => {
     errorsNightlyReceipt,
   } = receiptType === "nocturno" ? useNightlyReceipts() : useReceipts();
   const { rates, getRates } = useRates();
+  const { login } = useAuth();
 
   //estado para traer los datos del vehicle
   const [vehicleForm, setVehicleForm] = useState(vehicle);
@@ -58,6 +60,7 @@ export const CreateReceipt = ({ receiptType }) => {
   const [departureTime, setDepartureTime] = useState(new Date());
 
   const { id } = useParams();
+
 
   //filtrar tarifas
   const [filteredRates, setFilteredRates] = useState();
@@ -175,10 +178,13 @@ export const CreateReceipt = ({ receiptType }) => {
         filteredRates = rates.filter((rate) => {
           const vehicleTypeName =
             vehicleForm.vehicleType.name || vehicleFormEdit.vehicleType.name;
+
+          const isValiRate =
+            !rate.time.includes("HORA") && !rate.time.includes("VISITANTE");
           if (vehicleTypeName === "CARRO") {
-            return rate.time.includes("CARRO");
+            return isValiRate && rate.time.includes("CARRO");
           } else if (vehicleTypeName === "MOTO") {
-            return rate.time.includes("MOTO");
+            return isValiRate && rate.time.includes("MOTO");
           }
           return false;
         });
@@ -256,7 +262,8 @@ export const CreateReceipt = ({ receiptType }) => {
             updatedReceiptForm,
             "/"
           )
-        : handlerAddReceiptByUser(
+        : 
+        handlerAddReceiptByUser(
             vehicleForm.user ? vehicleForm.user.id : null,
             updatedReceiptForm,
             "/"
@@ -268,12 +275,13 @@ export const CreateReceipt = ({ receiptType }) => {
     }
   };
 
+ 
   return (
     <div className="bg-secondary-100 p-8 rounded-xl shadow-2xl w-auto lg:w-[450px]">
       <div className="flex items-start justify-between">
         <h1 className=" text-2xl uppercase font-bold tracking-[5px] text-white mb-8">
           {receiptForm.id > 0 ? "Editar" : "Generar"}{" "}
-          <span className="text-primary">Recibo</span>
+          <span className="text-primary">recibo {receiptType === "nocturno" ? "nocturno": "diurno" }</span>
         </h1>
         <button
           className=" py-2 px-2 text-red-600 hover:text-black bg-secondary-900/80  hover:bg-red-600/50 rounded-lg  transition-colors"
@@ -371,23 +379,29 @@ export const CreateReceipt = ({ receiptType }) => {
                 icon={<RiCalendarCloseLine className="text-primary" />}
               />
             </div>
-            <hr className="m-4 border border-dashed border-gray-400/50" />
-            <div className="relative mb-2  ">
-              <label
-                htmlFor="paymentStatus"
-                className="flex items-center space-x-2"
-              >
-                <input
-                  type="checkbox"
-                  id="paymentStatus"
-                  name="paymentStatus"
-                  checked={receiptForm.paymentStatus || ""}
-                  onChange={(e) => onPaymentStatusChange(e)}
-                />
-                <span className="">Recibo pagado</span>
-              </label>
-              <hr className="m-4 border border-dashed border-gray-400/50" />
-            </div>
+            {login.isGuard ? (
+              <></>
+            ) : (
+              <>
+                <hr className="m-4 border border-dashed border-gray-400/50" />
+                <div className="relative mb-2  ">
+                  <label
+                    htmlFor="paymentStatus"
+                    className="flex items-center space-x-2"
+                  >
+                    <input
+                      type="checkbox"
+                      id="paymentStatus"
+                      name="paymentStatus"
+                      checked={receiptForm.paymentStatus || ""}
+                      onChange={(e) => onPaymentStatusChange(e)}
+                    />
+                    <span className="">Recibo pagado</span>
+                  </label>
+                  <hr className="m-4 border border-dashed border-gray-400/50" />
+                </div>
+              </>
+            )}
           </>
         ) : (
           <></>
