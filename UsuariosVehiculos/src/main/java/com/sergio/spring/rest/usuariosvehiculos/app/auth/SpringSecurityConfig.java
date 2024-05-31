@@ -49,7 +49,7 @@ public class SpringSecurityConfig {
                         .requestMatchers(HttpMethod.GET, "/users/inactive-users").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.GET, "/users/page/{page}").hasAnyRole("ADMIN","GUARD")
                         .requestMatchers(HttpMethod.GET, "/users/{id}").hasAnyRole("ADMIN","GUARD","USER")
-                        .requestMatchers(HttpMethod.POST, "/users").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.POST, "/users").permitAll()
                         .requestMatchers(HttpMethod.PUT, "/users/{id}").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.PATCH, "/users/changePassword/{id}").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.PUT, "/users/activate/{id}").hasRole("ADMIN")
