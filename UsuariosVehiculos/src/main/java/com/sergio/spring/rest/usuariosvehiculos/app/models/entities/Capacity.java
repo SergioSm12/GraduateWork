@@ -1,6 +1,7 @@
 package com.sergio.spring.rest.usuariosvehiculos.app.models.entities;
 
 import java.time.LocalDate;
+import java.util.Objects;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -30,6 +31,15 @@ public class Capacity {
 
 
     public Capacity() {
+    }
+
+    public Capacity(Long id, Building building, VehicleType vehicleType, int parkingSpaces, int maxParking, int occupiedSpaces) {
+        this.id = id;
+        this.building = building;
+        this.vehicleType = vehicleType;
+        this.parkingSpaces = parkingSpaces;
+        this.maxParking = maxParking;
+        this.occupiedSpaces = occupiedSpaces;
     }
 
     public Long getId() {
@@ -79,5 +89,18 @@ public class Capacity {
 
     public void setOccupiedSpaces(int occupiedSpaces) {
         this.occupiedSpaces = occupiedSpaces;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Capacity capacity = (Capacity) o;
+        return parkingSpaces == capacity.parkingSpaces && maxParking == capacity.maxParking && occupiedSpaces == capacity.occupiedSpaces && Objects.equals(id, capacity.id) && Objects.equals(building, capacity.building) && Objects.equals(vehicleType, capacity.vehicleType);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, building, vehicleType, parkingSpaces, maxParking, occupiedSpaces);
     }
 }

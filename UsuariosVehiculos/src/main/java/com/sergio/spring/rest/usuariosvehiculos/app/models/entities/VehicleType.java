@@ -8,6 +8,8 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotBlank;
 
+import java.util.Objects;
+
 @Entity
 @Table(name = "vehicle_types")
 public class VehicleType {
@@ -20,13 +22,14 @@ public class VehicleType {
     private String name;
 
     public VehicleType(Long id, String name) {
-        this.id=id;
-        this.name=name;
+        this.id = id;
+        this.name = name;
     }
 
     public VehicleType() {
 
     }
+
 
     public Long getId() {
         return id;
@@ -42,5 +45,18 @@ public class VehicleType {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        VehicleType that = (VehicleType) o;
+        return Objects.equals(id, that.id) && Objects.equals(name, that.name);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, name);
     }
 }
