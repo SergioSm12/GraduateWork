@@ -1,4 +1,4 @@
-package com.sergio.spring.rest.usuariosvehiculos.app.repositorys;
+package com.sergio.spring.rest.usuariosvehiculos.app.repositories;
 
 import com.sergio.spring.rest.usuariosvehiculos.app.models.entities.NightlyReceipt;
 import com.sergio.spring.rest.usuariosvehiculos.app.models.entities.User;

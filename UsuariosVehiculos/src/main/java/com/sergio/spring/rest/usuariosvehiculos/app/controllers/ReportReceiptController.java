@@ -1,6 +1,5 @@
 package com.sergio.spring.rest.usuariosvehiculos.app.controllers;
 
-import com.sergio.spring.rest.usuariosvehiculos.app.repositorys.IVisitorReceiptRepository;
 import com.sergio.spring.rest.usuariosvehiculos.app.service.INightlyReceiptService;
 import com.sergio.spring.rest.usuariosvehiculos.app.service.IReceiptService;
 import com.sergio.spring.rest.usuariosvehiculos.app.service.IReportsUnifiedService;

@@ -1,7 +1,7 @@
 package com.sergio.spring.rest.usuariosvehiculos.app.service;
 
 import com.sergio.spring.rest.usuariosvehiculos.app.models.entities.Building;
-import com.sergio.spring.rest.usuariosvehiculos.app.repositorys.IBuildingRepository;
+import com.sergio.spring.rest.usuariosvehiculos.app.repositories.IBuildingRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

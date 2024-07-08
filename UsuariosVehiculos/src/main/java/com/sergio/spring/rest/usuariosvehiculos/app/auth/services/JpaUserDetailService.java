@@ -1,6 +1,6 @@
 package com.sergio.spring.rest.usuariosvehiculos.app.auth.services;
 
-import com.sergio.spring.rest.usuariosvehiculos.app.repositorys.IUserRepository;
+import com.sergio.spring.rest.usuariosvehiculos.app.repositories.IUserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;

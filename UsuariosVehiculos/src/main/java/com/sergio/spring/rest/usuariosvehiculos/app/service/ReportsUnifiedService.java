@@ -3,11 +3,10 @@ package com.sergio.spring.rest.usuariosvehiculos.app.service;
 import com.sergio.spring.rest.usuariosvehiculos.app.models.entities.NightlyReceipt;
 import com.sergio.spring.rest.usuariosvehiculos.app.models.entities.Receipt;
 import com.sergio.spring.rest.usuariosvehiculos.app.models.entities.VisitorReceipt;
-import com.sergio.spring.rest.usuariosvehiculos.app.repositorys.INightlyReceiptRepository;
-import com.sergio.spring.rest.usuariosvehiculos.app.repositorys.IReceiptRepository;
-import com.sergio.spring.rest.usuariosvehiculos.app.repositorys.IVisitorReceiptRepository;
+import com.sergio.spring.rest.usuariosvehiculos.app.repositories.INightlyReceiptRepository;
+import com.sergio.spring.rest.usuariosvehiculos.app.repositories.IReceiptRepository;
+import com.sergio.spring.rest.usuariosvehiculos.app.repositories.IVisitorReceiptRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cglib.core.Local;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

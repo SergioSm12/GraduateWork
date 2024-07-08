@@ -11,7 +11,6 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import com.sergio.spring.rest.usuariosvehiculos.app.models.entities.Receipt;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,8 +19,8 @@ import com.sergio.spring.rest.usuariosvehiculos.app.models.dto.entity.users.Visi
 import com.sergio.spring.rest.usuariosvehiculos.app.models.dto.mapper.DtoMapperVisitorReceipt;
 import com.sergio.spring.rest.usuariosvehiculos.app.models.entities.Rate;
 import com.sergio.spring.rest.usuariosvehiculos.app.models.entities.VisitorReceipt;
-import com.sergio.spring.rest.usuariosvehiculos.app.repositorys.IRateRepository;
-import com.sergio.spring.rest.usuariosvehiculos.app.repositorys.IVisitorReceiptRepository;
+import com.sergio.spring.rest.usuariosvehiculos.app.repositories.IRateRepository;
+import com.sergio.spring.rest.usuariosvehiculos.app.repositories.IVisitorReceiptRepository;
 
 @Service
 public class VisitorReceiptService implements IVisitorReceiptService {

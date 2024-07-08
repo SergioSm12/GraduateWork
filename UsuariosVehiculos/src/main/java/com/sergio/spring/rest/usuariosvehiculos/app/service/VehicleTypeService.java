@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.sergio.spring.rest.usuariosvehiculos.app.models.entities.VehicleType;
-import com.sergio.spring.rest.usuariosvehiculos.app.repositorys.IVehicleTypeRepository;
+import com.sergio.spring.rest.usuariosvehiculos.app.repositories.IVehicleTypeRepository;
 
 @Service
 public class VehicleTypeService implements IVehicleTypeService {

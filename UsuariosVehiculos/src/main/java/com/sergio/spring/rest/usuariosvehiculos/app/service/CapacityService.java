@@ -3,7 +3,7 @@ package com.sergio.spring.rest.usuariosvehiculos.app.service;
 import com.sergio.spring.rest.usuariosvehiculos.app.Errors.CapacityNotFoundException;
 import com.sergio.spring.rest.usuariosvehiculos.app.Errors.NoParkingSpaceException;
 import com.sergio.spring.rest.usuariosvehiculos.app.models.entities.Capacity;
-import com.sergio.spring.rest.usuariosvehiculos.app.repositorys.ICapacityRepository;
+import com.sergio.spring.rest.usuariosvehiculos.app.repositories.ICapacityRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

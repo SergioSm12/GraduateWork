@@ -1,10 +1,9 @@
-package com.sergio.spring.rest.usuariosvehiculos.app.repositorys;
+package com.sergio.spring.rest.usuariosvehiculos.app.repositories;
 
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
-import com.sergio.spring.rest.usuariosvehiculos.app.models.entities.Receipt;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;

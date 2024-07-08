@@ -4,10 +4,10 @@ import com.sergio.spring.rest.usuariosvehiculos.app.models.dto.entity.users.Nigh
 import com.sergio.spring.rest.usuariosvehiculos.app.models.dto.mapper.DtoMapperNightlyReceipt;
 import com.sergio.spring.rest.usuariosvehiculos.app.models.entities.*;
 import com.sergio.spring.rest.usuariosvehiculos.app.models.request.NightlyReceiptRequest;
-import com.sergio.spring.rest.usuariosvehiculos.app.repositorys.INightlyReceiptRepository;
-import com.sergio.spring.rest.usuariosvehiculos.app.repositorys.IRateRepository;
-import com.sergio.spring.rest.usuariosvehiculos.app.repositorys.IUserRepository;
-import com.sergio.spring.rest.usuariosvehiculos.app.repositorys.IVehicleRepository;
+import com.sergio.spring.rest.usuariosvehiculos.app.repositories.INightlyReceiptRepository;
+import com.sergio.spring.rest.usuariosvehiculos.app.repositories.IRateRepository;
+import com.sergio.spring.rest.usuariosvehiculos.app.repositories.IUserRepository;
+import com.sergio.spring.rest.usuariosvehiculos.app.repositories.IVehicleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

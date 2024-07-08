@@ -16,8 +16,8 @@ import com.sergio.spring.rest.usuariosvehiculos.app.models.dto.mapper.DtoMapperV
 import com.sergio.spring.rest.usuariosvehiculos.app.models.entities.User;
 import com.sergio.spring.rest.usuariosvehiculos.app.models.entities.Vehicle;
 import com.sergio.spring.rest.usuariosvehiculos.app.models.entities.VehicleType;
-import com.sergio.spring.rest.usuariosvehiculos.app.repositorys.IUserRepository;
-import com.sergio.spring.rest.usuariosvehiculos.app.repositorys.IVehicleRepository;
+import com.sergio.spring.rest.usuariosvehiculos.app.repositories.IUserRepository;
+import com.sergio.spring.rest.usuariosvehiculos.app.repositories.IVehicleRepository;
 
 @Service
 public class VehicleService implements IVehicleService {

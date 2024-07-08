@@ -1,4 +1,4 @@
-package com.sergio.spring.rest.usuariosvehiculos.app.repositorys;
+package com.sergio.spring.rest.usuariosvehiculos.app.repositories;
 
 import com.sergio.spring.rest.usuariosvehiculos.app.models.entities.Building;
 import org.springframework.data.repository.CrudRepository;

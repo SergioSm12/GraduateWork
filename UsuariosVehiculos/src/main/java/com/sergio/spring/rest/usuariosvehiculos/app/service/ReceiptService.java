@@ -21,10 +21,10 @@ import com.sergio.spring.rest.usuariosvehiculos.app.models.entities.Receipt;
 import com.sergio.spring.rest.usuariosvehiculos.app.models.entities.User;
 import com.sergio.spring.rest.usuariosvehiculos.app.models.entities.Vehicle;
 import com.sergio.spring.rest.usuariosvehiculos.app.models.request.ReceiptRequest;
-import com.sergio.spring.rest.usuariosvehiculos.app.repositorys.IRateRepository;
-import com.sergio.spring.rest.usuariosvehiculos.app.repositorys.IReceiptRepository;
-import com.sergio.spring.rest.usuariosvehiculos.app.repositorys.IUserRepository;
-import com.sergio.spring.rest.usuariosvehiculos.app.repositorys.IVehicleRepository;
+import com.sergio.spring.rest.usuariosvehiculos.app.repositories.IRateRepository;
+import com.sergio.spring.rest.usuariosvehiculos.app.repositories.IReceiptRepository;
+import com.sergio.spring.rest.usuariosvehiculos.app.repositories.IUserRepository;
+import com.sergio.spring.rest.usuariosvehiculos.app.repositories.IVehicleRepository;
 
 @Service
 public class ReceiptService implements IReceiptService {

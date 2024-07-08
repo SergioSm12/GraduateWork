@@ -11,7 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.sergio.spring.rest.usuariosvehiculos.app.models.dto.entity.users.RateDto;
 import com.sergio.spring.rest.usuariosvehiculos.app.models.dto.mapper.DtoMapperRate;
 import com.sergio.spring.rest.usuariosvehiculos.app.models.entities.Rate;
-import com.sergio.spring.rest.usuariosvehiculos.app.repositorys.IRateRepository;
+import com.sergio.spring.rest.usuariosvehiculos.app.repositories.IRateRepository;
 
 @Service
 public class RateService implements IRateService {

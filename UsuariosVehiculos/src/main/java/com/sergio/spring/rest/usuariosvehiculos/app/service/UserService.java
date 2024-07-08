@@ -21,9 +21,9 @@ import com.sergio.spring.rest.usuariosvehiculos.app.models.entities.User;
 import com.sergio.spring.rest.usuariosvehiculos.app.models.interfaces.IUser;
 
 import com.sergio.spring.rest.usuariosvehiculos.app.models.request.UserRequest;
-import com.sergio.spring.rest.usuariosvehiculos.app.repositorys.IRoleRepository;
-import com.sergio.spring.rest.usuariosvehiculos.app.repositorys.IUserRepository;
-import com.sergio.spring.rest.usuariosvehiculos.app.repositorys.IVehicleRepository;
+import com.sergio.spring.rest.usuariosvehiculos.app.repositories.IRoleRepository;
+import com.sergio.spring.rest.usuariosvehiculos.app.repositories.IUserRepository;
+import com.sergio.spring.rest.usuariosvehiculos.app.repositories.IVehicleRepository;
 
 
 @Service

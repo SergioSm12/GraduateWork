@@ -1,7 +1,7 @@
 package com.sergio.spring.rest.usuariosvehiculos.app.config;
 
 import com.sergio.spring.rest.usuariosvehiculos.app.models.entities.Role;
-import com.sergio.spring.rest.usuariosvehiculos.app.repositorys.IRoleRepository;
+import com.sergio.spring.rest.usuariosvehiculos.app.repositories.IRoleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;

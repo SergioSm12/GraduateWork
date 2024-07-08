@@ -1,4 +1,4 @@
-package com.sergio.spring.rest.usuariosvehiculos.app.repositorys;
+package com.sergio.spring.rest.usuariosvehiculos.app.repositories;
 
 import java.util.List;
 import java.util.Optional;
