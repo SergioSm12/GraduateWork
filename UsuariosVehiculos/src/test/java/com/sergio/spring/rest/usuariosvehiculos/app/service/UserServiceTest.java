@@ -12,6 +12,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.Arrays;
 import java.util.List;
@@ -29,6 +30,9 @@ class UserServiceTest {
 
     @Autowired
     IUserService userService;
+
+    @MockBean
+    private PasswordEncoder passwordEncoder;
 
     @Test
     void testFindAll() {
@@ -182,17 +186,61 @@ class UserServiceTest {
 
     @Test
     void testChangePassword() {
+        User existUser = new User();
+        existUser.setId(1L);
+        existUser.setPassword("oldPassword");
+
+        UserChangePasswordRequest passwordRequest = new UserChangePasswordRequest();
+        passwordRequest.setPassword("newPassword");
+
+        when(userRepository.findById(existUser.getId())).thenReturn(Optional.of(existUser));
+        when(passwordEncoder.encode(passwordRequest.getPassword())).thenReturn("encodeNewPassword");
+        when(userRepository.save(any(User.class))).thenReturn(existUser);
+
+        userService.changePassword(passwordRequest, existUser.getId());
+
+        verify(userRepository).findById(existUser.getId());
+        verify(passwordEncoder).encode(passwordRequest.getPassword());
+        verify(userRepository).save(existUser);
+
+        assertEquals("encodeNewPassword", existUser.getPassword());
     }
 
     @Test
-    void activateUser() {
+    void testActivateUser() {
+        User existUser = DataUser.createUser003().orElseThrow();
+        when(userRepository.findById(existUser.getId())).thenReturn(Optional.of(existUser));
+        when(userRepository.save(any())).thenReturn(existUser);
+
+        userService.activateUser(existUser.getId());
+
+        verify(userRepository).findById(existUser.getId());
+        verify(userRepository).save(existUser);
+
+        assertTrue(existUser.isActive());
     }
 
     @Test
-    void deactivateUser() {
+    void testDeactivateUser() {
+        User existUser = DataUser.createUser001().orElseThrow();
+        when(userRepository.findById(existUser.getId())).thenReturn(Optional.of(existUser));
+        when(userRepository.save(any(User.class))).thenReturn(existUser);
+
+        userService.deactivateUser(existUser.getId());
+
+        verify(userRepository).findById(existUser.getId());
+        verify(userRepository).save(existUser);
+
+        assertFalse(existUser.isActive());
     }
 
     @Test
-    void remove() {
+    void testRemove() {
+        Long userId = DataUser.createUser001().orElseThrow().getId();
+        doNothing().when(userRepository).deleteById(userId);
+
+        userService.remove(userId);
+
+        verify(userRepository).deleteById(userId);
     }
 }

@@ -6,6 +6,9 @@ public class UserChangePasswordRequest {
     @NotBlank(message = "El campo contraseña no puede estar vacío.")
     private String password;
 
+    public UserChangePasswordRequest() {
+    }
+
     public UserChangePasswordRequest(String password) {
         this.password = password;
     }

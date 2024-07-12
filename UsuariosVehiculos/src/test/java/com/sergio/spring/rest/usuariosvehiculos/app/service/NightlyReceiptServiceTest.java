@@ -1,14 +1,18 @@
 package com.sergio.spring.rest.usuariosvehiculos.app.service;
 
+import com.sergio.spring.rest.usuariosvehiculos.app.data.DataNightlyReceipt;
+import com.sergio.spring.rest.usuariosvehiculos.app.models.dto.entity.users.NightlyReceiptDto;
 import com.sergio.spring.rest.usuariosvehiculos.app.models.entities.NightlyReceipt;
 import com.sergio.spring.rest.usuariosvehiculos.app.repositories.INightlyReceiptRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.MockBean;
 
+import java.util.Arrays;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
 
 class NightlyReceiptServiceTest {
 
@@ -19,7 +23,7 @@ class NightlyReceiptServiceTest {
     INightlyReceiptService nightlyReceiptService;
 
     @Test
-    void nightlyReceiptList() {
+    void testNightlyReceiptList() {
 
     }
 

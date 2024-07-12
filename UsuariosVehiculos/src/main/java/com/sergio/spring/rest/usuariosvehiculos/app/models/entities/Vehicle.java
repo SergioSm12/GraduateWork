@@ -15,6 +15,8 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 
+import java.util.Objects;
+
 @Entity
 @Table(name = "vehicles")
 public class Vehicle {
@@ -85,5 +87,18 @@ public class Vehicle {
 
     public void setActive(Boolean active) {
         this.active = active;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Vehicle vehicle = (Vehicle) o;
+        return active == vehicle.active && Objects.equals(id, vehicle.id) && Objects.equals(plate, vehicle.plate) && Objects.equals(user, vehicle.user) && Objects.equals(vehicleType, vehicle.vehicleType);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, plate, user, vehicleType, active);
     }
 }

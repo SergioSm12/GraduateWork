@@ -7,6 +7,7 @@ import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 
 import java.time.LocalDateTime;
+import java.util.Objects;
 
 @Entity
 @Table(name = "nightly_receipt")
@@ -110,5 +111,18 @@ public class NightlyReceipt {
 
     public void setVehicle(Vehicle vehicle) {
         this.vehicle = vehicle;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        NightlyReceipt that = (NightlyReceipt) o;
+        return paymentStatus == that.paymentStatus && Double.compare(amount, that.amount) == 0 && Objects.equals(Id, that.Id) && Objects.equals(user, that.user) && Objects.equals(vehicle, that.vehicle) && Objects.equals(rate, that.rate) && Objects.equals(initialTime, that.initialTime) && Objects.equals(departureTime, that.departureTime);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(Id, user, vehicle, rate, initialTime, departureTime, paymentStatus, amount);
     }
 }
