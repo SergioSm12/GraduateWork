@@ -2,6 +2,7 @@ package com.sergio.spring.rest.usuariosvehiculos.app.models.dto.entity.users;
 
 
 import java.util.List;
+import java.util.Objects;
 
 //Creamos clase que recibe los datos del entity
 public class UserDto {
@@ -101,5 +102,18 @@ public class UserDto {
 
     public void setGuard(boolean guard) {
         this.guard = guard;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        UserDto userDto = (UserDto) o;
+        return admin == userDto.admin && guard == userDto.guard && Objects.equals(id, userDto.id) && Objects.equals(name, userDto.name) && Objects.equals(lastName, userDto.lastName) && Objects.equals(email, userDto.email) && Objects.equals(phoneNumber, userDto.phoneNumber) && Objects.equals(vehicles, userDto.vehicles) && Objects.equals(active, userDto.active);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, name, lastName, email, phoneNumber, vehicles, active, admin, guard);
     }
 }

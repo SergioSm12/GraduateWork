@@ -15,6 +15,7 @@ import com.sergio.spring.rest.usuariosvehiculos.app.repositories.IRateRepository
 
 @Service
 public class RateService implements IRateService {
+
     @Autowired
     private IRateRepository rateRepository;
 

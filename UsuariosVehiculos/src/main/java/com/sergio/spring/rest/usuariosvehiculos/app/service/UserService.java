@@ -90,7 +90,7 @@ public class UserService implements IUserService {
                         .build());
     }
 
-    //Listar vehiculos activos
+    //Listar users activos
     @Override
     @Transactional(readOnly = true)
     public List<UserDto> findActiveUsers() {

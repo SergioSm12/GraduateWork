@@ -34,6 +34,20 @@ public class NightlyReceipt {
     private boolean paymentStatus;
     private double amount;
 
+    public NightlyReceipt() {
+    }
+
+    public NightlyReceipt(Long id, User user, Vehicle vehicle, Rate rate, LocalDateTime initialTime, LocalDateTime departureTime, boolean paymentStatus, double amount) {
+        Id = id;
+        this.user = user;
+        this.vehicle = vehicle;
+        this.rate = rate;
+        this.initialTime = initialTime;
+        this.departureTime = departureTime;
+        this.paymentStatus = paymentStatus;
+        this.amount = amount;
+    }
+
     public double getAmount() {
         return amount;
     }

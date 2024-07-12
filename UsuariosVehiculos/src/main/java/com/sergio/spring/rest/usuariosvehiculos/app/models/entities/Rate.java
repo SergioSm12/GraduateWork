@@ -12,6 +12,8 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 
+import java.util.Objects;
+
 @Entity
 @Table(name = "rates")
 public class Rate {
@@ -27,6 +29,17 @@ public class Rate {
     @NotNull(message = "El campo valor no puede estar vacio")
     @Positive(message = "El valor debe ser mayor a cero.")
     private double amount;
+
+
+    public Rate() {
+    }
+
+    public Rate(Long id, VehicleType vehicleType, String time, double amount) {
+        this.id = id;
+        this.vehicleType = vehicleType;
+        this.time = time;
+        this.amount = amount;
+    }
 
     public Long getId() {
         return id;
@@ -60,4 +73,16 @@ public class Rate {
         this.amount = amount;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Rate rate = (Rate) o;
+        return Double.compare(amount, rate.amount) == 0 && Objects.equals(id, rate.id) && Objects.equals(vehicleType, rate.vehicleType) && Objects.equals(time, rate.time);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, vehicleType, time, amount);
+    }
 }

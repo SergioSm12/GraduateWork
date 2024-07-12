@@ -36,6 +36,17 @@ public class Vehicle {
     @Column(name = "active")
     private boolean active;
 
+    public Vehicle() {
+    }
+
+    public Vehicle(Long id, String plate, User user, VehicleType vehicleType, boolean active) {
+        this.id = id;
+        this.plate = plate;
+        this.user = user;
+        this.vehicleType = vehicleType;
+        this.active = active;
+    }
+
     public Long getId() {
         return id;
     }

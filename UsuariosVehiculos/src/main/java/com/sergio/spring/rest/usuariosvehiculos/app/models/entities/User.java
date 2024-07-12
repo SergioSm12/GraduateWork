@@ -3,6 +3,7 @@ package com.sergio.spring.rest.usuariosvehiculos.app.models.entities;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import com.sergio.spring.rest.usuariosvehiculos.app.models.interfaces.IUser;
 
@@ -65,6 +66,24 @@ public class User implements IUser {
     private boolean admin;
     @Transient
     private boolean guard;
+
+    public User() {
+    }
+
+    public User(Long id, String name, String lastName, String email, String password, List<Role> roles, String phoneNumber, List<Vehicle> vehicles, List<Receipt> receipts, Boolean active, boolean admin, boolean guard) {
+        this.id = id;
+        this.name = name;
+        this.lastName = lastName;
+        this.email = email;
+        this.password = password;
+        this.roles = roles;
+        this.phoneNumber = phoneNumber;
+        this.vehicles = vehicles;
+        this.receipts = receipts;
+        this.active = active;
+        this.admin = admin;
+        this.guard = guard;
+    }
 
     public Long getId() {
         return id;
@@ -163,5 +182,18 @@ public class User implements IUser {
 
     public void setGuard(boolean guard) {
         this.guard = guard;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        User user = (User) o;
+        return admin == user.admin && guard == user.guard && Objects.equals(id, user.id) && Objects.equals(name, user.name) && Objects.equals(lastName, user.lastName) && Objects.equals(email, user.email) && Objects.equals(password, user.password) && Objects.equals(roles, user.roles) && Objects.equals(phoneNumber, user.phoneNumber) && Objects.equals(vehicles, user.vehicles) && Objects.equals(receipts, user.receipts) && Objects.equals(active, user.active);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, name, lastName, email, password, roles, phoneNumber, vehicles, receipts, active, admin, guard);
     }
 }

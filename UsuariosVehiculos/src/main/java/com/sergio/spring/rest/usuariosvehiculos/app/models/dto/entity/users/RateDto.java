@@ -1,5 +1,7 @@
 package com.sergio.spring.rest.usuariosvehiculos.app.models.dto.entity.users;
 
+import java.util.Objects;
+
 public class RateDto {
     private Long id;
     private String time;
@@ -46,5 +48,18 @@ public class RateDto {
 
     public void setVehicleType(VehicleTypeDto vehicleType) {
         this.vehicleType = vehicleType;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        RateDto rateDto = (RateDto) o;
+        return Double.compare(amount, rateDto.amount) == 0 && Objects.equals(id, rateDto.id) && Objects.equals(time, rateDto.time) && Objects.equals(vehicleType, rateDto.vehicleType);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, time, amount, vehicleType);
     }
 }
