@@ -198,10 +198,10 @@ export const Home = () => {
               </div>
               <div className="flex items-center justify-center gap-2">
                 <Link
-                  to="/users"
+                  to="/vehicleType"
                   className="flex items-center gap-1 font-bold text-xs py-2 px-4 bg-primary/80 text-black hover:bg-primary rounded-lg transition-colors"
                 >
-                  Agregar recibo usuario <RiSunLine />
+                  Agregar recibo diurno <RiSunLine />
                 </Link>
                 <Link
                   to="/vehicleType"
