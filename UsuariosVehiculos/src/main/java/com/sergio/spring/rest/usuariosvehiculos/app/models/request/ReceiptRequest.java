@@ -18,6 +18,16 @@ public class ReceiptRequest {
 
     private Rate rate;
 
+    public ReceiptRequest() {
+    }
+
+    public ReceiptRequest(LocalDateTime issueDate, LocalDateTime dueDate, boolean paymentStatus, Rate rate) {
+        this.issueDate = issueDate;
+        this.dueDate = dueDate;
+        this.paymentStatus = paymentStatus;
+        this.rate = rate;
+    }
+
     public LocalDateTime getDueDate() {
         return dueDate;
     }

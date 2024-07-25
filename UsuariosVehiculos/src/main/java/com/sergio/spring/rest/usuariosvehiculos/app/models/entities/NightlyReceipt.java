@@ -12,6 +12,20 @@ public class NightlyReceipt extends BaseReceipt {
     private LocalDateTime departureTime;
     private double amount;
 
+    public NightlyReceipt() {
+    }
+
+    public NightlyReceipt(Long id, User user, Vehicle vehicle, Rate rate, LocalDateTime initialTime, LocalDateTime departureTime, boolean paymentStatus, double amount) {
+        super.setId(id);
+        super.setUser(user);
+        super.setVehicle(vehicle);
+        super.setRate(rate);
+        this.initialTime = initialTime;
+        this.departureTime = departureTime;
+        super.setPaymentStatus(paymentStatus);
+        this.amount = amount;
+    }
+
     public LocalDateTime getInitialTime() {
         return initialTime;
     }

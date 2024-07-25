@@ -6,6 +6,8 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 
+import java.time.LocalDateTime;
+
 @Entity
 @Table(name = "visitor_receipt")
 public class VisitorReceipt extends BaseReceipt {
@@ -21,4 +23,19 @@ public class VisitorReceipt extends BaseReceipt {
     public void setPlate(String plate) {
         this.plate = plate;
     }
+
+    public VisitorReceipt() {
+        super();
+    }
+
+    public VisitorReceipt(Long id, Rate rate, LocalDateTime issueDate, LocalDateTime dueDate, boolean paymentStatus, String plate) {
+        super();
+        this.setId(id);
+        this.setRate(rate);
+        this.setIssueDate(issueDate);
+        this.setDueDate(dueDate);
+        this.setPaymentStatus(paymentStatus);
+        this.plate = plate;
+    }
+
 }

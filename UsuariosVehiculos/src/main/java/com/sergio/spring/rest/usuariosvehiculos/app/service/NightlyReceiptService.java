@@ -99,6 +99,17 @@ public class NightlyReceiptService implements INightlyReceiptService {
     @Override
     @Transactional
     public NightlyReceiptDto saveReceipt(NightlyReceipt nightlyReceipt) {
+
+        if (nightlyReceipt.getUser() == null || nightlyReceipt.getUser().getId() == null) {
+            throw new IllegalArgumentException("User is null or has no ID");
+        }
+        if (nightlyReceipt.getVehicle() == null || nightlyReceipt.getVehicle().getId() == null) {
+            throw new IllegalArgumentException("Vehicle is null or has no ID");
+        }
+        if (nightlyReceipt.getRate() == null || nightlyReceipt.getRate().getId() == null) {
+            throw new IllegalArgumentException("Rate is null or has no ID");
+        }
+
         // Obtener user y asociarlo
         Optional<User> userOptional = userRepository.findById(nightlyReceipt.getUser().getId());
         if (userOptional.isEmpty()) {
@@ -208,7 +219,6 @@ public class NightlyReceiptService implements INightlyReceiptService {
 
         //Llamar el metodo principal
         return getWeeklyIncome(year, month);
-
     }
 
     @Override
@@ -350,6 +360,7 @@ public class NightlyReceiptService implements INightlyReceiptService {
     }
 
     public double calculateAmount(LocalDateTime initialTime, LocalDateTime departureTime, String rateTime, double rateAmount) {
+
         //calcular las horas
         long hours = ChronoUnit.HOURS.between(initialTime, departureTime);
         //Verificar si el monto es de hora nocturna tener en cuenta que del front debe venir igual.

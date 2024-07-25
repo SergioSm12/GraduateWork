@@ -56,6 +56,7 @@ public class VisitorReceiptService implements IVisitorReceiptService {
     @Transactional
     public VisitorReceiptDto saveVisitorReceipt(VisitorReceipt visitorReceipt) {
 
+
         Optional<Rate> rateOptional = rateRepository.findById(visitorReceipt.getRate().getId());
         if (rateOptional.isEmpty()) {
             throw new IllegalArgumentException("Rate not found");

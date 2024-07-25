@@ -4,6 +4,7 @@ import com.sergio.spring.rest.usuariosvehiculos.app.models.entities.Rate;
 import jakarta.validation.constraints.NotNull;
 
 import java.time.LocalDateTime;
+import java.util.Objects;
 
 public class NightlyReceiptRequest {
 
@@ -15,6 +16,17 @@ public class NightlyReceiptRequest {
     private boolean paymentStatus;
     private Rate rate;
     private double amount;
+
+    public NightlyReceiptRequest() {
+    }
+
+    public NightlyReceiptRequest(LocalDateTime initialTime, LocalDateTime departureTime, boolean paymentStatus, Rate rate, double amount) {
+        this.initialTime = initialTime;
+        this.departureTime = departureTime;
+        this.paymentStatus = paymentStatus;
+        this.rate = rate;
+        this.amount = amount;
+    }
 
     public Rate getRate() {
         return rate;
@@ -54,5 +66,18 @@ public class NightlyReceiptRequest {
 
     public void setAmount(double amount) {
         this.amount = amount;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        NightlyReceiptRequest that = (NightlyReceiptRequest) o;
+        return paymentStatus == that.paymentStatus && Double.compare(amount, that.amount) == 0 && Objects.equals(initialTime, that.initialTime) && Objects.equals(departureTime, that.departureTime) && Objects.equals(rate, that.rate);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(initialTime, departureTime, paymentStatus, rate, amount);
     }
 }
