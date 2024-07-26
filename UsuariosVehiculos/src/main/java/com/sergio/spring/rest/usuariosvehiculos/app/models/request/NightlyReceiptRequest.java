@@ -14,6 +14,7 @@ public class NightlyReceiptRequest {
     private LocalDateTime departureTime;
     @NotNull
     private boolean paymentStatus;
+    @NotNull(message = "Debe seleccionar una tarifa")
     private Rate rate;
     private double amount;
 

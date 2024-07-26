@@ -3,16 +3,15 @@ package com.sergio.spring.rest.usuariosvehiculos.app.controllers;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import com.sergio.spring.rest.usuariosvehiculos.app.data.DataNightlyReceipt;
-import com.sergio.spring.rest.usuariosvehiculos.app.data.DataRate;
-import com.sergio.spring.rest.usuariosvehiculos.app.data.DataUser;
-import com.sergio.spring.rest.usuariosvehiculos.app.data.DataVehicle;
+import com.sergio.spring.rest.usuariosvehiculos.app.data.*;
 import com.sergio.spring.rest.usuariosvehiculos.app.models.dto.entity.users.NightlyReceiptDto;
 import com.sergio.spring.rest.usuariosvehiculos.app.models.dto.entity.users.UserDto;
 import com.sergio.spring.rest.usuariosvehiculos.app.models.dto.mapper.DtoMapperNightlyReceipt;
 import com.sergio.spring.rest.usuariosvehiculos.app.models.dto.mapper.DtoMapperUser;
 import com.sergio.spring.rest.usuariosvehiculos.app.models.entities.NightlyReceipt;
+import com.sergio.spring.rest.usuariosvehiculos.app.models.entities.Rate;
 import com.sergio.spring.rest.usuariosvehiculos.app.models.entities.User;
+import com.sergio.spring.rest.usuariosvehiculos.app.models.request.NightlyReceiptRequest;
 import com.sergio.spring.rest.usuariosvehiculos.app.service.INightlyReceiptService;
 import com.sergio.spring.rest.usuariosvehiculos.app.service.IUserService;
 import org.junit.jupiter.api.BeforeEach;
@@ -185,7 +184,7 @@ class NightlyReceiptControllerTest {
         when(nightlyReceiptService.saveReceipt(any(NightlyReceipt.class))).thenReturn(nightlyReceiptDto);
 
         //when
-        mvc.perform(post("/nightly-receipt/{userId}/create",user.getId()).contentType(MediaType.APPLICATION_JSON)
+        mvc.perform(post("/nightly-receipt/{userId}/create", user.getId()).contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(nightlyReceipt))
                         .with(csrf()))
                 //then
@@ -201,21 +200,228 @@ class NightlyReceiptControllerTest {
     }
 
     @Test
-    void testCreateNightlyReceiptValidationErrors() throws Exception{
+    @WithMockUser
+    void testCreateNightlyReceiptValidationErrors() throws Exception {
+        //given
+        LocalDateTime initialTime = LocalDateTime.of(2024, 7, 25, 22, 00);
+        LocalDateTime departureTime = LocalDateTime.of(2024, 7, 25, 6, 00);
+        User user = DataUser.createUser001().orElseThrow();
+        NightlyReceipt nightlyReceipt = new NightlyReceipt(3L, DataUser.createUser001().orElseThrow(), null, DataRate.createRate003().orElseThrow(), initialTime, departureTime, false, 27000);
+
+        //when
+        mvc.perform(post("/nightly-receipt/{userId}/create", user.getId()).contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(nightlyReceipt))
+                        .with(csrf()))
+                //then
+                .andExpect(status().isBadRequest())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.vehicle").value("No hay un vehículo seleccionado"));
 
 
+        verify(nightlyReceiptService, never()).saveReceipt(any(NightlyReceipt.class));
     }
 
     @Test
-    void updateReceipt() {
+    @WithMockUser
+    void testCreateReceiptUserNotFound() throws Exception {
+        //given
+        LocalDateTime initialTime = LocalDateTime.of(2024, 7, 25, 22, 00);
+        LocalDateTime departureTime = LocalDateTime.of(2024, 7, 25, 6, 00);
+        User user = DataUser.createUser001().orElseThrow();
+        NightlyReceipt nightlyReceipt = new NightlyReceipt(3L, user, DataVehicle.createVehicle001().orElseThrow(), DataRate.createRate003().orElseThrow(), initialTime, departureTime, false, 27000);
 
+
+        when(userService.findById(user.getId())).thenReturn(Optional.empty());
+
+        //when
+        mvc.perform(post("/nightly-receipt/{userId}/create", user.getId())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(nightlyReceipt))
+                        .with(csrf()))
+                //then
+                .andExpect(status().isNotFound())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON));
+
+        // Verificar que saveReceipt no se llame
+        verify(nightlyReceiptService, never()).saveReceipt(any(NightlyReceipt.class));
     }
 
     @Test
-    void changePaymentStatus() {
+    @WithMockUser
+    void testCreateNightlyReceiptUserIdMismatch() throws Exception {
+        //given
+        LocalDateTime initialTime = LocalDateTime.of(2024, 7, 25, 22, 00);
+        LocalDateTime departureTime = LocalDateTime.of(2024, 7, 25, 6, 00);
+        User user = DataUser.createUser001().orElseThrow();
+        UserDto userDto = DtoMapperUser.builder().setUser(user).build();
+        NightlyReceipt nightlyReceipt = new NightlyReceipt(3L, user, DataVehicle.createVehicle001().orElseThrow(), DataRate.createRate003().orElseThrow(), initialTime, departureTime, false, 27000);
+        userDto.setId(user.getId() + 1);
+
+        when(userService.findById(user.getId())).thenReturn(Optional.of(userDto));
+
+        //when
+        mvc.perform(post("/nightly-receipt/{userId}/create", user.getId())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(nightlyReceipt))
+                        .with(csrf()))
+                //then
+                .andExpect(status().isForbidden())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.message").value("Usuario no encontrado"));
+
+        verify(nightlyReceiptService, never()).saveReceipt(any(NightlyReceipt.class));
+    }
+
+
+    @Test
+    @WithMockUser
+    void updateReceipt() throws Exception {
+        //given
+        NightlyReceipt existNightlyReceipt = DataNightlyReceipt.createNightlyReceipt001().orElseThrow();
+        NightlyReceiptRequest updateNightlyReceipt = new NightlyReceiptRequest(existNightlyReceipt.getInitialTime(), existNightlyReceipt.getDepartureTime(), true, new Rate(6L, DataVehicleType.createVehicleType001().orElseThrow(), "HORA CARRO", 5000), 20000);
+        NightlyReceipt savedNightlyReceipt = getNightlyReceipt(existNightlyReceipt, updateNightlyReceipt);
+        NightlyReceiptDto nightlyReceiptDto = DtoMapperNightlyReceipt.builder().setNightlyReceipt(savedNightlyReceipt).build();
+
+
+        when(nightlyReceiptService.updateNightlyReceipt(updateNightlyReceipt, existNightlyReceipt.getId())).thenReturn(Optional.of(nightlyReceiptDto));
+
+        mvc.perform(put("/nightly-receipt/{nightlyReceiptId}/update", existNightlyReceipt.getId()).contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(updateNightlyReceipt))
+                        .with(csrf()))
+
+                //then
+                .andExpect(status().isCreated())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.id", is(1)))
+                .andExpect(jsonPath("$.rate.time", is("HORA CARRO")))
+                .andExpect(jsonPath("$.amount", is(20000.0)))
+                .andExpect(jsonPath("$.paymentStatus", is(true)))
+                .andExpect(content().json(objectMapper.writeValueAsString(nightlyReceiptDto)));
+
+        verify(nightlyReceiptService).updateNightlyReceipt(updateNightlyReceipt, existNightlyReceipt.getId());
     }
 
     @Test
-    void deleteNightlyReceipt() {
+    @WithMockUser
+    void testUpdateNightlyReceiptValidationErrors() throws Exception {
+
+        NightlyReceipt nightlyReceipt = DataNightlyReceipt.createNightlyReceipt001().orElseThrow();
+
+        NightlyReceiptRequest invalidNightlyReceipt = new NightlyReceiptRequest();
+        invalidNightlyReceipt.setInitialTime(nightlyReceipt.getInitialTime());
+        invalidNightlyReceipt.setDepartureTime(nightlyReceipt.getDepartureTime());
+        invalidNightlyReceipt.setPaymentStatus(nightlyReceipt.isPaymentStatus());
+        invalidNightlyReceipt.setRate(null);
+        invalidNightlyReceipt.setAmount(nightlyReceipt.getAmount());
+
+
+        mvc.perform(put("/nightly-receipt/{nightlyReceiptId}/update", nightlyReceipt.getId())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(invalidNightlyReceipt))
+                        .with(csrf()))
+
+                .andExpect(status().isBadRequest())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.rate", is("Debe seleccionar una tarifa")));
+
+        // Verify that the service method was never called
+        verify(nightlyReceiptService, never()).updateNightlyReceipt(any(NightlyReceiptRequest.class), anyLong());
+    }
+
+    @Test
+    @WithMockUser
+    void testUpdateNightlyReceiptNotFound() throws Exception {
+        // given
+        Long nonexistentNightlyReceiptId = 999L; // ID de un recibo inexistente
+        NightlyReceiptRequest updateNightlyReceiptRequest = new NightlyReceiptRequest();
+        updateNightlyReceiptRequest.setInitialTime(LocalDateTime.of(2024, 7, 25, 22, 00));
+        updateNightlyReceiptRequest.setDepartureTime(LocalDateTime.of(2024, 7, 25, 6, 00));
+        updateNightlyReceiptRequest.setPaymentStatus(true);
+        updateNightlyReceiptRequest.setRate(new Rate(6L, DataVehicleType.createVehicleType001().orElseThrow(), "HORA CARRO", 5000));
+        updateNightlyReceiptRequest.setAmount(20000);
+
+
+        when(nightlyReceiptService.updateNightlyReceipt(any(NightlyReceiptRequest.class), eq(nonexistentNightlyReceiptId)))
+                .thenReturn(Optional.empty());
+
+        // when
+        mvc.perform(put("/nightly-receipt/{nightlyReceiptId}/update", nonexistentNightlyReceiptId)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(updateNightlyReceiptRequest))
+                        .with(csrf()))
+                // then
+                .andExpect(status().isNotFound())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON));
+
+        verify(nightlyReceiptService).updateNightlyReceipt(any(NightlyReceiptRequest.class), eq(nonexistentNightlyReceiptId));
+    }
+
+
+    @Test
+    @WithMockUser
+    void changePaymentStatus() throws Exception {
+        //given
+        NightlyReceipt existingNightlyReceipt = DataNightlyReceipt.createNightlyReceipt001().orElseThrow();
+        NightlyReceiptDto nightlyReceiptDto = DtoMapperNightlyReceipt.builder().setNightlyReceipt(existingNightlyReceipt).build();
+        when(nightlyReceiptService.findByIdNightlyReceipt(existingNightlyReceipt.getId())).thenReturn(Optional.of(nightlyReceiptDto));
+        doNothing().when(nightlyReceiptService).changePaymentStatus(existingNightlyReceipt.getId());
+
+        //when
+        mvc.perform(patch("/nightly-receipt/change-payment/{receiptId}", existingNightlyReceipt.getId()).with(csrf()))
+                //then
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    @WithMockUser
+    void testChangePaymentStatusNotFound() throws Exception {
+        Long nightlyReceiptId = 1L;
+        when(nightlyReceiptService.findByIdNightlyReceipt(1L)).thenReturn(Optional.empty());
+        mvc.perform(patch("/nightly-receipt/change-payment/{receiptId}", nightlyReceiptId).with(csrf()))
+                //then
+                .andExpect(status().isNotFound())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON));
+    }
+
+    @Test
+    @WithMockUser
+    void deleteNightlyReceipt() throws Exception {
+        //given
+        NightlyReceipt existingNightlyReceipt = DataNightlyReceipt.createNightlyReceipt001().orElseThrow();
+        NightlyReceiptDto nightlyReceiptDto = DtoMapperNightlyReceipt.builder().setNightlyReceipt(existingNightlyReceipt).build();
+        when(nightlyReceiptService.findByIdNightlyReceipt(existingNightlyReceipt.getId())).thenReturn(Optional.of(nightlyReceiptDto));
+        doNothing().when(nightlyReceiptService).remove(existingNightlyReceipt.getId());
+
+        //when
+        mvc.perform(delete("/nightly-receipt/{nightlyReceiptId}", existingNightlyReceipt.getId()).with(csrf())).andExpect(status().isNoContent());
+
+        verify(nightlyReceiptService).remove(existingNightlyReceipt.getId());
+    }
+
+    @Test
+    @WithMockUser
+    void testDeleteNightlyReceiptNotFound() throws Exception {
+        //given
+        NightlyReceipt existingNightlyReceipt = DataNightlyReceipt.createNightlyReceipt001().orElseThrow();
+        when(nightlyReceiptService.findByIdNightlyReceipt(existingNightlyReceipt.getId())).thenReturn(Optional.empty());
+        doNothing().when(nightlyReceiptService).remove(existingNightlyReceipt.getId());
+
+        //when
+        mvc.perform(delete("/nightly-receipt/{nightlyReceiptId}", existingNightlyReceipt.getId()).with(csrf())).andExpect(status().isNotFound());
+
+        verify(nightlyReceiptService, never()).remove(existingNightlyReceipt.getId());
+    }
+
+    private static NightlyReceipt getNightlyReceipt(NightlyReceipt existNightlyReceipt, NightlyReceiptRequest updateNightlyReceipt) {
+        NightlyReceipt savedNightlyReceipt = new NightlyReceipt();
+        savedNightlyReceipt.setId(existNightlyReceipt.getId());
+        savedNightlyReceipt.setUser(existNightlyReceipt.getUser());
+        savedNightlyReceipt.setVehicle(existNightlyReceipt.getVehicle());
+        savedNightlyReceipt.setRate(updateNightlyReceipt.getRate());
+        savedNightlyReceipt.setInitialTime(updateNightlyReceipt.getInitialTime());
+        savedNightlyReceipt.setDepartureTime(updateNightlyReceipt.getDepartureTime());
+        savedNightlyReceipt.setPaymentStatus(updateNightlyReceipt.isPaymentStatus());
+        savedNightlyReceipt.setAmount(updateNightlyReceipt.getAmount());
+        return savedNightlyReceipt;
     }
 }

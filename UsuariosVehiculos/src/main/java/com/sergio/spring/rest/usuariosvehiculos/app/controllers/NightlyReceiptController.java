@@ -2,17 +2,18 @@ package com.sergio.spring.rest.usuariosvehiculos.app.controllers;
 
 import com.sergio.spring.rest.usuariosvehiculos.app.Errors.ErrorResponse;
 import com.sergio.spring.rest.usuariosvehiculos.app.models.dto.entity.users.NightlyReceiptDto;
-import com.sergio.spring.rest.usuariosvehiculos.app.models.dto.entity.users.ReceiptDto;
+
 import com.sergio.spring.rest.usuariosvehiculos.app.models.dto.entity.users.UserDto;
 import com.sergio.spring.rest.usuariosvehiculos.app.models.entities.NightlyReceipt;
 import com.sergio.spring.rest.usuariosvehiculos.app.models.entities.User;
 import com.sergio.spring.rest.usuariosvehiculos.app.models.request.NightlyReceiptRequest;
-import com.sergio.spring.rest.usuariosvehiculos.app.models.request.ReceiptRequest;
+
 import com.sergio.spring.rest.usuariosvehiculos.app.service.INightlyReceiptService;
 import com.sergio.spring.rest.usuariosvehiculos.app.service.IUserService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
@@ -69,7 +70,7 @@ public class NightlyReceiptController {
         Optional<UserDto> userDtoOptional = userService.findById(userId);
 
         if (userDtoOptional.isEmpty()) {
-            return ResponseEntity.notFound().build();
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).contentType(MediaType.APPLICATION_JSON).build();
         }
 
         UserDto userDto = userDtoOptional.get();
@@ -95,7 +96,7 @@ public class NightlyReceiptController {
         if (ro.isPresent()) {
             return ResponseEntity.status(HttpStatus.CREATED).body(ro.orElseThrow());
         }
-        return ResponseEntity.notFound().build();
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).contentType(MediaType.APPLICATION_JSON).build();
     }
 
     @PatchMapping("/change-payment/{receiptId}")
@@ -103,7 +104,7 @@ public class NightlyReceiptController {
 
         Optional<NightlyReceiptDto> NightlyReceiptOptional = nightlyReceiptService.findByIdNightlyReceipt(receiptId);
         if (NightlyReceiptOptional.isEmpty()) {
-            return ResponseEntity.notFound().build();
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).contentType(MediaType.APPLICATION_JSON).build();
         }
         nightlyReceiptService.changePaymentStatus(receiptId);
         return ResponseEntity.ok().build();
