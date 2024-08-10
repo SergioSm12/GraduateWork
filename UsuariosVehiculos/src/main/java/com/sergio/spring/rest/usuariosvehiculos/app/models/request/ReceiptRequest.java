@@ -2,6 +2,7 @@ package com.sergio.spring.rest.usuariosvehiculos.app.models.request;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.Objects;
 
 import com.sergio.spring.rest.usuariosvehiculos.app.models.entities.Rate;
 
@@ -16,6 +17,7 @@ public class ReceiptRequest {
     @NotNull
     private boolean paymentStatus;
 
+    @NotNull(message = "Debe seleccionar una tarifa")
     private Rate rate;
 
     public ReceiptRequest() {
@@ -60,4 +62,16 @@ public class ReceiptRequest {
         this.rate = rate;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        ReceiptRequest that = (ReceiptRequest) o;
+        return paymentStatus == that.paymentStatus && Objects.equals(issueDate, that.issueDate) && Objects.equals(dueDate, that.dueDate) && Objects.equals(rate, that.rate);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(issueDate, dueDate, paymentStatus, rate);
+    }
 }

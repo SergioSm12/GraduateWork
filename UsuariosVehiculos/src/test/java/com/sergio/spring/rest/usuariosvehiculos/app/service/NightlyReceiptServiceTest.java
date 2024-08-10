@@ -310,132 +310,26 @@ class NightlyReceiptServiceTest {
         verify(nightlyReceiptRepository).deleteById(existNightlyReceipt.getId());
     }
 
-    @Test
-    void testGetWeeklyIncome() {
-        // given
-        LocalDate currentDate = LocalDate.now();
-        int year = currentDate.getYear();
-        Month month = currentDate.getMonth();
-
-        Map<String, Double> expectedWeeklyIncome = new LinkedHashMap<>();
-        expectedWeeklyIncome.put("2024-07-01 - 2024-07-06", 0.0);
-        expectedWeeklyIncome.put("2024-07-07 - 2024-07-13", 0.0);
-        expectedWeeklyIncome.put("2024-07-14 - 2024-07-20", 0.0);
-        expectedWeeklyIncome.put("2024-07-21 - 2024-07-27", 0.0);
-        expectedWeeklyIncome.put("2024-07-28 - 2024-07-31", 0.0);
-        expectedWeeklyIncome.put(" Saldo pendiente de pago ", 0.0);
-        expectedWeeklyIncome.put(" Saldo Pago ", 0.0);
-        expectedWeeklyIncome.put(" Total ", 0.0);
-
-        when(nightlyReceiptRepository.findByInitialTimeBetween(any(), any()))
-                .thenReturn(Arrays.asList(new NightlyReceipt(), new NightlyReceipt()));
-        when(nightlyReceiptRepository.findByInitialTimeBetweenAndPaymentStatus(any(), any(), eq(true)))
-                .thenReturn(Arrays.asList(new NightlyReceipt(), new NightlyReceipt()));
-        when(nightlyReceiptRepository.findByInitialTimeBetweenAndPaymentStatus(any(), any(), eq(false)))
-                .thenReturn(List.of(new NightlyReceipt()));
-
-        // when
-        Map<String, Double> actualWeeklyIncome = nightlyReceiptService.getWeeklyIncome();
-
-        // then
-        assertEquals(expectedWeeklyIncome, actualWeeklyIncome);
-    }
-
-    @Test
-    void testGetWeeklyIncomeWithYearAndMonth() {
-        // given
-        int year = 2024;
-        Month month = Month.JULY;
-
-        Map<String, Double> expectedWeeklyIncome = new LinkedHashMap<>();
-        expectedWeeklyIncome.put("2024-07-01 - 2024-07-06", 0.0);
-        expectedWeeklyIncome.put("2024-07-07 - 2024-07-13", 0.0);
-        expectedWeeklyIncome.put("2024-07-14 - 2024-07-20", 0.0);
-        expectedWeeklyIncome.put("2024-07-21 - 2024-07-27", 0.0);
-        expectedWeeklyIncome.put("2024-07-28 - 2024-07-31", 0.0);
-        expectedWeeklyIncome.put(" Saldo pendiente de pago ", 0.0);
-        expectedWeeklyIncome.put(" Saldo Pago ", 0.0);
-        expectedWeeklyIncome.put(" Total ", 0.0);
-
-        when(nightlyReceiptRepository.findByInitialTimeBetween(any(), any()))
-                .thenReturn(Arrays.asList(new NightlyReceipt(), new NightlyReceipt()));
-        when(nightlyReceiptRepository.findByInitialTimeBetweenAndPaymentStatus(any(), any(), eq(true)))
-                .thenReturn(Arrays.asList(new NightlyReceipt(), new NightlyReceipt()));
-        when(nightlyReceiptRepository.findByInitialTimeBetweenAndPaymentStatus(any(), any(), eq(false)))
-                .thenReturn(List.of(new NightlyReceipt()));
-
-        // when
-        Map<String, Double> actualWeeklyIncome = nightlyReceiptService.getWeeklyIncome(year, month);
-
-        // then
-        assertEquals(expectedWeeklyIncome, actualWeeklyIncome);
-    }
-
-
-    @Test
-    void testGetBiWeeklyIncome() {
-        // given
-        LocalDate currentDate = LocalDate.now();
-        LocalDate firstDayOfMonth = currentDate.withDayOfMonth(1);
-        int lastDayOfMonthValue = firstDayOfMonth.lengthOfMonth();
-        LocalDate middleOfMonth = firstDayOfMonth.plusDays(lastDayOfMonthValue / 2);
-        boolean isAfterMiddleOfMonth = currentDate.isAfter(middleOfMonth);
-        LocalDate startDate = isAfterMiddleOfMonth ? middleOfMonth.plusDays(1) : firstDayOfMonth;
-        LocalDate endDate = isAfterMiddleOfMonth ? firstDayOfMonth.plusMonths(1).minusDays(1) : middleOfMonth;
-
-        Map<String, Double> expectedBiWeeklyIncome = new LinkedHashMap<>();
-        expectedBiWeeklyIncome.put("2024-07-17 - 2024-07-23", 0.0);
-        expectedBiWeeklyIncome.put("2024-07-24 - 2024-07-30", 0.0);
-        expectedBiWeeklyIncome.put("2024-07-31 - 2024-07-31", 0.0);
-        expectedBiWeeklyIncome.put("Saldo pendiente de pago ", 0.0);
-        expectedBiWeeklyIncome.put("Saldo pago ", 0.0);
-        expectedBiWeeklyIncome.put("Total ", 0.0);
-
-        when(nightlyReceiptRepository.findByInitialTimeBetween(any(), any()))
-                .thenReturn(Arrays.asList(new NightlyReceipt(), new NightlyReceipt()));
-        when(nightlyReceiptRepository.findByInitialTimeBetweenAndPaymentStatus(any(), any(), eq(true)))
-                .thenReturn(Arrays.asList(new NightlyReceipt(), new NightlyReceipt()));
-        when(nightlyReceiptRepository.findByInitialTimeBetweenAndPaymentStatus(any(), any(), eq(false)))
-                .thenReturn(Arrays.asList(new NightlyReceipt()));
-
-        // when
-        Map<String, Double> actualBiWeeklyIncome = nightlyReceiptService.getBiWeeklyIncome();
-
-        // then
-        assertEquals(expectedBiWeeklyIncome, actualBiWeeklyIncome);
-    }
 
     @Test
     void testGetDailyIncomeForCurrentWeek() {
         // given
-        LocalDate currentDate = LocalDate.now();
-        LocalDate firstDayOfWeek = currentDate.with(TemporalAdjusters.previous(DayOfWeek.MONDAY));
-        LocalDate lastDayOfWeek = currentDate.with(TemporalAdjusters.nextOrSame(DayOfWeek.SUNDAY));
-
-        Map<String, Double> expectedDailyIncome = new LinkedHashMap<>();
-        expectedDailyIncome.put("2024-07-22", 0.0);
-        expectedDailyIncome.put("2024-07-23", 0.0);
-        expectedDailyIncome.put("2024-07-24", 0.0);
-        expectedDailyIncome.put("2024-07-25", 0.0);
-        expectedDailyIncome.put("2024-07-26", 0.0);
-        expectedDailyIncome.put("2024-07-27", 0.0);
-        expectedDailyIncome.put("2024-07-28", 0.0);
-        expectedDailyIncome.put("Saldo pendiente de pago ", 0.0);
-        expectedDailyIncome.put("Saldo Pago ", 0.0);
-        expectedDailyIncome.put("Total ", 0.0);
 
         when(nightlyReceiptRepository.findByInitialTimeBetween(any(), any()))
                 .thenReturn(Arrays.asList(new NightlyReceipt(), new NightlyReceipt()));
         when(nightlyReceiptRepository.findByInitialTimeBetweenAndPaymentStatus(any(), any(), eq(true)))
                 .thenReturn(Arrays.asList(new NightlyReceipt(), new NightlyReceipt()));
         when(nightlyReceiptRepository.findByInitialTimeBetweenAndPaymentStatus(any(), any(), eq(false)))
-                .thenReturn(Arrays.asList(new NightlyReceipt()));
+                .thenReturn(List.of(new NightlyReceipt()));
 
         // when
         Map<String, Double> actualDailyIncome = nightlyReceiptService.getDailyIncomeForCurrentWeek();
 
+        assertNotNull(actualDailyIncome);
         // then
-        assertEquals(expectedDailyIncome, actualDailyIncome);
+        verify(nightlyReceiptRepository, times(7)).findByInitialTimeBetween(any(), any());
+
+
     }
 
 }

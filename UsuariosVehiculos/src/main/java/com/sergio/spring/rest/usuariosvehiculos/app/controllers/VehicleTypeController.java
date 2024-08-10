@@ -49,10 +49,10 @@ public class VehicleTypeController {
 
     @PutMapping("/{id}")
     public ResponseEntity<?> updateVehicleType(@Valid @RequestBody VehicleType vehicleType, BindingResult result,
-            @PathVariable Long id) {
+                                               @PathVariable Long id) {
 
         if (result.hasErrors()) {
-            validation(result);
+            return validation(result);
         }
         Optional<VehicleType> vt = vehicleTypeService.updateVehicleType(id, vehicleType);
         if (vt.isPresent()) {

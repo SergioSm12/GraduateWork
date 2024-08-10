@@ -2,6 +2,7 @@ package com.sergio.spring.rest.usuariosvehiculos.app.models.dto.entity.users;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.Objects;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -75,4 +76,16 @@ public class VisitorReceiptDto {
         this.paymentStatus = paymentStatus;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        VisitorReceiptDto that = (VisitorReceiptDto) o;
+        return paymentStatus == that.paymentStatus && Objects.equals(id, that.id) && Objects.equals(plate, that.plate) && Objects.equals(rateDto, that.rateDto) && Objects.equals(issueDate, that.issueDate) && Objects.equals(dueDate, that.dueDate);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, plate, rateDto, issueDate, dueDate, paymentStatus);
+    }
 }

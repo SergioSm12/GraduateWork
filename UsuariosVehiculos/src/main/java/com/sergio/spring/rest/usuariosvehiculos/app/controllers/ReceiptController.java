@@ -125,9 +125,9 @@ public class ReceiptController {
         User user = optionalUser.orElseThrow();
         receipt.setUser(user);
 
-        try{
+        try {
             return ResponseEntity.status(HttpStatus.CREATED).body(receiptService.saveReceipt(receipt));
-        }catch (PendingReceiptException ex){
+        } catch (PendingReceiptException ex) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponse(ex.getMessage()));
         }
 
@@ -141,6 +141,7 @@ public class ReceiptController {
             return validation(result);
         }
         Optional<ReceiptDto> ro = receiptService.updateReceipt(receipt, receiptId);
+
         if (ro.isPresent()) {
             return ResponseEntity.status(HttpStatus.CREATED).body(ro.orElseThrow());
         }

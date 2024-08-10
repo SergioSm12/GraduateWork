@@ -285,7 +285,8 @@ class NightlyReceiptControllerTest {
 
         when(nightlyReceiptService.updateNightlyReceipt(updateNightlyReceipt, existNightlyReceipt.getId())).thenReturn(Optional.of(nightlyReceiptDto));
 
-        mvc.perform(put("/nightly-receipt/{nightlyReceiptId}/update", existNightlyReceipt.getId()).contentType(MediaType.APPLICATION_JSON)
+        mvc.perform(put("/nightly-receipt/{nightlyReceiptId}/update", existNightlyReceipt.getId())
+                        .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(updateNightlyReceipt))
                         .with(csrf()))
 
@@ -324,7 +325,7 @@ class NightlyReceiptControllerTest {
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.rate", is("Debe seleccionar una tarifa")));
 
-        // Verify that the service method was never called
+
         verify(nightlyReceiptService, never()).updateNightlyReceipt(any(NightlyReceiptRequest.class), anyLong());
     }
 

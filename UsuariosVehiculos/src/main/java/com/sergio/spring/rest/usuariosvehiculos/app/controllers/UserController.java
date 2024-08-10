@@ -12,6 +12,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
@@ -81,8 +82,10 @@ public class UserController {
         if (result.hasErrors()) {
             return validation(result, null);
         }
+
         try {
-            return ResponseEntity.status(HttpStatus.CREATED).body(userService.save(user));
+            UserDto userDto = userService.save(user);
+            return ResponseEntity.status(HttpStatus.CREATED).contentType(MediaType.APPLICATION_JSON).body(userDto);
         } catch (DataIntegrityViolationException ex) {
             return validation(result, ex);
         }

@@ -28,5 +28,13 @@ public class Receipt extends BaseReceipt {
         this.setPaymentStatus(paymentStatus);
     }
 
+    @Override
+    public int hashCode() {
+        return super.hashCode();
+    }
 
+    @Override
+    public boolean equals(Object o) {
+        return super.equals(o);
+    }
 }

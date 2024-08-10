@@ -9,7 +9,7 @@ import java.util.Objects;
 
 //Clase generada para el update solo pasar campos necesarios
 public class UserRequest implements IUser {
-    @NotBlank
+    @NotBlank(message = "El campo nombre no puede estar vacio")
     private String name;
     @NotBlank
     private String lastName;

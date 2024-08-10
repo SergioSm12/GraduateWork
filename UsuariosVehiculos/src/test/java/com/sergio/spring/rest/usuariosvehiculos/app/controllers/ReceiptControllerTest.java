@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.sergio.spring.rest.usuariosvehiculos.app.data.*;
+
 import com.sergio.spring.rest.usuariosvehiculos.app.models.dto.entity.users.ReceiptDto;
 import com.sergio.spring.rest.usuariosvehiculos.app.models.dto.entity.users.UserDto;
 import com.sergio.spring.rest.usuariosvehiculos.app.models.dto.mapper.DtoMapperReceipt;
@@ -13,6 +14,7 @@ import com.sergio.spring.rest.usuariosvehiculos.app.models.entities.Receipt;
 
 import com.sergio.spring.rest.usuariosvehiculos.app.models.entities.User;
 import com.sergio.spring.rest.usuariosvehiculos.app.models.request.ReceiptRequest;
+
 import com.sergio.spring.rest.usuariosvehiculos.app.service.IRateService;
 import com.sergio.spring.rest.usuariosvehiculos.app.service.IReceiptService;
 import com.sergio.spring.rest.usuariosvehiculos.app.service.IUserService;
@@ -51,6 +53,9 @@ class ReceiptControllerTest {
 
     @MockBean
     IUserService userService;
+
+    @MockBean
+    IRateService rateService;
 
 
     ObjectMapper objectMapper;
@@ -382,45 +387,142 @@ class ReceiptControllerTest {
 
     @Test
     @WithMockUser
-    void updateReceipt() throws Exception {
-        // given
-        Receipt existingReceipt = DataReceipt.createReceipt001().orElseThrow();
-        ReceiptRequest updateReceipt = new ReceiptRequest(existingReceipt.getIssueDate(), existingReceipt.getDueDate(), true, new Rate(6L, DataVehicleType.createVehicleType001().orElseThrow(), "MES MOTO", 30000));
+    void testUpdateReceipt() throws Exception {
+        //given
+        Receipt existReceipt = DataReceipt.createReceipt001().orElseThrow();
+        Rate rate = new Rate(6L, DataVehicleType.createVehicleType001().orElseThrow(), "HORA CARRO", 5000);
+        ReceiptRequest updateReceiptRequest = new ReceiptRequest();
+        updateReceiptRequest.setIssueDate(existReceipt.getIssueDate());
+        updateReceiptRequest.setDueDate(existReceipt.getDueDate());
+        updateReceiptRequest.setPaymentStatus(true);
+        updateReceiptRequest.setRate(rate);
         Receipt savedReceipt = new Receipt();
-        savedReceipt.setId(existingReceipt.getId());
-        savedReceipt.setUser(existingReceipt.getUser());
-        savedReceipt.setVehicle(existingReceipt.getVehicle());
-        savedReceipt.setRate(updateReceipt.getRate());
-        savedReceipt.setIssueDate(updateReceipt.getIssueDate());
-        savedReceipt.setDueDate(updateReceipt.getDueDate());
-        savedReceipt.setPaymentStatus(updateReceipt.isPaymentStatus());
+        savedReceipt.setId(existReceipt.getId());
+        savedReceipt.setUser(existReceipt.getUser());
+        savedReceipt.setVehicle(existReceipt.getVehicle());
+        savedReceipt.setRate(updateReceiptRequest.getRate());
+        savedReceipt.setIssueDate(updateReceiptRequest.getIssueDate());
+        savedReceipt.setDueDate(updateReceiptRequest.getDueDate());
+        savedReceipt.setPaymentStatus(updateReceiptRequest.isPaymentStatus());
         ReceiptDto receiptDto = DtoMapperReceipt.builder().setReceipt(savedReceipt).build();
 
-        System.out.println(updateReceipt.getRate().getTime());
-        // when
-        when(receiptService.updateReceipt(updateReceipt, existingReceipt.getId())).thenReturn(Optional.of(receiptDto));
+        when(receiptService.updateReceipt(updateReceiptRequest, existReceipt.getId())).thenReturn(Optional.of(receiptDto));
 
-        // then
-        mvc.perform(put("/receipt/{receiptId}/update", existingReceipt.getId())
+        mvc.perform(put("/receipt/{receiptId}/update", existReceipt.getId())
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(updateReceipt))
+                        .content(objectMapper.writeValueAsString(updateReceiptRequest))
                         .with(csrf()))
+                //then
                 .andExpect(status().isCreated())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.id", is(existingReceipt.getId().intValue())))
-                .andExpect(jsonPath("$.rate.time", is("MES MOTO")))
-                .andExpect(jsonPath("$.rate.amount", is(30000)))
+                .andExpect(jsonPath("$.id", is(1)))
+                .andExpect(jsonPath("$.rate.time", is("HORA CARRO")))
+                .andExpect(jsonPath("$.rate.amount", is(5000.0)))
                 .andExpect(jsonPath("$.paymentStatus", is(true)))
                 .andExpect(content().json(objectMapper.writeValueAsString(receiptDto)));
 
-        verify(receiptService).updateReceipt(updateReceipt, existingReceipt.getId());
+        verify(receiptService).updateReceipt(updateReceiptRequest, existReceipt.getId());
     }
 
     @Test
-    void changePaymentStatus() {
+    @WithMockUser
+    void testUpdateReceiptValidationErrors() throws Exception {
+        Receipt existingReceipt = DataReceipt.createReceipt001().orElseThrow();
+        ReceiptRequest invalidReceiptRequest = new ReceiptRequest();
+        invalidReceiptRequest.setIssueDate(existingReceipt.getIssueDate());
+        invalidReceiptRequest.setDueDate(existingReceipt.getDueDate());
+        invalidReceiptRequest.setPaymentStatus(existingReceipt.isPaymentStatus());
+        invalidReceiptRequest.setRate(null);
+
+        mvc.perform(put("/receipt/{receiptId}/update", existingReceipt.getId())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(invalidReceiptRequest))
+                        .with(csrf()))
+                //then
+                .andExpect(status().isBadRequest())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.rate", is("Debe seleccionar una tarifa")));
+
+        verify(receiptService, never()).updateReceipt(any(ReceiptRequest.class), anyLong());
     }
 
     @Test
-    void deleteReceipt() {
+    @WithMockUser
+    void testUpdateReceiptNotFound() throws Exception {
+        Receipt existingReceipt = DataReceipt.createReceipt001().orElseThrow();
+        ReceiptRequest invalidReceiptRequest = new ReceiptRequest();
+        invalidReceiptRequest.setIssueDate(existingReceipt.getIssueDate());
+        invalidReceiptRequest.setDueDate(existingReceipt.getDueDate());
+        invalidReceiptRequest.setPaymentStatus(existingReceipt.isPaymentStatus());
+        invalidReceiptRequest.setRate(existingReceipt.getRate());
+
+        when(receiptService.updateReceipt(any(ReceiptRequest.class), eq(existingReceipt.getId())))
+                .thenReturn(Optional.empty());
+        mvc.perform(put("/receipt/{receiptId}/update", existingReceipt.getId())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(invalidReceiptRequest))
+                        .with(csrf()))
+
+                .andExpect(status().isNotFound());
+
+
+        verify(receiptService).updateReceipt(any(ReceiptRequest.class), eq(existingReceipt.getId()));
+
+    }
+
+    @Test
+    @WithMockUser
+    void changePaymentStatus() throws Exception {
+        //given
+        Receipt existingReceipt = DataReceipt.createReceipt001().orElseThrow();
+        ReceiptDto receiptDto = DtoMapperReceipt.builder().setReceipt(existingReceipt).build();
+        when(receiptService.findByIdReceipt(existingReceipt.getId())).thenReturn(Optional.of(receiptDto));
+        doNothing().when(receiptService).changePaymentStatus(existingReceipt.getId());
+
+        //when
+        mvc.perform(put("/receipt/change-payment/{receiptId}", existingReceipt.getId()).with(csrf()))
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    @WithMockUser
+    void changePaymentStatusNotFound() throws Exception {
+        //given
+        Receipt existingReceipt = DataReceipt.createReceipt001().orElseThrow();
+        when(receiptService.findByIdReceipt(existingReceipt.getId())).thenReturn(Optional.empty());
+        //when
+        mvc.perform(put("/receipt/change-payment/{receiptId}", existingReceipt.getId()).with(csrf()))
+                .andExpect(status().isNotFound());
+    }
+
+
+    @Test
+    @WithMockUser
+    void deleteReceipt() throws Exception {
+        //given
+        Receipt existingReceipt = DataReceipt.createReceipt001().orElseThrow();
+        ReceiptDto receiptDto = DtoMapperReceipt.builder().setReceipt(existingReceipt).build();
+        when(receiptService.findByIdReceipt(existingReceipt.getId())).thenReturn(Optional.of(receiptDto));
+        doNothing().when(receiptService).remove(existingReceipt.getId());
+
+        //when
+        mvc.perform(delete("/receipt/{receiptId}", existingReceipt.getId()).with(csrf()))
+                .andExpect(status().isNoContent());
+
+        verify(receiptService).remove(existingReceipt.getId());
+    }
+
+    @Test
+    @WithMockUser
+    void deleteReceiptNotFound() throws Exception {
+        //given
+        Receipt existingReceipt = DataReceipt.createReceipt001().orElseThrow();
+        when(receiptService.findByIdReceipt(existingReceipt.getId())).thenReturn(Optional.empty());
+        doNothing().when(receiptService).remove(existingReceipt.getId());
+
+        //when
+        mvc.perform(delete("/receipt/{receiptId}", existingReceipt.getId()).with(csrf())).andExpect(status().isNotFound());
+
+        verify(receiptService, never()).remove(existingReceipt.getId());
     }
 }

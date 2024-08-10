@@ -39,6 +39,7 @@ public class RateService implements IRateService {
                         .build());
     }
 
+    @Override
     @Transactional
     public RateDto createRate(Rate rate) {
         String timeUpper = rate.getTime().toUpperCase();
