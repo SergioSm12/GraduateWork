@@ -146,6 +146,7 @@ public class ReceiptController {
             return ResponseEntity.status(HttpStatus.CREATED).body(ro.orElseThrow());
         }
         return ResponseEntity.notFound().build();
+
     }
 
     // admin changePaymentStatus cambia el estado de pago

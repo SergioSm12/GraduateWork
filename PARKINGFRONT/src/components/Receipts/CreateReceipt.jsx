@@ -61,7 +61,6 @@ export const CreateReceipt = ({ receiptType }) => {
 
   const { id } = useParams();
 
-
   //filtrar tarifas
   const [filteredRates, setFilteredRates] = useState();
 
@@ -247,6 +246,8 @@ export const CreateReceipt = ({ receiptType }) => {
         departureTime: departureTime,
       };
     } else {
+      setIssueDate(issueDate.setHours(issueDate.getHours() - 5));
+      setDueDate(dueDate.setHours(dueDate.getHours() - 5));
       updatedReceiptForm = {
         ...receiptForm,
         vehicle: vehicleForm,
@@ -262,8 +263,7 @@ export const CreateReceipt = ({ receiptType }) => {
             updatedReceiptForm,
             "/"
           )
-        : 
-        handlerAddReceiptByUser(
+        : handlerAddReceiptByUser(
             vehicleForm.user ? vehicleForm.user.id : null,
             updatedReceiptForm,
             "/"
@@ -275,13 +275,14 @@ export const CreateReceipt = ({ receiptType }) => {
     }
   };
 
- 
   return (
     <div className="bg-secondary-100 p-8 rounded-xl shadow-2xl w-auto lg:w-[450px]">
       <div className="flex items-start justify-between">
         <h1 className=" text-2xl uppercase font-bold tracking-[5px] text-white mb-8">
           {receiptForm.id > 0 ? "Editar" : "Generar"}{" "}
-          <span className="text-primary">recibo {receiptType === "nocturno" ? "nocturno": "diurno" }</span>
+          <span className="text-primary">
+            recibo {receiptType === "nocturno" ? "nocturno" : "diurno"}
+          </span>
         </h1>
         <button
           className=" py-2 px-2 text-red-600 hover:text-black bg-secondary-900/80  hover:bg-red-600/50 rounded-lg  transition-colors"

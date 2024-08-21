@@ -244,8 +244,10 @@ export const DataTableReceipt = ({ dataReceipts }) => {
                           type="button"
                           className={classNames({
                             "p-1 my-3 rounded-lg text-center w-full transition-colors": true,
-                            "text-red-500/80 bg-secondary-100": !row.original.paymentStatus,
-                            "text-green-500/80 bg-secondary-100": row.original.paymentStatus,
+                            "text-red-500/80 bg-secondary-100":
+                              !row.original.paymentStatus,
+                            "text-green-500/80 bg-secondary-100":
+                              row.original.paymentStatus,
                             "hover:border border-primary/80": login.isAdmin,
                             "cursor-not-allowed": !login.isAdmin,
                           })}
