@@ -11,13 +11,13 @@ import {
 import {
   RiDeleteBin7Line,
   RiEdit2Line,
-  RiInformationLine,
   RiLineHeight,
   RiLoopLeftFill,
   RiSearch2Line,
   RiShutDownLine,
   RiSortAsc,
   RiSortDesc,
+  RiUserSharedLine,
 } from "react-icons/ri";
 import { rankItem } from "@tanstack/match-sorter-utils";
 import classNames from "classnames";
@@ -238,7 +238,7 @@ Inactivo
                             className="py-2 px-2 bg-primary/80 text-black hover:bg-secondary-100 rounded-lg transition-colors"
                             to={"show/" + row.original.id}
                           >
-                            <RiInformationLine className="text-lg" />
+                            <RiUserSharedLine className="text-lg" />
                           </NavLink>
                           <button
                             type="button"

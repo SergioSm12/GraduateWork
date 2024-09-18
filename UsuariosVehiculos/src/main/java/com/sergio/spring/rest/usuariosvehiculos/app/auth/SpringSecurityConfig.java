@@ -76,8 +76,9 @@ public class SpringSecurityConfig {
                         .requestMatchers(HttpMethod.PUT, "/vehicleType/{id}").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.DELETE, "/vehicleType/{id}").hasRole("ADMIN")
 
-                        .requestMatchers(HttpMethod.GET, "/rate").hasAnyRole("ADMIN","USER","GUARD")
-                        .requestMatchers(HttpMethod.GET, "/rate/{rateId}").hasAnyRole("ADMIN","USER","GUARD")
+                //Rates
+                        .requestMatchers(HttpMethod.GET, "/rate").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/rate/{rateId}").permitAll()
                         .requestMatchers(HttpMethod.POST, "/rate").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.PUT, "/rate/{rateId}").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.DELETE, "/rate/{rateId}").hasRole("ADMIN")
@@ -104,9 +105,9 @@ public class SpringSecurityConfig {
 
                         // visitor
                         .requestMatchers(HttpMethod.GET, "visitor-receipt").hasAnyRole("ADMIN","GUARD")
-                        .requestMatchers(HttpMethod.GET, "visitor-receipt/count-total").hasRole("ADMIN")
-                        .requestMatchers(HttpMethod.GET, "visitor-receipt/count-unpaid").hasRole("ADMIN")
-                        .requestMatchers(HttpMethod.GET, "visitor-receipt/count-paid").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.GET, "visitor-receipt/count-total").permitAll()
+                        .requestMatchers(HttpMethod.GET, "visitor-receipt/count-unpaid").permitAll()
+                        .requestMatchers(HttpMethod.GET, "visitor-receipt/count-paid").permitAll()
                         .requestMatchers(HttpMethod.POST, "visitor-receipt").permitAll()
                         .requestMatchers(HttpMethod.PUT, "visitor-receipt/{id}").hasAnyRole("ADMIN","GUARD")
                         .requestMatchers(HttpMethod.PUT, "visitor-receipt/change-payment/{visitorReceiptId}").hasRole("ADMIN")

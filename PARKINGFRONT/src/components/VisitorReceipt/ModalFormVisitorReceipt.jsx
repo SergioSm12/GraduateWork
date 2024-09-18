@@ -62,9 +62,12 @@ export const ModalFormVisitorReceipt = () => {
         "yyyy-MM-dd HH:mm"
       );
 
-     
       //Parsear fecha formatead timeZone
-      const parsedDueDate = parse(formattedDueDate, "yyyy-MM-dd HH:mm", new Date());
+      const parsedDueDate = parse(
+        formattedDueDate,
+        "yyyy-MM-dd HH:mm",
+        new Date()
+      );
       setDueDate(parsedDueDate);
     }
   }, [visitorReceiptSelected]);
@@ -112,8 +115,6 @@ export const ModalFormVisitorReceipt = () => {
     setDueDate(date);
   };
 
-  
-
   //filtrar tarifas
   const filteredRates = rates.filter((rate) => rate.time.includes("VISITANTE"));
   //formato de moneda
@@ -136,8 +137,8 @@ export const ModalFormVisitorReceipt = () => {
   //Envia la data cuando se encia el formulario
   const onSubmit = (e) => {
     e.preventDefault();
-    setIssueDate(issueDate.setHours(issueDate.getHours() - 5))
-    setDueDate(dueDate.setHours(dueDate.getHours()-5));
+    setIssueDate(issueDate.setHours(issueDate.getHours() - 5));
+    setDueDate(dueDate.setHours(dueDate.getHours() - 5));
     const updatedVisitorReceiptForm = {
       ...visitorReceiptForm,
       issueDate: issueDate,
