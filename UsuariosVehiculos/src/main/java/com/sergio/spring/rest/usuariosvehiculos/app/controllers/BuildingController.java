@@ -2,6 +2,7 @@ package com.sergio.spring.rest.usuariosvehiculos.app.controllers;
 
 import com.sergio.spring.rest.usuariosvehiculos.app.models.entities.Building;
 import com.sergio.spring.rest.usuariosvehiculos.app.service.IBuildingService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
